@@ -25,10 +25,10 @@ def hello():
 
 @app.route('/')
 def hello_world():
-   return render_template('hello_world.html')   
+   return render_template('home.html')   
 
 
-@app.route('/hello/<name>')
+@app.route('/learn/<index>')
 def hello_name(name=None):
     return render_template('hello_name.html', name=name) 
 
