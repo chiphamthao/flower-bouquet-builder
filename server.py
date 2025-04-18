@@ -1,23 +1,20 @@
 from flask import Flask
 from flask import render_template
 from flask import Response, request, jsonify
+import os
+import json
+
 app = Flask(__name__)
 
-
-current_id = 2
-data = [
-    {
-        "id": 1,
-        "name": "michael scott"
-    },
-    {
-        "id": 2,
-        "name": "jim halpert"
-    },
-]
+# Dictionary to store flower selections
+current_flowers = {
+    'focal': "rose",
+    'secondary': None,
+    'filler': None,
+    'greens': None
+}
 
 # ROUTES
-
 @app.route('/home')
 def hello():
     return render_template('home.html') 
@@ -27,7 +24,11 @@ def hello():
 def hello_world():
    return render_template('home.html')   
 
+@app.route('/assemble')
+def assemble():
+    return render_template('assemble.html', current_flowers=current_flowers)
 
+# skeleton code from hw 5
 @app.route('/learn/<index>')
 def hello_name(name=None):
     return render_template('hello_name.html', name=name) 
@@ -39,30 +40,25 @@ def people():
 
 
 # AJAX FUNCTIONS
-
-# ajax for people.js
-@app.route('/add_name', methods=['GET', 'POST'])
-def add_name():
-    global data 
-    global current_id 
-
-    json_data = request.get_json()   
-    name = json_data["name"] 
+@app.route('/save_flower', methods=['POST'])
+def save_flower():
+    data = request.get_json()
+    flower_type = data['flowerType']  # This comes from data-type in HTML
+    flower_name = data['flowerName']
     
-    # add new entry to array with 
-    # a new id and the name the user sent in JSON
-    current_id += 1
-    new_id = current_id 
-    new_name_entry = {
-        "name": name,
-        "id":  current_id
-    }
-    data.append(new_name_entry)
+    # Save the flower name in the build_it_flowers dictionary
+    current_flowers[flower_type] = flower_name
+    print(current_flowers)
+    return jsonify(current_flowers=current_flowers) 
 
-    #send back the WHOLE array of data, so the client can redisplay it
-    return jsonify(data = data)
- 
-
+@app.route('/clear_flower', methods=['POST'])
+def clear_flower():
+    data = request.get_json()
+    flower_type = data['flowerType']  # This comes from data-type in HTML
+    
+    # Clear the flower from build_it_flowers
+    current_flowers[flower_type] = None
+    return jsonify(current_flowers=current_flowers) 
 
 if __name__ == '__main__':
    app.run(debug = True, port=5001)

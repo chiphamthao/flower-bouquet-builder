@@ -1,42 +1,29 @@
-#hello_div {
-  padding-top: 10px;
-  padding-bottom: 10px;
-  color: blue;
-}
-
-.class {
-  align-items: center;
-}
-
 .content {
   text-align: center;
   padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
+/* Page Title Styles */
 .page-title {
-  font-size: 3.5em;
+  font-size: 2.7rem;
   margin-bottom: 0.5rem;
+  color: #4a7a4a;
 }
 
 .page-subtitle {
   font-size: 1.2em;
-  margin-bottom: 3rem;
-}
-
-.section-title {
-  font-size: 1.8em;
   margin-bottom: 2rem;
 }
 
-.bouquet-option {
-  width: 100%;
-  height: 400px;
-  object-fit: cover;
-  border-radius: 10px;
-  display: block;
+.section-title {
+  font-size: 1.5em;
+  margin-bottom: 1.5rem;
+  color: #4a7a4a;
 }
 
-.bouquet-btn {
+.selection-btn {
   cursor: pointer;
   padding: 0;
   border: none;
@@ -49,13 +36,95 @@
   transition: transform 0.2s ease-in-out;
 }
 
-.bouquet-btn:hover {
+.selection-btn:hover {
   transform: scale(1.05);
 }
 
-.bouquet-container {
+.btn-container {
   display: flex;
   justify-content: center;
   max-width: 1200px;
   margin: 0 auto;
+}
+
+/* Flower Grid Styles */
+.flower-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.8rem;
+  margin-bottom: 2rem;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.flower-item {
+  aspect-ratio: 1;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: grab;
+  transition: transform 0.2s ease;
+  width: 120px;
+  height: 120px;
+}
+
+.flower-item:hover {
+  transform: scale(1.05);
+}
+
+.flower-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.drop-zones {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.drop-zone-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.drop-zone-label {
+  font-size: 1.1em;
+  color: #4a7a4a;
+  font-weight: 500;
+  text-align: center;
+}
+
+.drop-zone {
+  width: 150px;
+  height: 150px;
+  border: 2px dashed #4a7a4a;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f9f9f9;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.drop-zone:hover {
+  border-color: #2d4d2d;
+  background-color: #f0f0f0;
+}
+
+.drop-zone.drag-over {
+  border-color: #2d4d2d;
+  background-color: #e8f0e8;
+}
+
+.drop-zone img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
 }
