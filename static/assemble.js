@@ -96,8 +96,8 @@ function saveDroppedFlower(data) {
     }),
     success: function (response) {
       console.log("Flower saved successfully:", response);
-      if (response.current_selections) {
-        display_flowers(response.current_selections);
+      if (response.current_flowers) {
+        display_flowers(response.current_flowers);
       }
     },
     error: function (xhr, status, error) {
@@ -114,8 +114,8 @@ function clearDroppedFlower(data) {
     data: JSON.stringify({ flowerType: data.flowerType }),
     success: function (response) {
       console.log("Position cleared successfully:", response);
-      if (response.current_selections) {
-        display_flowers(response.current_selections);
+      if (response.current_flowers) {
+        display_flowers(response.current_flowers);
       }
     },
     error: function (xhr, status, error) {
@@ -127,15 +127,17 @@ function clearDroppedFlower(data) {
 function display_flowers(flowers) {
   const types = ["focal", "secondary", "filler", "greens"];
   $(".drop-zone").empty();
-
+  console.log("redisplaying.....");
   // for each slot type, if we have data, inject its <img>
   for (let type of types) {
-    const info = flowers[type];
-    if (info) {
+    if (flowers[type]) {
+      const flowerName = flowers[type][0];
+      const flowerType = flowers[type][1];
+
       const $img = $("<img>", {
-        src: "/static/images/" + info.toLowerCase() + ".png",
-        alt: info,
-        "data-type": type,
+        src: "/static/images/" + flowerName.toLowerCase() + ".png",
+        alt: flowerName,
+        "data-type": flowerType,
       }).css({
         "max-width": "100%",
         "max-height": "100%",

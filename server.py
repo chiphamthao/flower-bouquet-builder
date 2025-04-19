@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 # Dictionary to store flower selections
 current_flowers = {
-    'focal': "rose",
+    'focal': None,
     'secondary': None,
     'filler': None,
     'greens': None
@@ -47,8 +47,7 @@ def save_flower():
     flower_name = data['flowerName']
     
     # Save the flower name in the build_it_flowers dictionary
-    current_flowers[flower_type] = flower_name
-    print(current_flowers)
+    current_flowers[flower_type] = (flower_name, flower_type)
     return jsonify(current_flowers=current_flowers) 
 
 @app.route('/clear_flower', methods=['POST'])
