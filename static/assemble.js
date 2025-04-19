@@ -133,7 +133,7 @@ function display_flowers(flowers) {
     const info = flowers[type];
     if (info) {
       const $img = $("<img>", {
-        src: "/statics/images/" + info.toLowerCase() + ".png",
+        src: "/static/images/" + info.toLowerCase() + ".png",
         alt: info,
         "data-type": type,
       }).css({
