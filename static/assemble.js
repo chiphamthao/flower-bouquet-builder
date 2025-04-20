@@ -22,13 +22,14 @@ $(document).ready(function () {
       const $dropZone = $(this);
       const $draggedItem = ui.draggable;
       const $originalImg = $draggedItem.find("img");
-      const flowerType = $dropZone.data("type");
+      const dropZoneType = $dropZone.data("type");
       const flowerName = $draggedItem.data("name");
+      const originalFlowerType = $draggedItem.data("type");
 
       const $newImg = $("<img>", {
         src: $originalImg.attr("src"),
         alt: $originalImg.attr("alt"),
-        "data-type": flowerType,
+        "data-type": originalFlowerType,
       }).css({
         opacity: 0,
         "max-width": "100%",
@@ -47,9 +48,10 @@ $(document).ready(function () {
 
       // Save to server
       saveDroppedFlower({
-        flowerType: flowerType,
+        flowerType: originalFlowerType,
         flowerName: flowerName,
-        imageUrl: $originalImg.attr("src"),
+        imageURL: $originalImg.attr("src"),
+        dropZoneType: dropZoneType,
       });
     },
   });
@@ -82,6 +84,55 @@ $(document).ready(function () {
   if (typeof current_flowers !== "undefined") {
     display_flowers(current_flowers);
   }
+
+  // Add the bouquet checking functionality
+  $("#check-bouquet").on("click", function () {
+    const types = ["focal", "secondary", "filler", "greens"];
+    let hasError = false;
+
+    // Reset all check items
+    $(".check-item").each(function () {
+      $(this).removeClass("correct");
+      $(this).find(".validation-indicator").removeClass("correct incorrect");
+    });
+
+    // Check each type
+    types.forEach((type, index) => {
+      const $checkItem = $(`.check-item:eq(${index})`);
+      const $indicator = $checkItem.find(".validation-indicator");
+
+      if (current_flowers[type]) {
+        // Get the flower's type from the tuple (second element)
+        const flowerType = current_flowers[type][1];
+
+        // Simply check if the flower type matches the key in current_flowers
+        if (type === flowerType) {
+          $checkItem.addClass("correct");
+          $indicator.addClass("correct");
+        } else {
+          $indicator.addClass("incorrect");
+          hasError = true;
+        }
+      } else {
+        $indicator.addClass("incorrect");
+        hasError = true;
+      }
+    });
+
+    // Show appropriate message
+    const $message = $(".validation-message");
+    $message.removeClass("show error success");
+
+    setTimeout(() => {
+      if (hasError) {
+        $message
+          .text("Please check your selections again!")
+          .addClass("show error");
+      } else {
+        $message.text("Perfect!").addClass("show success");
+      }
+    }, 100);
+  });
 });
 
 function saveDroppedFlower(data) {
@@ -92,12 +143,14 @@ function saveDroppedFlower(data) {
     data: JSON.stringify({
       flowerType: data.flowerType,
       flowerName: data.flowerName,
-      imageUrl: data.imageUrl,
+      imageURL: data.imageURL,
+      dropZoneType: data.dropZoneType,
     }),
     success: function (response) {
       console.log("Flower saved successfully:", response);
       if (response.current_flowers) {
-        display_flowers(response.current_flowers);
+        current_flowers = response.current_flowers;
+        display_flowers(current_flowers);
       }
     },
     error: function (xhr, status, error) {
@@ -115,7 +168,8 @@ function clearDroppedFlower(data) {
     success: function (response) {
       console.log("Position cleared successfully:", response);
       if (response.current_flowers) {
-        display_flowers(response.current_flowers);
+        current_flowers = response.current_flowers; // Update the global variable
+        display_flowers(current_flowers);
       }
     },
     error: function (xhr, status, error) {
@@ -126,18 +180,16 @@ function clearDroppedFlower(data) {
 
 function display_flowers(flowers) {
   const types = ["focal", "secondary", "filler", "greens"];
+  console.log(flowers);
   $(".drop-zone").empty();
   console.log("redisplaying.....");
   // for each slot type, if we have data, inject its <img>
   for (let type of types) {
     if (flowers[type]) {
-      const flowerName = flowers[type][0];
-      const flowerType = flowers[type][1];
-
       const $img = $("<img>", {
-        src: "/static/images/" + flowerName.toLowerCase() + ".png",
-        alt: flowerName,
-        "data-type": flowerType,
+        src: flowers[type][2],
+        alt: flowers[type][0],
+        "data-type": flowers[type][1],
       }).css({
         "max-width": "100%",
         "max-height": "100%",

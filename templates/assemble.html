@@ -22,17 +22,37 @@
     >
       <img src="/static/images/rose.png" alt="Rose" />
     </div>
-    <div class="flower-item" draggable="true" data-type="focal">
-      <img src="/static/images/flowers/sunflower.jpg" alt="Sunflower" />
+    <div
+      class="flower-item"
+      draggable="true"
+      data-type="focal"
+      data-name="sunflower"
+    >
+      <img src="/static/images/sunflower.png" alt="Sunflower" />
     </div>
-    <div class="flower-item" draggable="true" data-type="secondary">
-      <img src="/static/images/flowers/daisy.jpg" alt="Daisy" />
+    <div
+      class="flower-item"
+      draggable="true"
+      data-type="focal"
+      data-name="daisy"
+    >
+      <img src="/static/images/daisy.png" alt="Daisy" />
     </div>
-    <div class="flower-item" draggable="true" data-type="secondary">
-      <img src="/static/images/flowers/tulip.jpg" alt="Tulip" />
+    <div
+      class="flower-item"
+      draggable="true"
+      data-type="secondary"
+      data-name="tulip"
+    >
+      <img src="/static/images/tulip.png" alt="Tulip" />
     </div>
-    <div class="flower-item" draggable="true" data-type="secondary">
-      <img src="/static/images/flowers/lily.jpg" alt="Lily" />
+    <div
+      class="flower-item"
+      draggable="true"
+      data-type="focal"
+      data-name="lily"
+    >
+      <img src="/static/images/lily.png" alt="Lily" />
     </div>
 
     <!-- Row 2 (Fillers) -->
@@ -40,26 +60,41 @@
       class="flower-item"
       draggable="true"
       data-type="filler"
-      data-name="babys-breath"
+      data-name="Babysbreath"
     >
       <img src="/static/images/babys-breath.png" alt="Baby's Breath" />
     </div>
-    <div class="flower-item" draggable="true" data-type="filler">
-      <img src="/static/images/fillers/waxflower.jpg" alt="Waxflower" />
-    </div>
-    <div class="flower-item" draggable="true" data-type="filler">
-      <img src="/static/images/fillers/statice.jpg" alt="Statice" />
-    </div>
-    <div class="flower-item" draggable="true" data-type="filler">
-      <img src="/static/images/fillers/dusty-miller.jpg" alt="Dusty Miller" />
+    <div
+      class="flower-item"
+      draggable="true"
+      data-type="secondary"
+      data-name="waxflower"
+    >
+      <img src="/static/images/waxflower.png" alt="Waxflower" />
     </div>
     <div
       class="flower-item"
       draggable="true"
       data-type="filler"
+      data-name="statice"
+    >
+      <img src="/static/images/statice.png" alt="Statice" />
+    </div>
+    <div
+      class="flower-item"
+      draggable="true"
+      data-type="filler"
+      data-name="dustyMiller"
+    >
+      <img src="/static/images/dustymiller.png" alt="Dusty Miller" />
+    </div>
+    <div
+      class="flower-item"
+      draggable="true"
+      data-type="greens"
       data-name="eucalyptus"
     >
-      <img src="/static/images/fillers/eucalyptus.jpg" alt="Eucalyptus" />
+      <img src="/static/images/eucalyptus.png" alt="Eucalyptus" />
     </div>
 
     <!-- Row 3 - Greens -->
@@ -69,19 +104,39 @@
       data-type="greens"
       data-name="ming-fern"
     >
-      <img src="/static/images/greens/ming-fern.jpg" alt="Ming Fern" />
+      <img src="/static/images/ming-fern.jpg" alt="Ming Fern" />
     </div>
-    <div class="flower-item" draggable="true" data-type="greens">
-      <img src="/static/images/greens/leather-leaf.jpg" alt="Leather Leaf" />
+    <div
+      class="flower-item"
+      draggable="true"
+      data-type="greens"
+      data-name="leatherLeaf"
+    >
+      <img src="/static/images/leatherleaf.png" alt="Leather Leaf" />
     </div>
-    <div class="flower-item" draggable="true" data-type="greens">
-      <img src="/static/images/greens/salal.jpg" alt="Salal" />
+    <div
+      class="flower-item"
+      draggable="true"
+      data-type="greens"
+      data-name="salal"
+    >
+      <img src="/static/images/salal.png" alt="Salal" />
     </div>
-    <div class="flower-item" draggable="true" data-type="greens">
-      <img src="/static/images/greens/ruscus.jpg" alt="Ruscus" />
+    <div
+      class="flower-item"
+      draggable="true"
+      data-type="greens"
+      data-name="ruscus"
+    >
+      <img src="/static/images/ruscus.png" alt="Ruscus" />
     </div>
-    <div class="flower-item" draggable="true" data-type="greens">
-      <img src="/static/images/greens/tree-fern.jpg" alt="Tree Fern" />
+    <div
+      class="flower-item"
+      draggable="true"
+      data-type="greens"
+      data-name="treeFern"
+    >
+      <img src="/static/images/treefern.png" alt="Tree Fern" />
     </div>
   </div>
 
@@ -137,6 +192,7 @@
         <span class="validation-indicator"></span>
       </div>
     </div>
+    <div class="validation-message"></div>
   </div>
 
   {% endblock %}

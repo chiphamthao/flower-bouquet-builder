@@ -43,11 +43,8 @@ def people():
 @app.route('/save_flower', methods=['POST'])
 def save_flower():
     data = request.get_json()
-    flower_type = data['flowerType']  # This comes from data-type in HTML
-    flower_name = data['flowerName']
-    
     # Save the flower name in the build_it_flowers dictionary
-    current_flowers[flower_type] = (flower_name, flower_type)
+    current_flowers[ data['dropZoneType']] = (data['flowerName'], data['flowerType'], data['imageURL'])
     return jsonify(current_flowers=current_flowers) 
 
 @app.route('/clear_flower', methods=['POST'])
