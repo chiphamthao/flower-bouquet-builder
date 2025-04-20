@@ -1,23 +1,23 @@
 from flask import Flask
 from flask import render_template
 from flask import Response, request, jsonify
+import os
+import json
+
 app = Flask(__name__)
 
+# Dictionary to store flower selections
+current_selections = {
+    'focal': None,
+    'secondary': None,
+    'filler': None,
+    'greens': None,
+    'color_theme': None
+}
 
-current_id = 2
-data = [
-    {
-        "id": 1,
-        "name": "michael scott"
-    },
-    {
-        "id": 2,
-        "name": "jim halpert"
-    },
-]
+color_theme = ""
 
 # ROUTES
-
 @app.route('/home')
 def hello():
     return render_template('home.html') 
@@ -27,42 +27,35 @@ def hello():
 def hello_world():
    return render_template('home.html')   
 
-
-@app.route('/learn/<index>')
-def hello_name(name=None):
-    return render_template('hello_name.html', name=name) 
-
-
-@app.route('/people')
-def people():
-    return render_template('people.html', data=data)  
-
+@app.route('/assemble')
+def assemble():
+    return render_template('assemble.html', current_selections=current_selections)
 
 # AJAX FUNCTIONS
+@app.route('/save_flower', methods=['POST'])
+def save_flower():
+    data = request.get_json()
+    # Save the flower name in the build_it_flowers dictionary
+    current_selections[ data['dropZoneType']] = (data['flowerName'], data['flowerType'], data['imageURL'])
+    return jsonify(current_selections=current_selections) 
 
-# ajax for people.js
-@app.route('/add_name', methods=['GET', 'POST'])
-def add_name():
-    global data 
-    global current_id 
-
-    json_data = request.get_json()   
-    name = json_data["name"] 
+@app.route('/clear_flower', methods=['POST'])
+def clear_flower():
+    data = request.get_json()
+    flower_type = data['flowerType']  # This comes from data-type in HTML
     
-    # add new entry to array with 
-    # a new id and the name the user sent in JSON
-    current_id += 1
-    new_id = current_id 
-    new_name_entry = {
-        "name": name,
-        "id":  current_id
-    }
-    data.append(new_name_entry)
+    # Clear the flower from build_it_flowers
+    current_selections[flower_type] = None
+    return jsonify(current_selections=current_selections) 
 
-    #send back the WHOLE array of data, so the client can redisplay it
-    return jsonify(data = data)
- 
-
+@app.route('/save_theme', methods=['POST'])
+def save_theme():
+    global color_theme
+    data = request.get_json()
+    # Grab the submitted theme (or default to empty)
+    color_theme = data.get('color_theme', '').strip()
+    current_selections["color_theme"] = color_theme
+    return jsonify(current_selections=current_selections)
 
 if __name__ == '__main__':
    app.run(debug = True, port=5001)

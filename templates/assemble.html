@@ -1,0 +1,202 @@
+{% extends "layout.html" %} {% block content %}
+<script src="{{ url_for('static', filename='assemble.js') }}"></script>
+<script>
+  let current_selections = {{current_selections|tojson}}
+</script>
+
+<div class="content">
+  <h1 class="page-title" style="color: #4a7a4a">Assemble Your Bouquet</h1>
+  <p class="page-subtitle">
+    Using what you have learned from the lessons, choose your flowers, fillers,
+    and greens to create a full bouquet
+  </p>
+
+  <h2 class="section-title">Choose your selection</h2>
+  <div class="flower-grid">
+    <!-- Row 1 -->
+    <div
+      class="flower-item"
+      draggable="true"
+      data-type="focal"
+      data-name="rose"
+    >
+      <img src="/static/images/rose.png" alt="Rose" />
+    </div>
+    <div
+      class="flower-item"
+      draggable="true"
+      data-type="focal"
+      data-name="sunflower"
+    >
+      <img src="/static/images/sunflower.png" alt="Sunflower" />
+    </div>
+    <div
+      class="flower-item"
+      draggable="true"
+      data-type="focal"
+      data-name="daisy"
+    >
+      <img src="/static/images/daisy.png" alt="Daisy" />
+    </div>
+    <div
+      class="flower-item"
+      draggable="true"
+      data-type="secondary"
+      data-name="tulip"
+    >
+      <img src="/static/images/tulip.png" alt="Tulip" />
+    </div>
+    <div
+      class="flower-item"
+      draggable="true"
+      data-type="focal"
+      data-name="lily"
+    >
+      <img src="/static/images/lily.png" alt="Lily" />
+    </div>
+
+    <!-- Row 2 (Fillers) -->
+    <div
+      class="flower-item"
+      draggable="true"
+      data-type="filler"
+      data-name="Babysbreath"
+    >
+      <img src="/static/images/babys-breath.png" alt="Baby's Breath" />
+    </div>
+    <div
+      class="flower-item"
+      draggable="true"
+      data-type="secondary"
+      data-name="waxflower"
+    >
+      <img src="/static/images/waxflower.png" alt="Waxflower" />
+    </div>
+    <div
+      class="flower-item"
+      draggable="true"
+      data-type="filler"
+      data-name="statice"
+    >
+      <img src="/static/images/statice.png" alt="Statice" />
+    </div>
+    <div
+      class="flower-item"
+      draggable="true"
+      data-type="filler"
+      data-name="dustyMiller"
+    >
+      <img src="/static/images/dustymiller.png" alt="Dusty Miller" />
+    </div>
+    <div
+      class="flower-item"
+      draggable="true"
+      data-type="greens"
+      data-name="eucalyptus"
+    >
+      <img src="/static/images/eucalyptus.png" alt="Eucalyptus" />
+    </div>
+
+    <!-- Row 3 - Greens -->
+    <div
+      class="flower-item"
+      draggable="true"
+      data-type="greens"
+      data-name="ming-fern"
+    >
+      <img src="/static/images/ming-fern.jpg" alt="Ming Fern" />
+    </div>
+    <div
+      class="flower-item"
+      draggable="true"
+      data-type="greens"
+      data-name="leatherLeaf"
+    >
+      <img src="/static/images/leatherleaf.png" alt="Leather Leaf" />
+    </div>
+    <div
+      class="flower-item"
+      draggable="true"
+      data-type="greens"
+      data-name="salal"
+    >
+      <img src="/static/images/salal.png" alt="Salal" />
+    </div>
+    <div
+      class="flower-item"
+      draggable="true"
+      data-type="greens"
+      data-name="ruscus"
+    >
+      <img src="/static/images/ruscus.png" alt="Ruscus" />
+    </div>
+    <div
+      class="flower-item"
+      draggable="true"
+      data-type="greens"
+      data-name="treeFern"
+    >
+      <img src="/static/images/treefern.png" alt="Tree Fern" />
+    </div>
+  </div>
+
+  <h2 class="section-title">Drag and drop your final selection</h2>
+  <div class="drop-zones">
+    <div class="drop-zone-container">
+      <div class="drop-zone-label">Focal</div>
+      <div class="drop-zone" data-type="focal"></div>
+    </div>
+    <div class="drop-zone-container">
+      <div class="drop-zone-label">Secondary</div>
+      <div class="drop-zone" data-type="secondary"></div>
+    </div>
+    <div class="drop-zone-container">
+      <div class="drop-zone-label">Filler</div>
+      <div class="drop-zone" data-type="filler"></div>
+    </div>
+    <div class="drop-zone-container">
+      <div class="drop-zone-label">Greens</div>
+      <div class="drop-zone" data-type="greens"></div>
+    </div>
+  </div>
+
+  <div class="theme-description">
+    <h2 class="section-title">
+      How would you describe the color theme of your bouquet?
+    </h2>
+    <textarea
+      id="color-theme"
+      class="theme-input"
+      rows="3"
+      placeholder="Describe your color theme here…"
+    ></textarea>
+    <!-- preload existing text -->
+    <button id="submit-theme" class="theme-submit">Submit Theme</button>
+    <div class="theme-message"></div>
+  </div>
+
+  <div class="bouquet-check">
+    <button id="check-bouquet" class="check-button">Check your bouquet</button>
+    <div class="check-results">
+      <div class="check-item">
+        <span class="check-label">Focal Flower</span>
+        <span class="validation-indicator"></span>
+      </div>
+      <div class="check-item">
+        <span class="check-label">Secondary Flower</span>
+        <span class="validation-indicator"></span>
+      </div>
+      <div class="check-item">
+        <span class="check-label">Filler</span>
+        <span class="validation-indicator"></span>
+      </div>
+      <div class="check-item">
+        <span class="check-label">Greens</span>
+        <span class="validation-indicator"></span>
+      </div>
+    </div>
+    <div class="validation-message"></div>
+  </div>
+
+  {% endblock %}
+</div>
