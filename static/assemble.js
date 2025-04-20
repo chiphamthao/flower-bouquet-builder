@@ -81,8 +81,8 @@ $(document).ready(function () {
   });
 
   // Initial display
-  if (typeof current_flowers !== "undefined") {
-    display_flowers(current_flowers);
+  if (typeof current_selections !== "undefined") {
+    display_page(current_selections);
   }
 
   // Add the bouquet checking functionality
@@ -101,11 +101,11 @@ $(document).ready(function () {
       const $checkItem = $(`.check-item:eq(${index})`);
       const $indicator = $checkItem.find(".validation-indicator");
 
-      if (current_flowers[type]) {
+      if (current_selections[type]) {
         // Get the flower's type from the tuple (second element)
-        const flowerType = current_flowers[type][1];
+        const flowerType = current_selections[type][1];
 
-        // Simply check if the flower type matches the key in current_flowers
+        // Simply check if the flower type matches the key in current_selections
         if (type === flowerType) {
           $checkItem.addClass("correct");
           $indicator.addClass("correct");
@@ -133,6 +133,46 @@ $(document).ready(function () {
       }
     }, 100);
   });
+
+  $("#submit-theme").on("click", submitTheme);
+
+  // 3) On Enter key inside the textarea…
+  $("#color-theme").on("keypress", function (e) {
+    if (e.which === 13) {
+      e.preventDefault();
+      submitTheme();
+    }
+  });
+
+  function submitTheme() {
+    const theme = $("#color-theme").val().trim();
+    if (!theme) {
+      return $(".theme-message")
+        .text("Please enter a color theme.")
+        .addClass("error")
+        .removeClass("success");
+    }
+    $.ajax({
+      url: "/save_theme",
+      method: "POST",
+      contentType: "application/json",
+      data: JSON.stringify({ color_theme: theme }),
+      success: function (resp) {
+        current_selections = resp.current_selections;
+        display_page(current_selections);
+        $(".theme-message")
+          .text("Color theme saved.")
+          .addClass("success")
+          .removeClass("error");
+      },
+      error: function () {
+        $(".theme-message")
+          .text("Error saving theme; try again.")
+          .addClass("error")
+          .removeClass("success");
+      },
+    });
+  }
 });
 
 function saveDroppedFlower(data) {
@@ -148,9 +188,9 @@ function saveDroppedFlower(data) {
     }),
     success: function (response) {
       console.log("Flower saved successfully:", response);
-      if (response.current_flowers) {
-        current_flowers = response.current_flowers;
-        display_flowers(current_flowers);
+      if (response.current_selections) {
+        current_selections = response.current_selections;
+        display_page(current_selections);
       }
     },
     error: function (xhr, status, error) {
@@ -167,9 +207,9 @@ function clearDroppedFlower(data) {
     data: JSON.stringify({ flowerType: data.flowerType }),
     success: function (response) {
       console.log("Position cleared successfully:", response);
-      if (response.current_flowers) {
-        current_flowers = response.current_flowers; // Update the global variable
-        display_flowers(current_flowers);
+      if (response.current_selections) {
+        current_selections = response.current_selections; // Update the global variable
+        display_page(current_selections);
       }
     },
     error: function (xhr, status, error) {
@@ -178,18 +218,17 @@ function clearDroppedFlower(data) {
   });
 }
 
-function display_flowers(flowers) {
+function display_page(current_selections) {
   const types = ["focal", "secondary", "filler", "greens"];
-  console.log(flowers);
   $(".drop-zone").empty();
-  console.log("redisplaying.....");
+  console.log(current_selections["color_theme"]);
   // for each slot type, if we have data, inject its <img>
   for (let type of types) {
-    if (flowers[type]) {
+    if (current_selections[type]) {
       const $img = $("<img>", {
-        src: flowers[type][2],
-        alt: flowers[type][0],
-        "data-type": flowers[type][1],
+        src: current_selections[type][2],
+        alt: current_selections[type][0],
+        "data-type": current_selections[type][1],
       }).css({
         "max-width": "100%",
         "max-height": "100%",
@@ -200,4 +239,6 @@ function display_flowers(flowers) {
       $(`.drop-zone[data-type="${type}"]`).append($img);
     }
   }
+
+  $("#color-theme").val(current_selections.color_theme || "");
 }

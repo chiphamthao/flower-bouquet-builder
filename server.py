@@ -7,12 +7,15 @@ import json
 app = Flask(__name__)
 
 # Dictionary to store flower selections
-current_flowers = {
+current_selections = {
     'focal': None,
     'secondary': None,
     'filler': None,
-    'greens': None
+    'greens': None,
+    'color_theme': None
 }
+
+color_theme = ""
 
 # ROUTES
 @app.route('/home')
@@ -26,26 +29,15 @@ def hello_world():
 
 @app.route('/assemble')
 def assemble():
-    return render_template('assemble.html', current_flowers=current_flowers)
-
-# skeleton code from hw 5
-@app.route('/learn/<index>')
-def hello_name(name=None):
-    return render_template('hello_name.html', name=name) 
-
-
-@app.route('/people')
-def people():
-    return render_template('people.html', data=data)  
-
+    return render_template('assemble.html', current_selections=current_selections)
 
 # AJAX FUNCTIONS
 @app.route('/save_flower', methods=['POST'])
 def save_flower():
     data = request.get_json()
     # Save the flower name in the build_it_flowers dictionary
-    current_flowers[ data['dropZoneType']] = (data['flowerName'], data['flowerType'], data['imageURL'])
-    return jsonify(current_flowers=current_flowers) 
+    current_selections[ data['dropZoneType']] = (data['flowerName'], data['flowerType'], data['imageURL'])
+    return jsonify(current_selections=current_selections) 
 
 @app.route('/clear_flower', methods=['POST'])
 def clear_flower():
@@ -53,8 +45,17 @@ def clear_flower():
     flower_type = data['flowerType']  # This comes from data-type in HTML
     
     # Clear the flower from build_it_flowers
-    current_flowers[flower_type] = None
-    return jsonify(current_flowers=current_flowers) 
+    current_selections[flower_type] = None
+    return jsonify(current_selections=current_selections) 
+
+@app.route('/save_theme', methods=['POST'])
+def save_theme():
+    global color_theme
+    data = request.get_json()
+    # Grab the submitted theme (or default to empty)
+    color_theme = data.get('color_theme', '').strip()
+    current_selections["color_theme"] = color_theme
+    return jsonify(current_selections=current_selections)
 
 if __name__ == '__main__':
    app.run(debug = True, port=5001)

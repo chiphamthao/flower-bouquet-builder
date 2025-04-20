@@ -1,7 +1,7 @@
 {% extends "layout.html" %} {% block content %}
 <script src="{{ url_for('static', filename='assemble.js') }}"></script>
 <script>
-  let current_flowers = {{current_flowers|tojson}}
+  let current_selections = {{current_selections|tojson}}
 </script>
 
 <div class="content">
@@ -168,8 +168,11 @@
       id="color-theme"
       class="theme-input"
       rows="3"
-      placeholder="Describe your color theme here..."
+      placeholder="Describe your color theme here…"
     ></textarea>
+    <!-- preload existing text -->
+    <button id="submit-theme" class="theme-submit">Submit Theme</button>
+    <div class="theme-message"></div>
   </div>
 
   <div class="bouquet-check">
