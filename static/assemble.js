@@ -1,3 +1,50 @@
+function refreshPalette() {
+  const types = ["focal", "secondary", "filler", "greens"];
+  const $palette = $("#palette").empty();
+
+  types.forEach((type) => {
+    const sel = current_selections[type];
+    if (sel) {
+      const [name, flowerType, url] = sel;
+      const $item = $(`
+        <div class="flower-item" data-type="${flowerType}" data-name="${name}">
+          <img src="${url}" alt="${name}"/>
+        </div>
+      `);
+      $palette.append($item);
+
+      // make palette item draggable
+      $item.draggable({
+        helper: "clone",
+        revert: "invalid",
+        opacity: 0.7,
+        zIndex: 200,
+      });
+    }
+  });
+}
+
+// 2) Set up the canvas as a drop target
+$("#canvas").droppable({
+  accept: ".flower-item",
+  drop(event, ui) {
+    const $c = $(this);
+    const off = $c.offset();
+    const x = ui.offset.left - off.left;
+    const y = ui.offset.top - off.top;
+
+    const $orig = ui.draggable.find("img");
+    const $clone = $("<img>", {
+      src: $orig.attr("src"),
+      alt: $orig.attr("alt"),
+      class: "canvas-flower",
+    }).css({ left: x, top: y });
+
+    $c.append($clone);
+    $clone.draggable({ containment: "#canvas" });
+  },
+});
+
 $(document).ready(function () {
   // Initialize draggable on flower items
   $(".flower-item").draggable({
@@ -173,6 +220,37 @@ $(document).ready(function () {
       },
     });
   }
+
+  // Make palette-items draggable into the new canvas
+  $(".flower-sidebar .flower-item").draggable({
+    helper: "clone",
+    revert: "invalid",
+    opacity: 0.7,
+    zIndex: 200,
+  });
+
+  // Canvas droppable handler
+  $("#canvas").droppable({
+    accept: ".flower-item",
+    drop: function (event, ui) {
+      const $canvas = $(this);
+      const offset = $canvas.offset();
+      // compute drop position relative to canvas
+      const x = ui.offset.left - offset.left;
+      const y = ui.offset.top - offset.top;
+
+      const $origImg = ui.draggable.find("img");
+      const $new = $("<img>", {
+        src: $origImg.attr("src"),
+        alt: $origImg.attr("alt"),
+        class: "canvas-flower",
+      }).css({ left: x, top: y });
+
+      // append and make draggable within canvas
+      $canvas.append($new);
+      $new.draggable({ containment: "#canvas" });
+    },
+  });
 });
 
 function saveDroppedFlower(data) {
@@ -241,4 +319,5 @@ function display_page(current_selections) {
   }
 
   $("#color-theme").val(current_selections.color_theme || "");
+  refreshPalette();
 }
