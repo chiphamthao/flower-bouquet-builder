@@ -24,27 +24,6 @@ function refreshPalette() {
   });
 }
 
-// 2) Set up the canvas as a drop target
-$("#canvas").droppable({
-  accept: ".flower-item",
-  drop(event, ui) {
-    const $c = $(this);
-    const off = $c.offset();
-    const x = ui.offset.left - off.left;
-    const y = ui.offset.top - off.top;
-
-    const $orig = ui.draggable.find("img");
-    const $clone = $("<img>", {
-      src: $orig.attr("src"),
-      alt: $orig.attr("alt"),
-      class: "canvas-flower",
-    }).css({ left: x, top: y });
-
-    $c.append($clone);
-    $clone.draggable({ containment: "#canvas" });
-  },
-});
-
 $(document).ready(function () {
   // Initialize draggable on flower items
   $(".flower-item").draggable({
@@ -233,22 +212,36 @@ $(document).ready(function () {
   $("#canvas").droppable({
     accept: ".flower-item",
     drop: function (event, ui) {
-      const $canvas = $(this);
-      const offset = $canvas.offset();
-      // compute drop position relative to canvas
-      const x = ui.offset.left - offset.left;
-      const y = ui.offset.top - offset.top;
+      const $canvas = $(this),
+        off = $canvas.offset(),
+        x = ui.offset.left - off.left,
+        y = ui.offset.top - off.top,
+        $orig = ui.draggable.find("img");
 
-      const $origImg = ui.draggable.find("img");
-      const $new = $("<img>", {
-        src: $origImg.attr("src"),
-        alt: $origImg.attr("alt"),
+      // Create the clone
+      const $clone = $("<img>", {
+        src: $orig.attr("src"),
+        alt: $orig.attr("alt"),
         class: "canvas-flower",
-      }).css({ left: x, top: y });
-
-      // append and make draggable within canvas
-      $canvas.append($new);
-      $new.draggable({ containment: "#canvas" });
+      })
+        .css({
+          left: x,
+          top: y,
+          width: "250px",
+          height: "auto",
+        })
+        .appendTo($canvas)
+        // 1) Make it resizable first
+        .resizable({
+          containment: "#canvas",
+          aspectRatio: true,
+          handles: "n,e,s,w,ne,se,sw,nw",
+        })
+        // 2) Then make it draggable, *excluding* the resize‐handles
+        .draggable({
+          cancel: ".ui-resizable-handle", // clicking on handles resizes, elsewhere drags
+          cursor: "move",
+        });
     },
   });
 });
