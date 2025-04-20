@@ -311,6 +311,12 @@
   cursor: move;
   transition: transform 0.2s;
 }
+
+.canvas-flower.selected {
+  outline: 3px dashed #c74a4a;
+  outline-offset: 4px;
+}
+
 .canvas-flower:hover {
   transform: scale(1.1);
 }

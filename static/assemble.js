@@ -321,3 +321,24 @@ function display_page(current_selections) {
   $("#color-theme").val(current_selections.color_theme || "");
   refreshPalette();
 }
+
+$(document).on("click", ".canvas-flower", function (e) {
+  e.stopPropagation(); // don’t let parent handlers clear it immediately
+  $(".canvas-flower").removeClass("selected");
+  $(this).addClass("selected");
+});
+
+// 2) Click outside any flower to clear selection
+$(document).on("click", "#canvas", function () {
+  $(".canvas-flower").removeClass("selected");
+});
+
+// 3) Listen for the Delete key
+$(document).on("keydown", function (e) {
+  if (e.key === "Delete" || e.keyCode === 46 || e.keyCode === 8) {
+    const $sel = $(".canvas-flower.selected");
+    if ($sel.length) {
+      $sel.remove();
+    }
+  }
+});
