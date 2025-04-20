@@ -7,17 +7,20 @@
 
 /* Page Title Styles */
 .page-title {
+  font-family: 'Indie Flower', sans-serif;
   font-size: 2.7rem;
   margin-bottom: 0.5rem;
   color: #4a7a4a;
 }
 
 .page-subtitle {
+  font-family: 'Indie Flower', sans-serif;
   font-size: 1.2em;
   margin-bottom: 2rem;
 }
 
 .section-title {
+  font-family: 'Indie Flower', sans-serif;
   font-size: 1.5em;
   margin-bottom: 1.5rem;
   color: #4a7a4a;
