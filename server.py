@@ -20,16 +20,29 @@ color_theme = ""
 # ROUTES
 @app.route('/home')
 def hello():
-    return render_template('home.html') 
+    return render_template('home.html')
 
 
-@app.route('/')
-def hello_world():
-   return render_template('home.html')   
+@app.route('/lessons')
+def lessons():
+    return render_template('lessons.html')
+
+
+@app.route('/overview')
+def overview():
+    return render_template('overview.html')
+
+
+@app.route('/focal_secondary')
+def focal_secondary():
+    return render_template('focal_secondary.html')
+
 
 @app.route('/assemble')
 def assemble():
     return render_template('assemble.html', current_selections=current_selections)
+
+
 
 # AJAX FUNCTIONS
 @app.route('/save_flower', methods=['POST'])

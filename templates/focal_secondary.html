@@ -1,10 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "layout.html" %}
 
-</body>
-</html>
+{% block title %}Focal & Secondary Flowers{% endblock %}
+
+{% block content %}
+<script type="text/javascript" src="{{ url_for('static', filename = 'focal_secondary.js') }}"></script>
+
+<div class="homepage-title">
+    <h1>Welcome to Poké Co.!</h1>
+    <br>
+    <p>where you can learn all about your favorite Pokémon (mainly the cute ones)</p>
+</div>
+
+{% endblock %}
