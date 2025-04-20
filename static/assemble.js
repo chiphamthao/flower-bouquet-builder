@@ -1,3 +1,29 @@
+function refreshPalette() {
+  const types = ["focal", "secondary", "filler", "greens"];
+  const $palette = $("#palette").empty();
+
+  types.forEach((type) => {
+    const sel = current_selections[type];
+    if (sel) {
+      const [name, flowerType, url] = sel;
+      const $item = $(`
+        <div class="flower-item" data-type="${flowerType}" data-name="${name}">
+          <img src="${url}" alt="${name}"/>
+        </div>
+      `);
+      $palette.append($item);
+
+      // make palette item draggable
+      $item.draggable({
+        helper: "clone",
+        revert: "invalid",
+        opacity: 0.7,
+        zIndex: 200,
+      });
+    }
+  });
+}
+
 $(document).ready(function () {
   // Initialize draggable on flower items
   $(".flower-item").draggable({
@@ -173,6 +199,51 @@ $(document).ready(function () {
       },
     });
   }
+
+  // Make palette-items draggable into the new canvas
+  $(".flower-sidebar .flower-item").draggable({
+    helper: "clone",
+    revert: "invalid",
+    opacity: 0.7,
+    zIndex: 200,
+  });
+
+  // Canvas droppable handler
+  $("#canvas").droppable({
+    accept: ".flower-item",
+    drop: function (event, ui) {
+      const $canvas = $(this),
+        off = $canvas.offset(),
+        x = ui.offset.left - off.left,
+        y = ui.offset.top - off.top,
+        $orig = ui.draggable.find("img");
+
+      // Create the clone
+      const $clone = $("<img>", {
+        src: $orig.attr("src"),
+        alt: $orig.attr("alt"),
+        class: "canvas-flower",
+      })
+        .css({
+          left: x,
+          top: y,
+          width: "250px",
+          height: "auto",
+        })
+        .appendTo($canvas)
+        // 1) Make it resizable first
+        .resizable({
+          containment: "#canvas",
+          aspectRatio: true,
+          handles: "n,e,s,w,ne,se,sw,nw",
+        })
+        // 2) Then make it draggable, *excluding* the resize‐handles
+        .draggable({
+          cancel: ".ui-resizable-handle", // clicking on handles resizes, elsewhere drags
+          cursor: "move",
+        });
+    },
+  });
 });
 
 function saveDroppedFlower(data) {
@@ -241,4 +312,26 @@ function display_page(current_selections) {
   }
 
   $("#color-theme").val(current_selections.color_theme || "");
+  refreshPalette();
 }
+
+$(document).on("click", ".canvas-flower", function (e) {
+  e.stopPropagation(); // don’t let parent handlers clear it immediately
+  $(".canvas-flower").removeClass("selected");
+  $(this).addClass("selected");
+});
+
+// 2) Click outside any flower to clear selection
+$(document).on("click", "#canvas", function () {
+  $(".canvas-flower").removeClass("selected");
+});
+
+// 3) Listen for the Delete key
+$(document).on("keydown", function (e) {
+  if (e.key === "Delete" || e.keyCode === 46 || e.keyCode === 8) {
+    const $sel = $(".canvas-flower.selected");
+    if ($sel.length) {
+      $sel.remove();
+    }
+  }
+});
