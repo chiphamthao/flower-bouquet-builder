@@ -70,14 +70,14 @@
   height: 350px;
   object-fit: cover;
   border-radius: 12px;
-  margin-top: 25px;
+  margin-top: 35px;
 }
 
 .overview_text h4{
     font-family: 'Indie Flower', sans-serif;
     font-size: 2.3rem !important;
     line-height: 1.6;
-    margin-top: 15px;
+    margin-top: 25px;
 }
 
 .overviewlink{
@@ -116,6 +116,16 @@
   justify-content: center;
   max-width: 1200px;
   margin: 0 auto;
+}
+
+/* Focal and Secondary Flowers Lesson Page */
+.focal_secondary_descriptions h1{
+    margin-top: 25px;
+    color: #4a7a4a;
+}
+
+.focal_secondary_descriptions{
+  font-family: 'Indie Flower', sans-serif;
 }
 
 /* Flower Grid Styles */

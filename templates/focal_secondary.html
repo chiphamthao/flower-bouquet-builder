@@ -5,10 +5,32 @@
 {% block content %}
 <script type="text/javascript" src="{{ url_for('static', filename = 'focal_secondary.js') }}"></script>
 
-<div class="homepage-title">
-    <h1>Welcome to Poké Co.!</h1>
-    <br>
-    <p>where you can learn all about your favorite Pokémon (mainly the cute ones)</p>
+<div class="focal_secondary_descriptions">
+    <h1>What are focal flowers?</h1>
+    <h3>Focal flowers are <strong>what stand out most</strong> in an arrangement.
+        You will be drawn to them due to either their size or their eye-catching features.
+        This flower features <strong>one large bloom</strong> per stem.
+    </h3>
+    <h1>What are secondary flowers?</h1>
+    <h3>Secondary flowers <strong>support the focal flowers</strong> in a bouquet
+        without overpowering the main blooms. You can identify secondary flowers by choosing
+        ones that are <strong>smaller or less bold</strong> than the focal flowers.
+    </h3>
+</div>
+
+
+
+
+
+<div class="back_next">
+    <div class="row justify-content-between">
+        <div class="col-auto">
+            <a href="/home" class="btn btn-outline-primary">Return</a>
+        </div>
+        <div class="col-auto">
+            <a href="/focal_secondary" class="btn btn-outline-primary">Next</a>
+        </div>
+    </div>
 </div>
 
 {% endblock %}
