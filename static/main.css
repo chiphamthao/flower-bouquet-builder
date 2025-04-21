@@ -8,9 +8,10 @@
 /* Page Title Styles */
 .page-title {
   font-family: 'Indie Flower', sans-serif;
-  font-size: 2.7rem;
+  font-size: 4.5rem;
   margin-bottom: 0.5rem;
-  color: #4a7a4a;
+  /*color: #4a7a4a;*/
+  color: black;
 }
 
 .page-subtitle {
