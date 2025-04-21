@@ -34,6 +34,13 @@
     color: black !important;
 }
 
+.navbar {
+  border-bottom: 2px solid black;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+
 /* Lesson Page */
 .lesson-page{
     font-family: 'Indie Flower', sans-serif;
