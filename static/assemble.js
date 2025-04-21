@@ -252,13 +252,32 @@ $(document).ready(function () {
         cursor: "move",
         containment: "#canvas"
       });
-      // 4) insert your rotate handle *then* initialize the plugin on this wrapper
-      // if ($.fn.rotatable) {
-      //   $wrapper.append('<div class="ui-rotatable-handle"></div>');
-      //   $wrapper.rotatable({ handle: ".ui-rotatable-handle" });
-      // }
-      // // immediately hides *both* resizable + rotatable handles:
-      //  $wrapper.find(".ui-resizable-handle, .ui-rotatable-handle").hide();
+            // Compute wrapper dimensions for centering rotation
+      const wrapperWidth = $wrapper.width();
+      const wrapperHeight = $wrapper.height();
+      var params = {
+        // Callback fired on rotation start.
+        start: function(event, ui) {
+        },
+        // Callback fired during rotation.
+        rotate: function(event, ui) {
+        },
+        // Callback fired on rotation end.
+        stop: function(event, ui) {
+        },
+        // Set the rotation center
+        rotationCenterOffset: {
+          top: wrapperHeight / 2,
+          left: wrapperWidth / 2
+        },
+        transforms: {
+            translate: '0, 0',
+            scale: '1'
+            //any other transforms
+        }
+    };
+      $wrapper.append('<div class="ui-rotatable-handle"></div>');
+      $wrapper.rotatable(params);
     },
   });
 });
