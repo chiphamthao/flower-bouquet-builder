@@ -26,6 +26,23 @@
   color: #4a7a4a;
 }
 
+/* Navbar Styling */
+.nav-link{
+    font-family: 'Indie Flower', sans-serif;
+    font-size: 32px;
+    color: black !important;
+}
+
+/* Lesson Page */
+.lesson-page{
+    font-family: 'Indie Flower', sans-serif;
+    color: black;
+}
+
+.lessonlink{
+    color: black;
+}
+
 /* Homepage Styles */
 .selection-btn {
   cursor: pointer;

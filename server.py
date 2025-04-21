@@ -20,9 +20,11 @@ current_selections = {
 def homepage():
    return render_template('home.html')   
 
+
 @app.route('/home')
 def hello():
     return render_template('home.html')
+
 
 @app.route('/lessons')
 def lessons():
@@ -51,6 +53,7 @@ def save_flower():
     current_selections[ data['dropZoneType']] = (data['flowerName'], data['flowerType'], data['imageURL'])
     return jsonify(current_selections=current_selections) 
 
+
 @app.route('/clear_flower', methods=['POST'])
 def clear_flower():
     data = request.get_json()
@@ -60,6 +63,7 @@ def clear_flower():
     current_selections[flower_type] = None
     return jsonify(current_selections=current_selections) 
 
+
 @app.route('/save_theme', methods=['POST'])
 def save_theme():
     global color_theme
@@ -68,6 +72,7 @@ def save_theme():
     color_theme = data.get('color_theme', '').strip()
     current_selections["color_theme"] = color_theme
     return jsonify(current_selections=current_selections)
+
 
 if __name__ == '__main__':
    app.run(debug = True, port=5001)
