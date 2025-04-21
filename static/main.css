@@ -311,8 +311,8 @@
 
 .canvas-flower {
   position: absolute;
-  width: 250px; /* starting “really large” width */
-  height: auto; /* preserve aspect ratio */
+  width: auto; /* starting “really large” width */
+  height: 150px; /* preserve aspect ratio */
   cursor: move;
   transition: transform 0.2s;
 }
@@ -330,9 +330,25 @@
   background: rgba(74, 122, 74, 0.6);
   border-radius: 2px;
 }
+
 .ui-resizable-se {
   width: 10px;
   height: 10px;
   right: -5px;
   bottom: -5px;
+}
+
+.ui-wrapper { overflow: visible; }            /* keep from clipping */  
+.ui-rotatable-handle {
+  width: 20px;
+  height: 20px;
+  background: rgba(74,122,74,0.8);
+  border: 2px solid #4a7a4a;
+  border-radius: 50%;
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  cursor: grab;
+  z-index: 1000;     /* make sure it’s above the image */
+  display: block !important;
 }

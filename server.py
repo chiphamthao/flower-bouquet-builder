@@ -15,13 +15,14 @@ current_selections = {
     'color_theme': None
 }
 
-color_theme = ""
-
 # ROUTES
+@app.route('/')
+def homepage():
+   return render_template('home.html')   
+
 @app.route('/home')
 def hello():
     return render_template('home.html')
-
 
 @app.route('/lessons')
 def lessons():
@@ -41,8 +42,6 @@ def focal_secondary():
 @app.route('/assemble')
 def assemble():
     return render_template('assemble.html', current_selections=current_selections)
-
-
 
 # AJAX FUNCTIONS
 @app.route('/save_flower', methods=['POST'])
