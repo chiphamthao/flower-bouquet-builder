@@ -1,8 +1,49 @@
 {% extends "layout.html" %}
 
-{% block title %}Overview% endblock %}
+{% block title %}Overview{% endblock %}
 
 {% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="bouquet_image">
+                <img src="{{ url_for('static', filename='images/bouquet1.avif') }}" alt="Flower Bouquet" class="img-cropped">
+            </div>
+        </div>
+        <div class="col-md-7">
+            <div class="overview_text">
+                <h4>
+                    A full bouquet uses a blend of
+                    <a href="colors.html" class="overviewlink">colors</a> and
+                    <a href="textures.html" class="overviewlink">textures</a> to create a large arrangement.
+                    A <a href="{{ url_for('focal_secondary') }}" class="overviewlink">focal flower</a> captures attention at the center,
+                    supported by <a href="{{ url_for('focal_secondary') }}" class="overviewlink">secondary flowers</a>,
+                    while <a href="fillers.html" class="overviewlink">fillers</a> and
+                    <a href="greens.html" class="overviewlink">greens</a> tie all the elements together.
+                </h4>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="considerations">
+    <h1 style="font-weight: bold;">Considerations</h1>
+    <h2>1. What is this person's favorite color(s)?</h2>
+    <h2>2. Do they have a favorite flower(s)?</h2>
+    <h2>3. Are they from a cultural background that might have taboos related to flowers?</h2>
+</div>
+
+<div class="back_next">
+    <div class="row justify-content-between">
+        <div class="col-auto">
+            <a href="/home" class="btn btn-outline-primary">Return</a>
+        </div>
+        <div class="col-auto">
+            <a href="/focal_secondary" class="btn btn-outline-primary">Next</a>
+        </div>
+    </div>
+</div>
 
 
 {% endblock %}

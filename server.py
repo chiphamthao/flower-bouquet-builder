@@ -16,13 +16,10 @@ current_selections = {
 }
 
 # ROUTES
-@app.route('/')
-def homepage():
-   return render_template('home.html')   
 
 
 @app.route('/home')
-def hello():
+def homepage():
     return render_template('home.html')
 
 
