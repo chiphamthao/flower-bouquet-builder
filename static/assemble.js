@@ -25,6 +25,7 @@ function refreshPalette() {
 }
 
 $(document).ready(function () {
+  $("#canvas").css("position", "relative");
   // Initialize draggable on flower items
   $(".flower-item").draggable({
     helper: "clone",
@@ -210,6 +211,7 @@ $(document).ready(function () {
 
   // Canvas droppable handler
   $("#canvas").droppable({
+    // ui.helper.hide();
     accept: ".flower-item",
     drop: function (event, ui) {
       const $canvas = $(this),
@@ -218,30 +220,45 @@ $(document).ready(function () {
         y = ui.offset.top - off.top,
         $orig = ui.draggable.find("img");
 
-      // Create the clone
-      const $clone = $("<img>", {
-        src: $orig.attr("src"),
-        alt: $orig.attr("alt"),
-        class: "canvas-flower",
-      })
-        .css({
-          left: x,
-          top: y,
-          width: "250px",
-          height: "auto",
-        })
-        .appendTo($canvas)
-        // 1) Make it resizable first
-        .resizable({
-          containment: "#canvas",
-          aspectRatio: true,
-          handles: "n,e,s,w,ne,se,sw,nw",
-        })
-        // 2) Then make it draggable, *excluding* the resize‐handles
-        .draggable({
-          cancel: ".ui-resizable-handle", // clicking on handles resizes, elsewhere drags
-          cursor: "move",
+      // 1) build the <img> element
+      const aspect = $orig.height() / $orig.width(),
+        initW = 250,
+        initH = initW * aspect,
+        $img = $("<img>", {
+          src: $orig.attr("src"),
+          alt: $orig.attr("alt"),
+          class: "canvas-flower",
+        }).css({
+          position: "absolute",
+          left: x + "px",
+          top: y + "px",
+          width: initW + "px",
+          height: initH + "px",
         });
+
+      // 2) append it and make it resizable (this wraps it in a .ui-wrapper)
+      $canvas.append($img);
+      $img.resizable({
+        containment: "#canvas",
+        aspectRatio: true,
+        handles: "n, e, s, w, ne, nw, se, sw",
+        autoHide: true,
+      });
+
+      // 3) grab its wrapper and make *that* draggable
+      const $wrapper = $img.parent(); // this is the .ui-wrapper
+      $wrapper.draggable({
+        cancel: ".ui-resizable-handle, .ui-rotatable-handle",
+        cursor: "move",
+        containment: "#canvas"
+      });
+      // 4) insert your rotate handle *then* initialize the plugin on this wrapper
+      // if ($.fn.rotatable) {
+      //   $wrapper.append('<div class="ui-rotatable-handle"></div>');
+      //   $wrapper.rotatable({ handle: ".ui-rotatable-handle" });
+      // }
+      // // immediately hides *both* resizable + rotatable handles:
+      //  $wrapper.find(".ui-resizable-handle, .ui-rotatable-handle").hide();
     },
   });
 });
