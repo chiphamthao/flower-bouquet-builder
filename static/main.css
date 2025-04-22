@@ -206,7 +206,6 @@
   display: block;
 }
 
-
 /* Focal and Secondary Flowers Lesson Page */
 .focal_secondary_descriptions h1{
     margin-top: 25px;
@@ -216,6 +215,21 @@
 .focal_secondary_descriptions{
   font-family: 'Indie Flower', sans-serif;
 }
+
+.focal_secondary_vs {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+.img-vs {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border: 2px solid #333;
+    border-radius: 8px;
+}
+
 
 /* Flower Grid Styles */
 .flower-grid {
