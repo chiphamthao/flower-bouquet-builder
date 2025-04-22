@@ -117,6 +117,7 @@
   max-width: 1200px;
   margin: 0 auto;
 }
+
 /* Greens Page */
 .lesson-title {
   font-family: 'Indie Flower', sans-serif;
@@ -201,13 +202,10 @@
   border-radius: 10px;
 }
 
-
 .line-break {
   display: block;
 }
 
-<<<<<<< HEAD
-=======
 /* color harmony cyu */
 .bouquet-img {
   max-width: 400px;
@@ -303,6 +301,7 @@ label.disabled {
     align-items: center;
     justify-content: center;
     gap: 10px;
+}
 
 .img-vs {
     width: 100px;
@@ -312,6 +311,13 @@ label.disabled {
     border-radius: 8px;
 }
 
+.img-group1 {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border: 2px solid #333;
+    border-radius: 8px;
+}
 
 /* Flower Grid Styles */
 .flower-grid {
@@ -600,7 +606,7 @@ label.disabled {
   bottom: -5px;
 }
 
-.ui-wrapper { overflow: visible; }            /* keep from clipping */  
+.ui-wrapper { overflow: visible; }
 .ui-rotatable-handle {
   width: 20px;
   height: 20px;
@@ -611,7 +617,7 @@ label.disabled {
   top: -10px;
   right: -10px;
   cursor: grab;
-  z-index: 1000;     /* make sure it’s above the image */
+  z-index: 1000;
   display: none;
 }
 
