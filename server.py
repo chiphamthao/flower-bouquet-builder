@@ -1,10 +1,13 @@
-from flask import Flask
+from flask import Flask, session
 from flask import render_template
 from flask import Response, request, jsonify
+from datetime import datetime
+import uuid
 import os
 import json
 
 app = Flask(__name__)
+app.secret_key = 'secret_key' 
 
 # Dictionary to store flower selections
 current_selections = {
@@ -18,6 +21,8 @@ current_selections = {
 # ROUTES
 @app.route('/')
 def default():
+    session['user_id'] = str(uuid.uuid4())  # Create a unique ID for each session
+    session['page_visits'] = {}  # To track timestamps
     return render_template('home.html')
 
 
@@ -46,6 +51,9 @@ def fillers():
     return render_template('fillers.html')
 
 
+@app.route('/cyu_fillers')
+def cyu_fillers():
+    return render_template('cyu_fillers.html')
 @app.route('/greens')
 def greens():
     return render_template('greens.html')
@@ -54,6 +62,10 @@ def greens():
 @app.route('/color_harmony')
 def color_harmony():
     return render_template('color_harmony.html')
+@app.route('/cyu_color_harmony')
+def cyu_color_harmony():
+    return render_template('cyu_color_harmony.html')
+
 
 
 # AJAX FUNCTIONS
