@@ -118,6 +118,19 @@
   margin: 0 auto;
 }
 /* Greens Page */
+.lesson-title {
+  font-family: 'Indie Flower', sans-serif;
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  /*color: #4a7a4a;*/
+  color: black;
+}
+.lesson-subtitle {
+  font-family: 'Indie Flower', sans-serif;
+  font-size: 1.5em;
+  margin-bottom: 2rem;
+}
+
 .greens-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
