@@ -12,7 +12,6 @@ function refreshPalette() {
         </div>
       `);
       $palette.append($item);
-
       // make palette item draggable
       $item.draggable({
         helper: "clone",
@@ -22,6 +21,10 @@ function refreshPalette() {
       });
     }
   });
+
+  $palette.append($(`<div class="flower-item" data-type="Wrapping Paper" data-name="Wrapping Paper">
+    <img src="static/images/wrappingpaper.png" alt="Wrapping Paper"/>
+  </div>`));
 }
 
 $(document).ready(function () {
@@ -365,6 +368,7 @@ function display_page(current_selections) {
 
   $("#color-theme").val(current_selections.color_theme || "");
   refreshPalette();
+  
 }
 
 // 3) Listen for the Delete key

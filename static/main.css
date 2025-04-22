@@ -440,3 +440,11 @@
 .ui-wrapper.selected .ui-rotatable-handle {
   display: block !important;
 }
+
+/* Wrapping-paper shape behind the flowers */
+.canvas-wrapper {
+  position: absolute;
+  width: 100%; /* adjust default width as needed */
+  height: auto;
+  z-index: 0;
+}
