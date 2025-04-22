@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+
+{% block title %}Check your understanding{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block content %}
+<script type="text/javascript" src="{{ url_for('static', filename='color_harmony.js') }}"></script>
+<br>
+<h1 class="lesson-title" style="color: #4a7a4a; text-align: center;">check your understanding</h1>
+<p class="lesson-subtitle" style="text-align: center;">How would you describe the color theme of this bouquet?</p>
+
+
+<img src="{{ url_for('static', filename='images/cyu_bouquet.png') }}" alt="Bouquet" class="bouquet-img">
+<br><br>
+
+<form id="quizForm">
+  <div class="options">
+    <input type="radio" name="answer" id="a" value="A">
+    <label for="a">A. Monochromatic</label>
+
+    <input type="radio" name="answer" id="b" value="B">
+    <label for="b">B. Complementary</label>
+
+    <input type="radio" name="answer" id="c" value="C">
+    <label for="c">C. Analogous</label>
+
+    <input type="radio" name="answer" id="d" value="D">
+    <label for="d">D. Neutral</label>
+  </div>
+  <button type="submit" style="display: block; margin: 0 auto;">Submit</button>
+
+  <div id="feedback" class="feedback"></div>
+</form>
+
+<div class="back_next">
+  <div class="row justify-content-between">
+      <div class="col-auto">
+          <a href="/color_harmony" class="btn btn-outline-primary">Return</a>
+      </div>
+      <div class="col-auto">
+          <a href="/textures.html" class="btn btn-outline-primary">Next</a>
+      </div>
+  </div>
+</div>
+{% endblock %}

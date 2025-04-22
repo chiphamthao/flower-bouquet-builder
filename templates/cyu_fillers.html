@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block title %}Check your understanding{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block content %}
+<script type="text/javascript" src="{{ url_for('static', filename='fillers.js') }}"></script>
+<br>
+<h1 class="lesson-title" style="color: #4a7a4a; text-align: center;">check your understanding</h1>
+<p class="lesson-subtitle" style="text-align: center;">Drag and drop each flower to the correct category</p>
+
+<br><br>
+
+TBC: to be coded
+
+<div class="back_next">
+  <div class="row justify-content-between">
+      <div class="col-auto">
+          <a href="/fillers" class="btn btn-outline-primary">Return</a>
+      </div>
+      <div class="col-auto">
+          <a href="/greens" class="btn btn-outline-primary">Next</a>
+      </div>
+  </div>
+</div>
+{% endblock %}
