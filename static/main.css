@@ -427,5 +427,16 @@
   right: -10px;
   cursor: grab;
   z-index: 1000;     /* make sure it’s above the image */
+  display: none;
+}
+
+.ui-wrapper .ui-resizable-handle {
+  display: none !important;
+}
+
+.ui-wrapper.selected .ui-resizable-handle {
+  display: block !important;
+}
+.ui-wrapper.selected .ui-rotatable-handle {
   display: block !important;
 }

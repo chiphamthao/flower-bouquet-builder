@@ -24,7 +24,6 @@ def default():
 def lessons():
     return render_template('lessons.html')
 
-
 @app.route('/overview')
 def overview():
     return render_template('overview.html')
