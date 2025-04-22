@@ -117,6 +117,82 @@
   max-width: 1200px;
   margin: 0 auto;
 }
+/* Greens Page */
+.greens-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.8rem;
+  margin-bottom: 2rem;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.greens-item {
+  aspect-ratio: 1;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: grab;
+  transition: transform 0.2s ease;
+  width: 120px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+}
+.greens-item:hover {
+  transform: scale(1.05);
+}
+
+.greens-item img {
+
+  max-width: 120%;
+  max-height: 120%;
+ 
+}
+
+.hint-text {
+  font-family: 'Indie Flower', sans-serif;
+  font-size: 1.8em;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  text-align: center;
+  color: darkgreen;
+
+}
+
+/* Color Harmony Page */
+.color_harmony {
+  width: 500px;
+  height: auto; 
+  display: block;
+  margin: 0 auto;
+  border: 2px solid #444;
+  border-radius: 10px;
+}
+
+.image-text-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  max-width: 800px;
+  margin: 2rem auto;
+}
+
+.left-image {
+  width: 250px;
+  height: auto; 
+  margin-right: 10px;
+  border: 2px solid #444;
+  border-radius: 10px;
+}
+
+
+.line-break {
+  display: block;
+}
+
 
 /* Focal and Secondary Flowers Lesson Page */
 .focal_secondary_descriptions h1{

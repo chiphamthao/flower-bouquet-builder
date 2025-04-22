@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+
+{% block title %}Greens{% endblock %}
+
+{% block content %}
+<script type="text/javascript" src="{{ url_for('static', filename = 'greens.js') }}"></script>
+<br>
+    <h1 class="page-title" style="color: #4a7a4a">What are greens?</h1>
+    <p class="page-subtitle">
+        Greens are the <strong> foliage or leafy elements</strong> used in bouquets to add fullness and texture. They help frame and support the focal and secondary flowers.
+        <br>
+        <br>
+    </p>
+    
+<div class="greens-grid">
+
+    <div class="greens-item">
+        <img src="/static/images/eucalyptus.png" alt="Eucalyptus" />
+    </div>
+
+    <div class="greens-item">
+        <img src="/static/images/ruscus.png" alt="Ruscus" />
+    </div>
+
+    <div class="greens-item">
+    <img src="/static/images/fern.avif" alt="Fern" />
+    </div>
+
+    <div class="greens-item">
+        <img src="/static/images/salal.jpg" alt="Salal" />
+    </div>
+
+    <div class="greens-item">
+        <img src="/static/images/myrtle.png" alt="Myrtle" />
+    </div>
+
+    <div class="greens-item">
+        <img src="/static/images/bay_laurel.jpg" alt="Bay Laurel" />
+    </div>
+
+    <div class="greens-item">
+        <img src="/static/images/pp.webp" alt="Pittosporum" />
+    </div>
+
+    <div class="greens-item">
+        <img src="/static/images/smilax.webp" alt="Smilax" />
+    </div>
+
+</div>
+<p class="hint-text">Hint: Greens are all green!</p>
+
+
+{% endblock %}
