@@ -20,9 +20,11 @@ current_selections = {
 def default():
     return render_template('home.html')
 
+
 @app.route('/lessons')
 def lessons():
     return render_template('lessons.html')
+
 
 @app.route('/overview')
 def overview():
@@ -38,15 +40,21 @@ def focal_secondary():
 def assemble():
     return render_template('assemble.html', current_selections=current_selections)
 
+
 @app.route('/fillers')
 def fillers():
     return render_template('fillers.html')
+
+
 @app.route('/greens')
 def greens():
     return render_template('greens.html')
+
+
 @app.route('/color_harmony')
 def color_harmony():
     return render_template('color_harmony.html')
+
 
 # AJAX FUNCTIONS
 @app.route('/save_flower', methods=['POST'])
