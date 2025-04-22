@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+
+{% block title %}Fillers{% endblock %}
+
+{% block content %}
+<script type="text/javascript" src="{{ url_for('static', filename = 'fillers.js') }}"></script>
+
+<br>
+    <h1 class="page-title" style="color: #4a7a4a">What is a Filler?</h1>
+    <p class="page-subtitle">
+        Filler flowers fill out your arrangements and make them look full and complete. 
+        They <strong>feature clusters of smaller blooms. </strong>
+        They're great for <strong>adding volume, texture, and variety</strong> to your designs
+    </p>
+<div class="greens-grid">
+        <div class="greens-item">
+          <img src="/static/images/babys-breath.png" alt="Baby's Breath" />
+        </div>
+        <div class="greens-item">
+        <img src="/static/images/statice.webp" alt="Statice" />
+      </div>
+      <div class="greens-item">
+      <img src="/static/images/waxflower.webp" alt="Waxflower" />
+    </div>
+    <div class="greens-item">
+    <img src="/static/images/solidago.webp" alt="Solidago" />
+    </div>
+   
+   
+
+    </div>
+    <h1 class="page-title" style="color: #4a7a4a">What is a Unique Filler?</h1>
+    <p class="page-subtitle">     
+        A unique filler is an <strong>unconventional or eye-catching element</strong> that adds character and personality to a bouquet.
+    </p>
+    <div class="greens-grid">
+        <div class="greens-item">
+          <img src="/static/images/craspedia.webp" alt="Craspedia" />
+        </div>
+        <div class="greens-item">
+        <img src="/static/images/astilbe.webp" alt="Astilbe" />
+      </div>
+      <div class="greens-item">
+      <img src="/static/images/berries.webp" alt="Hypericum Berries" />
+    </div>
+    <div class="greens-item">
+    <img src="/static/images/thistle.webp" alt="Thistle" />
+    </div>
+
+</div>
+
+    <h1 class="page-title" style="color: #4a7a4a">See the difference?</h1>
+    <p class="page-subtitle">     
+        A normal filler is <strong>simple </strong>and fills empty spaces with <strong>little flowers or leaves.</strong>
+        <br>
+        A unique filler is more <strong>special-looking</strong> and adds <strong>fun shapes or colors</strong> to the bouquet.
+    </p>
+
+
+{% endblock %}
