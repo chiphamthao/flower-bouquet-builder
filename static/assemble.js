@@ -12,7 +12,6 @@ function refreshPalette() {
         </div>
       `);
       $palette.append($item);
-
       // make palette item draggable
       $item.draggable({
         helper: "clone",
@@ -22,6 +21,10 @@ function refreshPalette() {
       });
     }
   });
+
+  $palette.append($(`<div class="flower-item" data-type="Wrapping Paper" data-name="Wrapping Paper">
+    <img src="static/images/wrappingpaper.png" alt="Wrapping Paper"/>
+  </div>`));
 }
 
 $(document).ready(function () {
@@ -242,11 +245,12 @@ $(document).ready(function () {
         containment: "#canvas",
         aspectRatio: true,
         handles: "n, e, s, w, ne, nw, se, sw",
-        autoHide: true,
       });
 
       // 3) grab its wrapper and make *that* draggable
       const $wrapper = $img.parent(); // this is the .ui-wrapper
+      $wrapper.find(".ui-resizable-handle").hide();
+
       $wrapper.draggable({
         cancel: ".ui-resizable-handle, .ui-rotatable-handle",
         cursor: "move",
@@ -273,13 +277,28 @@ $(document).ready(function () {
         transforms: {
             translate: '0, 0',
             scale: '1'
-            //any other transforms
         }
     };
       $wrapper.append('<div class="ui-rotatable-handle"></div>');
       $wrapper.rotatable(params);
+      $(".ui-wrapper, .canvas-flower").removeClass("selected");
+
+      $wrapper.addClass("selected");
+      $img.addClass("selected");
     },
   });
+});
+
+// 1) When you click a flower image…
+$(document).on("click", ".canvas-flower", function(e) {
+  e.stopPropagation();
+  $(".ui-wrapper, .canvas-flower").removeClass("selected");
+  $(this).addClass("selected");
+  $(this).parent(".ui-wrapper").addClass("selected");
+});
+
+$(document).on("click", "#canvas", function() {
+  $(".ui-wrapper, .canvas-flower").removeClass("selected");
 });
 
 function saveDroppedFlower(data) {
@@ -349,18 +368,8 @@ function display_page(current_selections) {
 
   $("#color-theme").val(current_selections.color_theme || "");
   refreshPalette();
+  
 }
-
-$(document).on("click", ".canvas-flower", function (e) {
-  e.stopPropagation(); // don’t let parent handlers clear it immediately
-  $(".canvas-flower").removeClass("selected");
-  $(this).addClass("selected");
-});
-
-// 2) Click outside any flower to clear selection
-$(document).on("click", "#canvas", function () {
-  $(".canvas-flower").removeClass("selected");
-});
 
 // 3) Listen for the Delete key
 $(document).on("keydown", function (e) {
