@@ -66,6 +66,22 @@ def color_harmony():
 def cyu_color_harmony():
     return render_template('cyu_color_harmony.html')
 
+@app.route('/textures')
+def textures():
+    return render_template('textures.html')
+
+@app.route('/cyu_textures')
+def cyu_textures():
+    return render_template('cyu_textures.html')
+
+@app.route('/buildit_quiz1')
+def buildit_quiz1():
+    return render_template('buildit_quiz1.html')
+
+@app.route('/buildit_quiz2')
+def buildit_quiz2():
+    return render_template('buildit_quiz2.html')
+
 
 
 # AJAX FUNCTIONS

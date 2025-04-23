@@ -1,0 +1,98 @@
+{% extends "layout.html" %}
+{% block title %}Build-It! Quiz{% endblock %}
+
+{% block content %}
+<style>
+  .option-label {
+    display: block;
+    margin-top: 10px;
+    font-size: 1.2em;
+    cursor: pointer;
+  }
+
+  .feedback {
+    text-align: center;
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-top: 20px;
+  }
+
+  .correct {
+    color: #3b8c3b;
+  }
+
+  .incorrect {
+    color: #c02e2e;
+  }
+</style>
+
+<br>
+<h1 class="lesson-title" style="color: #4a7a4a;">Build-It!</h1>
+<p class="lesson-subtitle">
+  Using what you have learned from the lessons, answer these questions correctly and get to choose your flowers, fillers, and greens to create a full bouquet.
+</p>
+
+<h4>What type of color harmony are these two flowers?</h4>
+<div class="d-flex mb-3">
+  <img src="{{ url_for('static', filename='images/astilbe.webp') }}" class="img-fluid mr-3" style="max-height: 150px;" />
+  <img src="{{ url_for('static', filename='images/statice.webp') }}" class="img-fluid" style="max-height: 150px;" />
+</div>
+
+<form id="quizForm">
+    <div class="form-check d-flex align-items-center mb-2">
+        <input class="form-check-input mr-2" type="radio" name="answer" id="a" value="A">
+        <label class="form-check-label" for="a">A. Complementary</label>
+      </div>
+      
+      <div class="form-check d-flex align-items-center mb-2">
+        <input class="form-check-input mr-2" type="radio" name="answer" id="b" value="B">
+        <label class="form-check-label" for="b">B. Analogous</label>
+      </div>
+      
+      <div class="form-check d-flex align-items-center mb-2">
+        <input class="form-check-input mr-2" type="radio" name="answer" id="c" value="C">
+        <label class="form-check-label" for="c">C. Triadic</label>
+      </div>
+      
+      <div class="form-check d-flex align-items-center mb-2">
+        <input class="form-check-input mr-2" type="radio" name="answer" id="d" value="D">
+        <label class="form-check-label" for="d">D. Monochromatic</label>
+      </div>
+      <br>
+      <button type="button" class="btn btn-success" id="check-btn">Check</button>
+      <div id="feedback" class="feedback"></div>     
+</form>
+
+<div class="back_next mt-4">
+  <div class="row justify-content-between">
+    <div class="col-auto">
+      <a href="/cyu_textures" class="btn btn-outline-primary">Return</a>
+    </div>
+    <div class="col-auto">
+      <a href="/buildit_quiz2" class="btn btn-outline-primary">Next</a> <!-- Replace later -->
+    </div>
+  </div>
+</div>
+
+<script>
+  document.getElementById('check-btn').addEventListener('click', () => {
+    const selected = document.querySelector('input[name="answer"]:checked');
+    const feedback = document.getElementById('feedback');
+    feedback.classList.remove('correct', 'incorrect');
+
+    if (!selected) {
+      feedback.textContent = 'Please select an answer.';
+      feedback.classList.add('incorrect');
+      return;
+    }
+
+    if (selected.value === 'B') {
+      feedback.textContent = 'Correct! Pink and purple are next to each other on the color wheel!';
+      feedback.classList.add('correct');
+    } else {
+      feedback.textContent = 'Not Quite!';
+      feedback.classList.add('incorrect');
+    }
+  });
+</script>
+{% endblock %}

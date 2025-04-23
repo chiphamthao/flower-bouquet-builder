@@ -1,0 +1,127 @@
+{% extends "layout.html" %}
+{% block title %}Build-It! Quiz 2{% endblock %}
+
+{% block content %}
+<style>
+  .selectable-img {
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+    max-height: 120px;
+  }
+
+  .selected {
+    border-color: black;
+  }
+
+  .feedback {
+    text-align: center;
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-top: 10px;
+  }
+
+  .correct {
+    color: #3b8c3b;
+  }
+
+  .incorrect {
+    color: #c02e2e;
+  }
+</style>
+
+<h1 class="lesson-title" style="color: #4a7a4a;">Build-It!</h1>
+
+<!-- Question 1 -->
+<p class="lesson-subtitle">
+  You are using <img src="{{ url_for('static', filename='images/rose.png') }}" style="height: 30px; vertical-align: middle;"> in a bouquet, which flower is similar in texture?
+</p>
+<div class="row justify-content-center mb-2" id="row1">
+  <img src="{{ url_for('static', filename='images/rose.png') }}" class="selectable-img mx-1" data-row="1" data-index="0">
+  {% for i in range(4) %}
+    <img src="{{ url_for('static', filename='images/thistle.webp') }}" class="selectable-img mx-1" data-row="1" data-index="{{ i+1 }}">
+  {% endfor %}
+</div>
+<div id="feedback1" class="feedback"></div>
+
+<!-- Question 2 -->
+<p class="lesson-subtitle">Which flowers are NOT similar in texture? Select 2.</p>
+<div class="row justify-content-center mb-2" id="row2">
+  {% for i in range(3) %}
+    <img src="{{ url_for('static', filename='images/rose.png') }}" class="selectable-img mx-1" data-row="2" data-index="{{ i }}">
+  {% endfor %}
+  <img src="{{ url_for('static', filename='images/salal.jpg') }}" class="selectable-img mx-1" data-row="2" data-index="3">
+  <img src="{{ url_for('static', filename='images/craspedia.webp') }}" class="selectable-img mx-1" data-row="2" data-index="4">
+</div>
+<div id="feedback2" class="feedback"></div>
+
+<!-- Check button -->
+<div class="text-center mt-3">
+  <button class="btn btn-success" id="check-btn">Check</button>
+</div>
+
+<!-- Navigation -->
+<div class="back_next mt-4">
+  <div class="row justify-content-between">
+    <div class="col-auto">
+      <a href="/buildit_quiz1" class="btn btn-outline-primary">Return</a>
+    </div>
+    <div class="col-auto">
+      <a href="/assemble" class="btn btn-outline-primary">Next</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  const selectedRow1 = [];
+  const selectedRow2 = [];
+
+  document.querySelectorAll('.selectable-img').forEach(img => {
+    img.addEventListener('click', () => {
+      const row = img.dataset.row;
+      const index = parseInt(img.dataset.index);
+      const selected = row === '1' ? selectedRow1 : selectedRow2;
+
+      if (row === '1') {
+        selectedRow1.length = 0;
+        document.querySelectorAll('[data-row="1"]').forEach(el => el.classList.remove('selected'));
+        selectedRow1.push(index);
+        img.classList.add('selected');
+      } else {
+        if (selected.includes(index)) {
+          selected.splice(selected.indexOf(index), 1);
+          img.classList.remove('selected');
+        } else if (selected.length < 2) {
+          selected.push(index);
+          img.classList.add('selected');
+        }
+      }
+    });
+  });
+
+  document.getElementById('check-btn').addEventListener('click', () => {
+    const fb1 = document.getElementById('feedback1');
+    const fb2 = document.getElementById('feedback2');
+    fb1.classList.remove('correct', 'incorrect');
+    fb2.classList.remove('correct', 'incorrect');
+
+    // Validate Question 1 (correct: index 0)
+    if (selectedRow1.length === 1 && selectedRow1[0] === 0) {
+      fb1.textContent = 'Correct! Rose is the same texture as itself.';
+      fb1.classList.add('correct');
+    } else {
+      fb1.textContent = 'Not Quite!';
+      fb1.classList.add('incorrect');
+    }
+
+    // Validate Question 2 (correct: index 3 and 4)
+    if (selectedRow2.length === 2 && selectedRow2.includes(3) && selectedRow2.includes(4)) {
+      fb2.textContent = 'Correct! Salal and Craspedia have different textures.';
+      fb2.classList.add('correct');
+    } else {
+      fb2.textContent = 'Not Quite!';
+      fb2.classList.add('incorrect');
+    }
+  });
+</script>
+{% endblock %}
