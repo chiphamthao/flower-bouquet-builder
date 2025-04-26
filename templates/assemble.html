@@ -3,6 +3,7 @@
 <script src="{{ url_for('static', filename='assemble.js') }}"></script>
 <script>
   let current_selections = {{current_selections|tojson}}
+  let canvas_flowers = {{canvas_flowers|tojson}}
 </script>
 
 <div class="content">
@@ -221,6 +222,6 @@
         <a href="/buildit_quiz2" class="btn btn-outline-primary">Return</a>
       </div>
     </div>
-  </div>  
+  </div>
   {% endblock %}
 </div>

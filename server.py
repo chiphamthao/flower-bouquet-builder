@@ -17,6 +17,7 @@ current_selections = {
     'greens': None,
     'color_theme': None
 }
+canvas_flowers = []
 
 # ROUTES
 @app.route('/')
@@ -43,8 +44,26 @@ def focal_secondary():
 
 @app.route('/assemble')
 def assemble():
-    return render_template('assemble.html', current_selections=current_selections)
+    global canvas_flowers
+    return render_template(
+        'assemble.html',
+        current_selections=current_selections,
+        canvas_flowers=canvas_flowers
+    )
 
+@app.route('/update_canvas', methods=['POST'])
+def update_canvas():
+    global canvas_flowers
+    data = request.get_json()
+
+    for f in canvas_flowers:
+        if f['id'] == data['id']:
+            f.update(data)
+            break
+    else:
+        canvas_flowers.append(data)
+
+    return jsonify(canvas_flowers=canvas_flowers)
 
 @app.route('/fillers')
 def fillers():

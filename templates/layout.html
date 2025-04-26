@@ -8,12 +8,12 @@
 
     <!-- jquery -->
     <script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
     <link
       rel="stylesheet"
       href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css"
     />
-    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
-    
+
     <script src="https://cdn.jsdelivr.net/gh/godswearhats/jquery-ui-rotatable@1.1.1/jquery.ui.rotatable.min.js"></script>
 
     <!-- Bootstrap 4.2.1 -->
@@ -25,20 +25,29 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{url_for('static', filename='main.css')}}" />
 
-    <link href="https://fonts.googleapis.com/css?family=Indie+Flower" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css?family=Indie+Flower"
+      rel="stylesheet"
+    />
 
     <title>Bouquet Builder</title>
   </head>
   <body>
-  <nav class="navbar navbar-expand-lg navbar-light" style="border-bottom: 1.5px solid black;">
-    <div class="container-fluid px-0">
-      <div class="d-flex w-100 justify-content-between text-center" id="navbarHome">
-        <a class="nav-link flex-fill" href="/">Home</a>
-        <a class="nav-link flex-fill" href="/lessons">Lessons</a>
-        <a class="nav-link flex-fill" href="/buildit_quiz1">Build-it!</a>
+    <nav
+      class="navbar navbar-expand-lg navbar-light"
+      style="border-bottom: 1.5px solid black"
+    >
+      <div class="container-fluid px-0">
+        <div
+          class="d-flex w-100 justify-content-between text-center"
+          id="navbarHome"
+        >
+          <a class="nav-link flex-fill" href="/">Home</a>
+          <a class="nav-link flex-fill" href="/lessons">Lessons</a>
+          <a class="nav-link flex-fill" href="/buildit_quiz1">Build-it!</a>
+        </div>
       </div>
-    </div>
-  </nav>
+    </nav>
 
     <div class="container">{% block content %} {% endblock %}</div>
   </body>

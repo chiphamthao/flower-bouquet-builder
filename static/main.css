@@ -7,7 +7,7 @@
 
 /* Page Title Styles */
 .page-title {
-  font-family: 'Indie Flower', sans-serif;
+  font-family: "Indie Flower", sans-serif;
   font-size: 4.5rem;
   margin-bottom: 0.5rem;
   /*color: #4a7a4a;*/
@@ -15,23 +15,23 @@
 }
 
 .page-subtitle {
-  font-family: 'Indie Flower', sans-serif;
+  font-family: "Indie Flower", sans-serif;
   font-size: 1.2em;
   margin-bottom: 2rem;
 }
 
 .section-title {
-  font-family: 'Indie Flower', sans-serif;
+  font-family: "Indie Flower", sans-serif;
   font-size: 1.5em;
   margin-bottom: 1.5rem;
   color: #4a7a4a;
 }
 
 /* Navbar Styling */
-.nav-link{
-    font-family: 'Indie Flower', sans-serif;
-    font-size: 32px;
-    color: black !important;
+.nav-link {
+  font-family: "Indie Flower", sans-serif;
+  font-size: 32px;
+  color: black !important;
 }
 
 .navbar {
@@ -40,15 +40,14 @@
   padding-bottom: 0;
 }
 
-
 /* Lesson Page */
-.lesson-page{
-    font-family: 'Indie Flower', sans-serif;
-    color: black;
+.lesson-page {
+  font-family: "Indie Flower", sans-serif;
+  color: black;
 }
 
-.lessonlink{
-    color: black;
+.lessonlink {
+  color: black;
 }
 
 /* Forward/Back Buttons */
@@ -58,10 +57,10 @@
   margin-bottom: 30px;
 }
 
-.btn.btn-outline-primary{
-    font-family: 'Indie Flower', sans-serif;
-    color: gray;
-    border-color: gray;
+.btn.btn-outline-primary {
+  font-family: "Indie Flower", sans-serif;
+  color: gray;
+  border-color: gray;
 }
 
 /* Overview Page */
@@ -73,22 +72,22 @@
   margin-top: 35px;
 }
 
-.overview_text h4{
-    font-family: 'Indie Flower', sans-serif;
-    font-size: 2.3rem !important;
-    line-height: 1.6;
-    margin-top: 25px;
+.overview_text h4 {
+  font-family: "Indie Flower", sans-serif;
+  font-size: 2.3rem !important;
+  line-height: 1.6;
+  margin-top: 25px;
 }
 
-.overviewlink{
-    color: black;
-    font-weight: bold;
-    text-decoration: underline;
+.overviewlink {
+  color: black;
+  font-weight: bold;
+  text-decoration: underline;
 }
 
-.considerations{
-    font-family: 'Indie Flower', sans-serif;
-    margin-top: 50px;
+.considerations {
+  font-family: "Indie Flower", sans-serif;
+  margin-top: 50px;
 }
 
 /* Homepage Styles */
@@ -110,7 +109,7 @@
 }
 
 .btn-container {
-  font-family: 'Indie Flower', sans-serif;
+  font-family: "Indie Flower", sans-serif;
   font-size: 1.5rem;
   display: flex;
   justify-content: center;
@@ -120,14 +119,14 @@
 
 /* Greens Page */
 .lesson-title {
-  font-family: 'Indie Flower', sans-serif;
+  font-family: "Indie Flower", sans-serif;
   font-size: 2.5rem;
   margin-bottom: 0.5rem;
   /*color: #4a7a4a;*/
   color: black;
 }
 .lesson-subtitle {
-  font-family: 'Indie Flower', sans-serif;
+  font-family: "Indie Flower", sans-serif;
   font-size: 1.5em;
   margin-bottom: 2rem;
 }
@@ -160,26 +159,23 @@
 }
 
 .greens-item img {
-
   max-width: 120%;
   max-height: 120%;
- 
 }
 
 .hint-text {
-  font-family: 'Indie Flower', sans-serif;
+  font-family: "Indie Flower", sans-serif;
   font-size: 1.8em;
   font-weight: bold;
   margin-bottom: 2rem;
   text-align: center;
   color: darkgreen;
-
 }
 
 /* Color Harmony Page */
 .color_harmony {
   width: 500px;
-  height: auto; 
+  height: auto;
   display: block;
   margin: 0 auto;
   border: 2px solid #444;
@@ -196,7 +192,7 @@
 
 .left-image {
   width: 250px;
-  height: auto; 
+  height: auto;
   margin-right: 10px;
   border: 2px solid #444;
   border-radius: 10px;
@@ -287,36 +283,36 @@ label.disabled {
 }
 
 /* Focal and Secondary Flowers Lesson Page */
-.focal_secondary_descriptions h1{
-    margin-top: 25px;
-    color: #4a7a4a;
+.focal_secondary_descriptions h1 {
+  margin-top: 25px;
+  color: #4a7a4a;
 }
 
-.focal_secondary_descriptions{
-  font-family: 'Indie Flower', sans-serif;
+.focal_secondary_descriptions {
+  font-family: "Indie Flower", sans-serif;
 }
 
 .focal_secondary_vs {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
 
 .img-vs {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    border: 2px solid #333;
-    border-radius: 8px;
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border: 2px solid #333;
+  border-radius: 8px;
 }
 
 .img-group1 {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    border: 2px solid #333;
-    border-radius: 8px;
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border: 2px solid #333;
+  border-radius: 8px;
 }
 
 /* Flower Grid Styles */
@@ -606,11 +602,13 @@ label.disabled {
   bottom: -5px;
 }
 
-.ui-wrapper { overflow: visible; }
+.ui-wrapper {
+  overflow: visible;
+}
 .ui-rotatable-handle {
   width: 20px;
   height: 20px;
-  background: rgba(74,122,74,0.8);
+  background: rgba(74, 122, 74, 0.8);
   border: 2px solid #4a7a4a;
   border-radius: 50%;
   position: absolute;
