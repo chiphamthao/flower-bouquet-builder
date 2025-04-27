@@ -3,6 +3,9 @@
 <script src="{{ url_for('static', filename='assemble.js') }}"></script>
 <script>
   let current_selections = {{current_selections|tojson}}
+  let canvas_flowers = {{canvas_flowers|tojson}}
+  let hasError = {{hasError|tojson}}
+  let remaining = {{remaining|tojson}}
 </script>
 
 <div class="content">
@@ -220,7 +223,10 @@
       <div class="col-auto">
         <a href="/buildit_quiz2" class="btn btn-outline-primary">Return</a>
       </div>
+      <div class="col-auto">
+        <a href="/final" class="btn btn-primary">Finish</a>
+      </div>
     </div>
-  </div>  
+  </div>
   {% endblock %}
 </div>

@@ -17,6 +17,8 @@ current_selections = {
     'greens': None,
     'color_theme': None
 }
+canvas_flowers = []
+MAX_CHECKS = 3
 
 # ROUTES
 @app.route('/')
@@ -25,6 +27,31 @@ def default():
     session['page_visits'] = {}  # To track timestamps
     return render_template('home.html')
 
+def is_bouquet_valid(selections):
+    # replicate your client‐side logic here
+    types = ["focal", "secondary", "filler", "greens"]
+    if not selections:
+        return False
+    for t in types:
+        if t not in selections or selections[t] == None or selections[t][1] != t:
+            return False
+    return True
+
+@app.route("/check_bouquet", methods=["POST"])
+def check_bouquet():
+    global MAX_CHECKS
+
+    data = request.get_json() or {}
+    selections = data.get("selections", {})
+    valid = is_bouquet_valid(selections)
+
+    if not valid:
+        MAX_CHECKS =  max(0, MAX_CHECKS - 1)
+
+    return jsonify({
+        "hasError": not valid,
+        "remaining": MAX_CHECKS
+    })
 
 @app.route('/lessons')
 def lessons():
@@ -43,8 +70,43 @@ def focal_secondary():
 
 @app.route('/assemble')
 def assemble():
-    return render_template('assemble.html', current_selections=current_selections)
+    global canvas_flowers
+    return render_template(
+        'assemble.html',
+        current_selections=current_selections,
+        canvas_flowers=canvas_flowers,
+        hasError = False,
+        remaining = MAX_CHECKS
+    )
 
+@app.route('/update_canvas', methods=['POST'])
+def update_canvas():
+    global canvas_flowers
+    data = request.get_json()
+
+    # Try to update an existing flower
+    found = False
+    for f in canvas_flowers:
+        if f['id'] == data['id']:
+            f.update(data)
+            found = True
+            break
+
+    if not found:
+        canvas_flowers.append(data)
+
+    return jsonify(canvas_flowers=canvas_flowers)
+
+@app.route("/delete_canvas", methods=["POST"])
+def delete_canvas():
+    data = request.get_json()
+    global canvas_flowers
+    canvas_flowers = [f for f in canvas_flowers if f["id"] != data["id"]]
+    return jsonify(canvas_flowers=canvas_flowers)
+
+@app.route('/final')
+def final():
+    return render_template('final.html', canvas_flowers=canvas_flowers, current_selections = current_selections)
 
 @app.route('/fillers')
 def fillers():

@@ -22,284 +22,17 @@ function refreshPalette() {
     }
   });
 
-  $palette.append($(`<div class="flower-item" data-type="Wrapping Paper" data-name="Wrapping Paper">
-    <img src="static/images/wrappingpaper.png" alt="Wrapping Paper"/>
-  </div>`));
+  $palette.append(
+    $(`<div class="flower-item" data-type="Wrapping Paper" data-name="Wrapping Paper">
+    <img src="static/images/wrap_paper.png" alt="Wrapping Paper"/>
+  </div>`).draggable({
+      helper: "clone",
+      revert: "invalid",
+      opacity: 0.7,
+      zIndex: 200,
+    })
+  );
 }
-
-$(document).ready(function () {
-  $("#canvas").css("position", "relative");
-  // Initialize draggable on flower items
-  $(".flower-item").draggable({
-    helper: "clone",
-    revert: "invalid",
-    cursor: "move",
-    opacity: 0.6,
-    zIndex: 100,
-    start: function (event, ui) {
-      $(this).addClass("dragging");
-    },
-    stop: function (event, ui) {
-      $(this).removeClass("dragging");
-    },
-  });
-
-  // Initialize droppable on drop zones
-  $(".drop-zone").droppable({
-    accept: ".flower-item",
-    hoverClass: "drag-over",
-    drop: function (event, ui) {
-      const $dropZone = $(this);
-      const $draggedItem = ui.draggable;
-      const $originalImg = $draggedItem.find("img");
-      const dropZoneType = $dropZone.data("type");
-      const flowerName = $draggedItem.data("name");
-      const originalFlowerType = $draggedItem.data("type");
-
-      const $newImg = $("<img>", {
-        src: $originalImg.attr("src"),
-        alt: $originalImg.attr("alt"),
-        "data-type": originalFlowerType,
-      }).css({
-        opacity: 0,
-        "max-width": "100%",
-        "max-height": "100%",
-        "object-fit": "contain",
-        transition: "opacity 0.3s ease",
-      });
-
-      // Clear existing content and add new image
-      $dropZone.empty().append($newImg);
-
-      // Trigger reflow and fade in
-      setTimeout(() => {
-        $newImg.css("opacity", 1);
-      }, 50);
-
-      // Save to server
-      saveDroppedFlower({
-        flowerType: originalFlowerType,
-        flowerName: flowerName,
-        imageURL: $originalImg.attr("src"),
-        dropZoneType: dropZoneType,
-      });
-    },
-  });
-
-  // Right click to clear drop zones
-  $(".drop-zone").on("contextmenu", function (e) {
-    e.preventDefault();
-    const $dropZone = $(this);
-    const flowerType = $dropZone.data("type");
-
-    // Fade out before removing
-    const $img = $dropZone.find("img");
-    if ($img.length) {
-      $img.css({
-        opacity: 0,
-        transition: "opacity 0.3s ease",
-      });
-      setTimeout(() => {
-        $dropZone.empty();
-      }, 300);
-    }
-
-    // Clear on server
-    clearDroppedFlower({
-      flowerType: flowerType,
-    });
-  });
-
-  // Initial display
-  if (typeof current_selections !== "undefined") {
-    display_page(current_selections);
-  }
-
-  // Add the bouquet checking functionality
-  $("#check-bouquet").on("click", function () {
-    const types = ["focal", "secondary", "filler", "greens"];
-    let hasError = false;
-
-    // Reset all check items
-    $(".check-item").each(function () {
-      $(this).removeClass("correct");
-      $(this).find(".validation-indicator").removeClass("correct incorrect");
-    });
-
-    // Check each type
-    types.forEach((type, index) => {
-      const $checkItem = $(`.check-item:eq(${index})`);
-      const $indicator = $checkItem.find(".validation-indicator");
-
-      if (current_selections[type]) {
-        // Get the flower's type from the tuple (second element)
-        const flowerType = current_selections[type][1];
-
-        // Simply check if the flower type matches the key in current_selections
-        if (type === flowerType) {
-          $checkItem.addClass("correct");
-          $indicator.addClass("correct");
-        } else {
-          $indicator.addClass("incorrect");
-          hasError = true;
-        }
-      } else {
-        $indicator.addClass("incorrect");
-        hasError = true;
-      }
-    });
-
-    // Show appropriate message
-    const $message = $(".validation-message");
-    $message.removeClass("show error success");
-
-    setTimeout(() => {
-      if (hasError) {
-        $message
-          .text("Please check your selections again!")
-          .addClass("show error");
-      } else {
-        $message.text("Perfect!").addClass("show success");
-      }
-    }, 100);
-  });
-
-  $("#submit-theme").on("click", submitTheme);
-
-  // 3) On Enter key inside the textarea…
-  $("#color-theme").on("keypress", function (e) {
-    if (e.which === 13) {
-      e.preventDefault();
-      submitTheme();
-    }
-  });
-
-  function submitTheme() {
-    const theme = $("#color-theme").val().trim();
-    if (!theme) {
-      return $(".theme-message")
-        .text("Please enter a color theme.")
-        .addClass("error")
-        .removeClass("success");
-    }
-    $.ajax({
-      url: "/save_theme",
-      method: "POST",
-      contentType: "application/json",
-      data: JSON.stringify({ color_theme: theme }),
-      success: function (resp) {
-        current_selections = resp.current_selections;
-        display_page(current_selections);
-        $(".theme-message")
-          .text("Color theme saved.")
-          .addClass("success")
-          .removeClass("error");
-      },
-      error: function () {
-        $(".theme-message")
-          .text("Error saving theme; try again.")
-          .addClass("error")
-          .removeClass("success");
-      },
-    });
-  }
-
-  // Make palette-items draggable into the new canvas
-  $(".flower-sidebar .flower-item").draggable({
-    helper: "clone",
-    revert: "invalid",
-    opacity: 0.7,
-    zIndex: 200,
-  });
-
-  // Canvas droppable handler
-  $("#canvas").droppable({
-    // ui.helper.hide();
-    accept: ".flower-item",
-    drop: function (event, ui) {
-      const $canvas = $(this),
-        off = $canvas.offset(),
-        x = ui.offset.left - off.left,
-        y = ui.offset.top - off.top,
-        $orig = ui.draggable.find("img");
-
-      // 1) build the <img> element
-      const aspect = $orig.height() / $orig.width(),
-        initW = 250,
-        initH = initW * aspect,
-        $img = $("<img>", {
-          src: $orig.attr("src"),
-          alt: $orig.attr("alt"),
-          class: "canvas-flower",
-        }).css({
-          position: "absolute",
-          left: x + "px",
-          top: y + "px",
-          width: initW + "px",
-          height: initH + "px",
-        });
-
-      // 2) append it and make it resizable (this wraps it in a .ui-wrapper)
-      $canvas.append($img);
-      $img.resizable({
-        containment: "#canvas",
-        aspectRatio: true,
-        handles: "n, e, s, w, ne, nw, se, sw",
-      });
-
-      // 3) grab its wrapper and make *that* draggable
-      const $wrapper = $img.parent(); // this is the .ui-wrapper
-      $wrapper.find(".ui-resizable-handle").hide();
-
-      $wrapper.draggable({
-        cancel: ".ui-resizable-handle, .ui-rotatable-handle",
-        cursor: "move",
-        containment: "#canvas"
-      });
-            // Compute wrapper dimensions for centering rotation
-      const wrapperWidth = $wrapper.width();
-      const wrapperHeight = $wrapper.height();
-      var params = {
-        // Callback fired on rotation start.
-        start: function(event, ui) {
-        },
-        // Callback fired during rotation.
-        rotate: function(event, ui) {
-        },
-        // Callback fired on rotation end.
-        stop: function(event, ui) {
-        },
-        // Set the rotation center
-        rotationCenterOffset: {
-          top: wrapperHeight / 2,
-          left: wrapperWidth / 2
-        },
-        transforms: {
-            translate: '0, 0',
-            scale: '1'
-        }
-    };
-      $wrapper.append('<div class="ui-rotatable-handle"></div>');
-      $wrapper.rotatable(params);
-      $(".ui-wrapper, .canvas-flower").removeClass("selected");
-
-      $wrapper.addClass("selected");
-      $img.addClass("selected");
-    },
-  });
-});
-
-// 1) When you click a flower image…
-$(document).on("click", ".canvas-flower", function(e) {
-  e.stopPropagation();
-  $(".ui-wrapper, .canvas-flower").removeClass("selected");
-  $(this).addClass("selected");
-  $(this).parent(".ui-wrapper").addClass("selected");
-});
-
-$(document).on("click", "#canvas", function() {
-  $(".ui-wrapper, .canvas-flower").removeClass("selected");
-});
 
 function saveDroppedFlower(data) {
   $.ajax({
@@ -368,15 +101,369 @@ function display_page(current_selections) {
 
   $("#color-theme").val(current_selections.color_theme || "");
   refreshPalette();
-  
 }
 
-// 3) Listen for the Delete key
-$(document).on("keydown", function (e) {
-  if (e.key === "Delete" || e.keyCode === 46 || e.keyCode === 8) {
-    const $sel = $(".canvas-flower.selected");
-    if ($sel.length) {
-      $sel.remove();
-    }
+function submitTheme() {
+  const theme = $("#color-theme").val().trim();
+  if (!theme) {
+    return $(".theme-message")
+      .text("Please enter a color theme.")
+      .addClass("error")
+      .removeClass("success");
   }
+  $.ajax({
+    url: "/save_theme",
+    method: "POST",
+    contentType: "application/json",
+    data: JSON.stringify({ color_theme: theme }),
+    success: function (resp) {
+      current_selections = resp.current_selections;
+      display_page(current_selections);
+      $(".theme-message")
+        .text("Color theme saved.")
+        .addClass("success")
+        .removeClass("error");
+    },
+    error: function () {
+      $(".theme-message")
+        .text("Error saving theme; try again.")
+        .addClass("error")
+        .removeClass("success");
+    },
+  });
+}
+
+function addCanvasFlower(info) {
+  const { id, src, left, top, width, height, rotation = 0 } = info;
+  const $canvas = $("#canvas");
+
+  // 1) Outer wrapper for dragging
+  const $dragWrapper = $("<div>")
+    .addClass("drag-wrapper")
+    .css({
+      position: "absolute",
+      left: `${left}px`,
+      top: `${top}px`,
+    })
+    .data("id", id)
+    .appendTo($canvas);
+
+  // 2) Inner wrapper for rotating and resizing
+  const $rotateWrapper = $("<div>")
+    .addClass("rotate-wrapper")
+    .css({
+      width: `${width}px`,
+      height: `${height}px`,
+      transformOrigin: "50% 50%",
+    })
+    .appendTo($dragWrapper);
+
+  // 3) The flower image filling the inner wrapper
+  const $img = $("<img>", { src, class: "canvas-flower" })
+    .css({ width: "100%", height: "100%" })
+    .appendTo($rotateWrapper);
+
+  $rotateWrapper.resizable({
+    aspectRatio: true,
+    handles: "n,e,s,w,ne,nw,se,sw",
+    stop: (e, ui) => {
+      // 1) new size
+      const { width: w, height: h } = ui.size;
+
+      // 2) how far the inner wrapper moved
+      const rel = $rotateWrapper.position(); // {left, top} relative to dragWrapper
+
+      // 3) compute new outer wrapper coords
+      const parentPos = $dragWrapper.position();
+      const newLeft = parentPos.left + rel.left;
+      const newTop = parentPos.top + rel.top;
+
+      // 4) reset inner wrapper back to top-left of dragWrapper
+      $rotateWrapper.css({
+        width: `${w}px`,
+        height: `${h}px`,
+        top: `0px`,
+        left: `0px`,
+        transformOrigin: `${w / 2}px ${h / 2}px`,
+      });
+
+      // 5) move the dragWrapper to absorb that shift
+      $dragWrapper.css({ left: `${newLeft}px`, top: `${newTop}px` });
+
+      // 6) post the true position & size
+      const lastAngle = $rotateWrapper.data("rotationObj")?.current || 0;
+      postUpdate({
+        id,
+        src,
+        left: newLeft,
+        top: newTop,
+        width: w,
+        height: h,
+        rotation: lastAngle,
+      });
+    },
+  });
+
+  // 5) Draggable on the outer wrapper
+  $dragWrapper.draggable({
+    containment: "#canvas",
+    stop: (e, ui) => {
+      const lastAngle = $rotateWrapper.data("rotationObj")?.current || 0;
+      postUpdate({
+        id,
+        src,
+        left: $dragWrapper.position().left,
+        top: $dragWrapper.position().top,
+        width: $rotateWrapper.width(),
+        height: $rotateWrapper.height(),
+        rotation: lastAngle,
+      });
+    },
+  });
+
+  // 6) Rotatable on the inner wrapper
+  $rotateWrapper.rotatable({
+    rotationCenterOffset: { top: height / 2, left: width / 2 },
+    wheelRotate: false,
+    stop: (e, ui) => {
+      $rotateWrapper.data("rotationObj", ui.angle);
+      postUpdate({
+        id,
+        src,
+        left: $dragWrapper.position().left,
+        top: $dragWrapper.position().top,
+        width: $rotateWrapper.width(),
+        height: $rotateWrapper.height(),
+        rotation: ui.angle.current,
+      });
+    },
+  });
+
+  // 7) Restore saved state on load
+  // position
+  $dragWrapper.css({ left: `${left}px`, top: `${top}px` });
+  // rotation
+  const initAngle = typeof rotation === "object" ? rotation.current : rotation;
+  $rotateWrapper.rotatable("angle", initAngle);
+  // full CSS matrix (if any)
+}
+
+function postUpdate(data) {
+  console.log("posting update", data);
+  $.ajax({
+    url: "/update_canvas",
+    method: "POST",
+    contentType: "application/json",
+    data: JSON.stringify(data),
+    success: function (response) {
+      canvas_flowers = response.canvas_flowers;
+    },
+    error: function (xhr, status, error) {
+      console.error("Error updating canvas:", error);
+    },
+  });
+}
+
+$(document).ready(function () {
+  if (typeof current_selections !== "undefined") {
+    display_page(current_selections);
+  }
+  if (typeof canvas_flowers !== "undefined") {
+    console.log(canvas_flowers);
+    canvas_flowers.forEach(addCanvasFlower);
+  }
+
+  $("#canvas").css("position", "relative");
+
+  $(".drop-zone").droppable({
+    accept: ".flower-item",
+    hoverClass: "drag-over",
+    drop: function (event, ui) {
+      const $drop = $(this);
+      const $orig = ui.draggable.find("img");
+      const data = {
+        flowerType: ui.draggable.data("type"),
+        flowerName: ui.draggable.data("name"),
+        imageURL: $orig.attr("src"),
+        dropZoneType: $drop.data("type"),
+      };
+      $drop.empty().append(
+        $("<img>", {
+          src: data.imageURL,
+          alt: data.flowerName,
+          "data-type": data.flowerType,
+        }).css({
+          opacity: 0,
+          "max-width": "100%",
+          "max-height": "100%",
+          "object-fit": "contain",
+          transition: "opacity 0.3s ease",
+        })
+      );
+      setTimeout(() => $drop.find("img").css("opacity", 1), 50);
+      saveDroppedFlower(data);
+    },
+  });
+
+  $("#canvas")
+    .droppable({
+      accept: ".flower-item",
+      drop: (e, ui) => {
+        const off = $("#canvas").offset();
+        const left = ui.offset.left - off.left,
+          top = ui.offset.top - off.top;
+        const $orig = ui.draggable.find("img");
+        const initW = 250,
+          initH = initW * ($orig.height() / $orig.width());
+        const id = "f-" + Date.now(),
+          src = $orig.attr("src");
+
+        addCanvasFlower({
+          id,
+          src,
+          left,
+          top,
+          width: initW,
+          height: initH,
+          rotation: 0,
+        });
+        postUpdate({
+          id,
+          src,
+          left,
+          top,
+          width: initW,
+          height: initH,
+          rotation: 0,
+        });
+      },
+    })
+    .css("position", "relative");
+
+  $(".flower-item").draggable({
+    helper: "clone",
+    revert: "invalid",
+    cursor: "move",
+    opacity: 0.7,
+    zIndex: 200,
+  });
+
+  // Replace your old handler with this:
+  $("#check-bouquet").on("click", function () {
+    const types = ["focal", "secondary", "filler", "greens"];
+    let hasErrorLocal = false;
+
+    // 1) Highlight each check-item as correct or incorrect
+    $(".check-item").each(function (index) {
+      const type = types[index];
+      const $item = $(this);
+      const $ind = $item.find(".validation-indicator");
+      $item.removeClass("correct incorrect");
+      $ind.removeClass("correct incorrect");
+
+      if (current_selections[type] && current_selections[type][1] === type) {
+        $item.addClass("correct");
+        $ind.addClass("correct");
+      } else {
+        $ind.addClass("incorrect");
+        hasErrorLocal = true;
+      }
+    });
+
+    // 2) Send to server to track remaining tries
+    const payload = { selections: current_selections };
+    $.ajax({
+      url: "/check_bouquet",
+      method: "POST",
+      contentType: "application/json",
+      data: JSON.stringify(payload),
+      success(resp) {
+        const { hasError, remaining } = resp;
+        const $msg = $(".validation-message").removeClass("show error success");
+
+        // slight delay so the UI updates “pop”
+        setTimeout(() => {
+          if (hasError) {
+            $msg
+              .text(
+                `Please check your selections again! (${remaining} tries left)`
+              )
+              .addClass("show error");
+            if (remaining <= 0) {
+              $("#check-bouquet").prop("disabled", true).text("No More Checks");
+            }
+          } else {
+            $msg.text("Perfect!").addClass("show success");
+          }
+        }, 100);
+      },
+      error() {
+        console.error("Check-bouquet request failed");
+      },
+    });
+  });
+
+  $("#submit-theme").on("click", submitTheme);
+  $("#color-theme").on("keypress", function (e) {
+    if (e.which === 13) {
+      e.preventDefault();
+      submitTheme();
+    }
+  });
+
+  $(".drop-zone").on("contextmenu", function (e) {
+    e.preventDefault();
+    const $drop = $(this);
+    const type = $drop.data("type");
+    const $img = $drop.find("img");
+    if ($img.length) {
+      $img.css({ opacity: 0, transition: "opacity 0.3s ease" });
+      setTimeout(() => $drop.empty(), 300);
+    }
+    clearDroppedFlower({ flowerType: type });
+  });
+
+  $(document).on("keydown", function (e) {
+    if (e.key === "Delete" || e.keyCode === 46 || e.keyCode === 8) {
+      const $sel = $(".canvas-flower.selected");
+      if ($sel.length) {
+        const $wrap = $sel.closest(".drag-wrapper");
+        const id = $wrap.data("id");
+        if (!id) {
+          console.warn("No ID on wrapper, skipping delete");
+          return;
+        }
+
+        // 2) Remove from DOM
+        $wrap.remove();
+        $sel.remove();
+
+        // 3) Tell server to delete
+        $.ajax({
+          url: "/delete_canvas", // or better: "/delete_canvas"
+          method: "POST",
+          contentType: "application/json",
+          data: JSON.stringify({ id, deleted: true }),
+          success(response) {
+            canvas_flowers = response.canvas_flowers;
+            display_page(current_selections);
+          },
+          error(xhr, status, err) {
+            console.error("Failed to delete canvas flower:", err);
+          },
+        });
+      }
+    }
+  });
+
+  $(document).on("click", ".canvas-flower", function (e) {
+    e.stopPropagation();
+    $(".drag-wrapper, .canvas-flower").removeClass("selected");
+    $(this).addClass("selected").closest(".drag-wrapper").addClass("selected");
+  });
+
+  // clicking outside clears selection
+  $(document).on("click", "#canvas", function () {
+    $(".drag-wrapper, .canvas-flower").removeClass("selected");
+  });
 });
