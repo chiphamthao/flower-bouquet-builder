@@ -581,59 +581,58 @@ label.disabled {
   transition: transform 0.2s;
 }
 
-.canvas-flower.selected {
-  outline: 3px dashed #c74a4a;
-  outline-offset: 4px;
+/* Resizable handles (hidden by default, shown when selected) */
+.rotate-wrapper .ui-resizable-handle {
+  background: rgba(11, 110, 11, 0.6);
+  border: 2px !important;
+  display: none !important;
 }
 
-.canvas-flower:hover {
-  transform: scale(1.1);
+.rotate-wrapper .ui-resizable-n,
+.rotate-wrapper .ui-resizable-s {
+  height: 2px !important;
 }
 
-.ui-resizable-handle {
-  background: rgba(74, 122, 74, 0.6);
-  border-radius: 2px;
+/* vertical bars */
+.rotate-wrapper .ui-resizable-e,
+.rotate-wrapper .ui-resizable-w {
+  width: 2px !important;
 }
 
-.ui-resizable-se {
+.rotate-wrapper .ui-resizable-se {
   width: 10px;
   height: 10px;
   right: -5px;
   bottom: -5px;
 }
 
-.ui-wrapper {
-  overflow: visible;
+.rotate-wrapper .canvas-flower {
+  position: relative !important;
+  width: calc(100% - 12px) !important;
+  height: calc(100% - 12px) !important;
+  margin: 0 auto !important;
 }
-.ui-rotatable-handle {
-  width: 20px;
-  height: 20px;
-  background: rgba(74, 122, 74, 0.8);
-  border: 2px solid #4a7a4a;
-  border-radius: 50%;
+
+.rotate-wrapper {
+  position: relative;
+  box-sizing: content-box;
+}
+
+.rotate-wrapper .ui-rotatable-handle {
   position: absolute;
   top: -10px;
   right: -10px;
+  width: 20px;
+  height: 20px;
+  background: rgba(74, 122, 74, 0.8);
+  border: 1px solid #4a7a4a;
+  border-radius: 100% 100% 0 0;
   cursor: grab;
   z-index: 1000;
-  display: none;
-}
-
-.ui-wrapper .ui-resizable-handle {
   display: none !important;
 }
 
-.ui-wrapper.selected .ui-resizable-handle {
+.drag-wrapper.selected .ui-resizable-handle,
+.drag-wrapper.selected .ui-rotatable-handle {
   display: block !important;
-}
-.ui-wrapper.selected .ui-rotatable-handle {
-  display: block !important;
-}
-
-/* Wrapping-paper shape behind the flowers */
-.canvas-wrapper {
-  position: absolute;
-  width: 100%; /* adjust default width as needed */
-  height: auto;
-  z-index: 0;
 }

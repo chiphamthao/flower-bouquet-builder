@@ -56,13 +56,25 @@ def update_canvas():
     global canvas_flowers
     data = request.get_json()
 
+    # Try to update an existing flower
+    found = False
     for f in canvas_flowers:
         if f['id'] == data['id']:
             f.update(data)
+            found = True
             break
-    else:
+
+    # If it wasn’t already in the list, append once
+    if not found:
         canvas_flowers.append(data)
 
+    return jsonify(canvas_flowers=canvas_flowers)
+
+@app.route("/delete_canvas", methods=["POST"])
+def delete_canvas():
+    data = request.get_json()
+    global canvas_flowers
+    canvas_flowers = [f for f in canvas_flowers if f["id"] != data["id"]]
     return jsonify(canvas_flowers=canvas_flowers)
 
 @app.route('/fillers')

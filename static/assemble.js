@@ -136,83 +136,98 @@ function submitTheme() {
 function addCanvasFlower(info) {
   const { id, src, left, top, width, height, rotation = 0 } = info;
   const $canvas = $("#canvas");
-  const $img = $("<img>", { src, class: "canvas-flower" }).css({
-    position: "absolute",
-    left: left + "px",
-    top: top + "px",
-    width: width + "px",
-    height: height + "px",
-    transform: `rotate(${rotation}deg)`,
-  });
-  $canvas.append($img);
 
-  // store initial size and rotation
-  $img.data({
-    origWidth: width,
-    origHeight: height,
-    rotation: rotation,
-  });
+  // 1) Outer wrapper for dragging
+  const $dragWrapper = $("<div>")
+    .addClass("drag-wrapper")
+    .css({
+      position: "absolute",
+      left: `${left}px`,
+      top: `${top}px`,
+    })
+    .data("id", id)
+    .appendTo($canvas);
 
-  $img.resizable({
+  // 2) Inner wrapper for rotating and resizing
+  const $rotateWrapper = $("<div>")
+    .addClass("rotate-wrapper")
+    .css({
+      width: `${width}px`,
+      height: `${height}px`,
+      transformOrigin: "50% 50%",
+    })
+    .appendTo($dragWrapper);
+
+  // 3) The flower image filling the inner wrapper
+  const $img = $("<img>", { src, class: "canvas-flower" })
+    .css({ width: "100%", height: "100%" })
+    .appendTo($rotateWrapper);
+
+  // 4) Resizable on the inner wrapper
+  $rotateWrapper.resizable({
     containment: "#canvas",
     aspectRatio: true,
     handles: "n,e,s,w,ne,nw,se,sw",
     stop: (e, ui) => {
-      const curRot = $img.data("rotation");
+      // update inner size
+      const { width: w, height: h } = ui.size;
+      $rotateWrapper.css({ width: `${w}px`, height: `${h}px` });
+      // update rotation pivot
+      $rotateWrapper.css("transformOrigin", `${w / 2}px ${h / 2}px`);
+      const lastAngle = $rotateWrapper.data("rotationObj")?.current || 0;
       postUpdate({
         id,
         src,
-        left: ui.position.left,
-        top: ui.position.top,
-        width: $img.width(),
-        height: $img.height(),
-        rotation: curRot,
+        left: $dragWrapper.position().left,
+        top: $dragWrapper.position().top,
+        width: w,
+        height: h,
+        rotation: lastAngle,
       });
     },
   });
 
-  // draggable + rotatable wrapper
-  const $wrapper = $img.parent();
-  $wrapper.css("position", "absolute").draggable({
+  // 5) Draggable on the outer wrapper
+  $dragWrapper.draggable({
     containment: "#canvas",
     stop: (e, ui) => {
-      const curRot = $img.data("rotation");
+      const lastAngle = $rotateWrapper.data("rotationObj")?.current || 0;
       postUpdate({
         id,
         src,
-        left: ui.position.left,
-        top: ui.position.top,
-        width: $img.width(),
-        height: $img.height(),
-        rotation: curRot,
+        left: $dragWrapper.position().left,
+        top: $dragWrapper.position().top,
+        width: $rotateWrapper.width(),
+        height: $rotateWrapper.height(),
+        rotation: lastAngle,
       });
     },
   });
 
-  $wrapper.append('<div class="ui-rotatable-handle"></div>').rotatable({
-    rotationCenterOffset: {
-      top: $wrapper.height() / 2,
-      left: $wrapper.width() / 2,
-    },
-    start: () => {},
-    rotate: (e, ui) => {},
+  // 6) Rotatable on the inner wrapper
+  $rotateWrapper.rotatable({
+    rotationCenterOffset: { top: height / 2, left: width / 2 },
     stop: (e, ui) => {
-      const angle = ui.angle;
-      console.log(angle);
-      // apply transform
-      $img.css("transform", `rotate(${angle}deg)`);
-      $img.data("rotation", angle);
+      $rotateWrapper.data("rotationObj", ui.angle);
       postUpdate({
         id,
         src,
-        left: $wrapper.position().left,
-        top: $wrapper.position().top,
-        width: $wrapper.width(),
-        height: $wrapper.height(),
-        rotation: angle,
+        left: $dragWrapper.position().left,
+        top: $dragWrapper.position().top,
+        width: $rotateWrapper.width(),
+        height: $rotateWrapper.height(),
+        rotation: ui.angle.current,
       });
     },
   });
+
+  // 7) Restore saved state on load
+  // position
+  $dragWrapper.css({ left: `${left}px`, top: `${top}px` });
+  // rotation
+  const initAngle = typeof rotation === "object" ? rotation.current : rotation;
+  $rotateWrapper.rotatable("angle", initAngle);
+  // full CSS matrix (if any)
 }
 
 function postUpdate(data) {
@@ -284,6 +299,7 @@ $(document).ready(function () {
           initH = initW * ($orig.height() / $orig.width());
         const id = "f-" + Date.now(),
           src = $orig.attr("src");
+
         addCanvasFlower({
           id,
           src,
@@ -365,23 +381,43 @@ $(document).ready(function () {
     if (e.key === "Delete" || e.keyCode === 46 || e.keyCode === 8) {
       const $sel = $(".canvas-flower.selected");
       if ($sel.length) {
+        const $wrap = $sel.closest(".drag-wrapper");
+        const id = $wrap.data("id");
+        if (!id) {
+          console.warn("No ID on wrapper, skipping delete");
+          return;
+        }
+
+        // 2) Remove from DOM
+        $wrap.remove();
         $sel.remove();
+
+        // 3) Tell server to delete
+        $.ajax({
+          url: "/delete_canvas", // or better: "/delete_canvas"
+          method: "POST",
+          contentType: "application/json",
+          data: JSON.stringify({ id, deleted: true }),
+          success(response) {
+            canvas_flowers = response.canvas_flowers;
+            display_page(current_selections);
+          },
+          error(xhr, status, err) {
+            console.error("Failed to delete canvas flower:", err);
+          },
+        });
       }
     }
   });
 
   $(document).on("click", ".canvas-flower", function (e) {
     e.stopPropagation();
-    $(".canvas-flower-wrapper, .canvas-flower").removeClass("selected");
-    $(this)
-      .addClass("selected")
-      .parent(".canvas-flower-wrapper")
-      .addClass("selected");
+    $(".drag-wrapper, .canvas-flower").removeClass("selected");
+    $(this).addClass("selected").closest(".drag-wrapper").addClass("selected");
   });
 
   // clicking outside clears selection
   $(document).on("click", "#canvas", function () {
-    console.log("deselect");
-    $(".canvas-flower-wrapper, .canvas-flower").removeClass("selected");
+    $(".drag-wrapper, .canvas-flower").removeClass("selected");
   });
 });
