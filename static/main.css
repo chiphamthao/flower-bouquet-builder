@@ -300,21 +300,42 @@ label.disabled {
 }
 
 .img-vs {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  border: 2px solid #333;
-  border-radius: 8px;
+    width: 200px;
+    height: 250px;
+    object-fit: cover;
+    border: 1px solid #333;
+    border-radius: 8px;
+    margin-top: 30px;
+    margin-bottom: 30px;
 }
 
 .img-group1 {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  border: 2px solid #333;
-  border-radius: 8px;
+    width: 200px;
+    height: 250px;
+    object-fit: cover;
+    border: 1px solid #333;
+    border-radius: 8px;
+    margin-bottom: 30px;
 }
 
+.checkyourunderstanding {
+    font-family: 'Indie Flower', sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.checkyourunderstanding h1,
+.checkyourunderstanding p {
+    margin-top: 20;
+}
+
+.groupLabel{
+    font-family: 'Indie Flower', sans-serif;
+}
 /* Flower Grid Styles */
 .flower-grid {
   display: grid;

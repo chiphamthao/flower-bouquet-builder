@@ -7,14 +7,100 @@
 
 {% block content %}
 <script type="text/javascript" src="{{ url_for('static', filename='fillers.js') }}"></script>
+<link rel="stylesheet" href="{{url_for('static', filename='cyu_fillers.css')}}" />
 <br>
 <h1 class="lesson-title" style="color: #4a7a4a; text-align: center;">check your understanding</h1>
 <p class="lesson-subtitle" style="text-align: center;">Drag and drop each flower to the correct category</p>
 
 <br><br>
 
-TBC: to be coded
+<!-- Draggable flowers -->
+<div class="greens-grid">
+    <!-- Regular flowers -->
+    <div 
+    class="greens-item"
+    draggable="true"
+    data-type="regular"
+    id="baby-breath">
+        <img src="/static/images/babys-breath.png" alt="Baby's Breath" />
+    </div>
+    
+    <div 
+    class="greens-item"
+    draggable="true"
+    data-type="regular"
+    id="statice">
+        <img src="/static/images/statice.webp" alt="Statice" />
+    </div>
+    
+    <div 
+    class="greens-item"
+    draggable="true"
+    data-type="regular"
+    id="waxflower">
+        <img src="/static/images/waxflower.webp" alt="Waxflower" />
+    </div>
+    
+    <div 
+    class="greens-item"
+    draggable="true"
+    data-type="regular"
+    id="solidago">
+        <img src="/static/images/solidago.webp" alt="Solidago" />
+    </div>
 
+    <!-- Unique flowers -->
+    <div 
+    class="greens-item"
+    draggable="true"
+    data-type="unique"
+    id="craspedia">
+        <img src="/static/images/craspedia.webp" alt="Craspedia" />
+    </div>
+
+    <div 
+    class="greens-item"
+    draggable="true"
+    data-type="unique"
+    id="astilbe">
+        <img src="/static/images/astilbe.webp" alt="Astilbe" />
+    </div>
+
+    <div 
+    class="greens-item"
+    draggable="true"
+    data-type="unique"
+    id="hypericum">
+        <img src="/static/images/berries.webp" alt="Hypericum Berries" />
+    </div>
+    
+    <div 
+    class="greens-item"
+    draggable="true"
+    data-type="unique"
+    id="thistle">
+        <img src="/static/images/thistle.webp" alt="Thistle" />
+    </div>
+</div>
+
+<!-- Drop areas for each type -->
+
+<div class="drop-zone-container">
+    <div class="drop-zone" data-type="regular">
+        <p>Regular Filler</p>
+    </div>
+
+    <div class="drop-zone" data-type="unique">
+        <p>Unique Filler</p>
+    </div>
+</div>
+<div style="text-align: center; margin-top: 20px;">
+    <button id="checkAnswers" class="btn btn-success">Submit</button>
+</div>
+<div style=" margin-top: 10px;">
+    <button id="resetActivity" class="btn btn-secondary">Reset</button>
+</div>
+<!-- Navigation Buttons -->
 <div class="back_next">
   <div class="row justify-content-between">
       <div class="col-auto">
