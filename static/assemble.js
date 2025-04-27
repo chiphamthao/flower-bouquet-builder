@@ -164,22 +164,62 @@ function addCanvasFlower(info) {
     .appendTo($rotateWrapper);
 
   // 4) Resizable on the inner wrapper
+  // $rotateWrapper.resizable({
+  //   containment: "#canvas",
+  //   aspectRatio: true,
+  //   handles: "n,e,s,w,ne,nw,se,sw",
+  //   stop: (e, ui) => {
+  //     // update inner size
+  //     const { width: w, height: h } = ui.size;
+  //     $rotateWrapper.css({ width: `${w}px`, height: `${h}px` });
+  //     // update rotation pivot
+  //     $rotateWrapper.css("transformOrigin", `${w / 2}px ${h / 2}px`);
+  //     const lastAngle = $rotateWrapper.data("rotationObj")?.current || 0;
+  //     postUpdate({
+  //       id,
+  //       src,
+  //       left: $dragWrapper.position().left,
+  //       top: $dragWrapper.position().top,
+  //       width: w,
+  //       height: h,
+  //       rotation: lastAngle,
+  //     });
+  //   },
+  // });
   $rotateWrapper.resizable({
-    containment: "#canvas",
     aspectRatio: true,
     handles: "n,e,s,w,ne,nw,se,sw",
     stop: (e, ui) => {
-      // update inner size
+      // 1) new size
       const { width: w, height: h } = ui.size;
-      $rotateWrapper.css({ width: `${w}px`, height: `${h}px` });
-      // update rotation pivot
-      $rotateWrapper.css("transformOrigin", `${w / 2}px ${h / 2}px`);
+
+      // 2) how far the inner wrapper moved
+      const rel = $rotateWrapper.position(); // {left, top} relative to dragWrapper
+
+      // 3) compute new outer wrapper coords
+      const parentPos = $dragWrapper.position();
+      const newLeft = parentPos.left + rel.left;
+      const newTop = parentPos.top + rel.top;
+
+      // 4) reset inner wrapper back to top-left of dragWrapper
+      $rotateWrapper.css({
+        width: `${w}px`,
+        height: `${h}px`,
+        top: `0px`,
+        left: `0px`,
+        transformOrigin: `${w / 2}px ${h / 2}px`,
+      });
+
+      // 5) move the dragWrapper to absorb that shift
+      $dragWrapper.css({ left: `${newLeft}px`, top: `${newTop}px` });
+
+      // 6) post the true position & size
       const lastAngle = $rotateWrapper.data("rotationObj")?.current || 0;
       postUpdate({
         id,
         src,
-        left: $dragWrapper.position().left,
-        top: $dragWrapper.position().top,
+        left: newLeft,
+        top: newTop,
         width: w,
         height: h,
         rotation: lastAngle,
@@ -207,6 +247,7 @@ function addCanvasFlower(info) {
   // 6) Rotatable on the inner wrapper
   $rotateWrapper.rotatable({
     rotationCenterOffset: { top: height / 2, left: width / 2 },
+    wheelRotate: false,
     stop: (e, ui) => {
       $rotateWrapper.data("rotationObj", ui.angle);
       postUpdate({

@@ -606,6 +606,19 @@ label.disabled {
   bottom: -5px;
 }
 
+rotate-wrapper .ui-resizable-nw {
+  width: 10px;
+  height: 10px;
+  left: -5px;
+  top: -5px;
+}
+.rotate-wrapper .ui-resizable-sw {
+  width: 10px;
+  height: 10px;
+  left: -5px;
+  bottom: -5px;
+}
+
 .rotate-wrapper .canvas-flower {
   position: relative !important;
   width: calc(100% - 12px) !important;
@@ -618,7 +631,7 @@ label.disabled {
   box-sizing: content-box;
 }
 
-.rotate-wrapper .ui-rotatable-handle {
+/* .rotate-wrapper .ui-rotatable-handle {
   position: absolute;
   top: -10px;
   right: -10px;
@@ -630,8 +643,38 @@ label.disabled {
   cursor: grab;
   z-index: 1000;
   display: none !important;
+} */
+/* Nicer rotate handle (hidden by default) */
+.rotate-wrapper .ui-rotatable-handle {
+  z-index: 9999 !important;
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  width: 24px;
+  height: 24px;
+  background-color: #4a7a4a;
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  cursor: grab;
+  display: none !important; /* hide by default */
 }
 
+/* show rotate handle only when selected */
+.drag-wrapper.selected .rotate-wrapper .ui-rotatable-handle {
+  display: block !important;
+  z-index: 9999 !important;
+}
+
+/* arrow icon */
+.rotate-wrapper .ui-rotatable-handle::before {
+  content: "⟲";
+  display: block;
+  color: white;
+  font-size: 14px;
+  line-height: 24px;
+  text-align: center;
+}
 .drag-wrapper.selected .ui-resizable-handle,
 .drag-wrapper.selected .ui-rotatable-handle {
   display: block !important;
