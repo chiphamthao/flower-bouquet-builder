@@ -631,20 +631,6 @@ rotate-wrapper .ui-resizable-nw {
   box-sizing: content-box;
 }
 
-/* .rotate-wrapper .ui-rotatable-handle {
-  position: absolute;
-  top: -10px;
-  right: -10px;
-  width: 20px;
-  height: 20px;
-  background: rgba(74, 122, 74, 0.8);
-  border: 1px solid #4a7a4a;
-  border-radius: 100% 100% 0 0;
-  cursor: grab;
-  z-index: 1000;
-  display: none !important;
-} */
-/* Nicer rotate handle (hidden by default) */
 .rotate-wrapper .ui-rotatable-handle {
   z-index: 9999 !important;
   position: absolute;
@@ -657,10 +643,9 @@ rotate-wrapper .ui-resizable-nw {
   border-radius: 50%;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   cursor: grab;
-  display: none !important; /* hide by default */
+  display: none !important;
 }
 
-/* show rotate handle only when selected */
 .drag-wrapper.selected .rotate-wrapper .ui-rotatable-handle {
   display: block !important;
   z-index: 9999 !important;

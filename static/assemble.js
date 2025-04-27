@@ -24,7 +24,7 @@ function refreshPalette() {
 
   $palette.append(
     $(`<div class="flower-item" data-type="Wrapping Paper" data-name="Wrapping Paper">
-    <img src="static/images/wrappingpaper.png" alt="Wrapping Paper"/>
+    <img src="static/images/wrap_paper.png" alt="Wrapping Paper"/>
   </div>`).draggable({
       helper: "clone",
       revert: "invalid",
