@@ -64,7 +64,6 @@ def update_canvas():
             found = True
             break
 
-    # If it wasn’t already in the list, append once
     if not found:
         canvas_flowers.append(data)
 
@@ -76,6 +75,10 @@ def delete_canvas():
     global canvas_flowers
     canvas_flowers = [f for f in canvas_flowers if f["id"] != data["id"]]
     return jsonify(canvas_flowers=canvas_flowers)
+
+@app.route('/final')
+def final():
+    return render_template('final.html', canvas_flowers=canvas_flowers)
 
 @app.route('/fillers')
 def fillers():

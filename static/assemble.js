@@ -163,29 +163,6 @@ function addCanvasFlower(info) {
     .css({ width: "100%", height: "100%" })
     .appendTo($rotateWrapper);
 
-  // 4) Resizable on the inner wrapper
-  // $rotateWrapper.resizable({
-  //   containment: "#canvas",
-  //   aspectRatio: true,
-  //   handles: "n,e,s,w,ne,nw,se,sw",
-  //   stop: (e, ui) => {
-  //     // update inner size
-  //     const { width: w, height: h } = ui.size;
-  //     $rotateWrapper.css({ width: `${w}px`, height: `${h}px` });
-  //     // update rotation pivot
-  //     $rotateWrapper.css("transformOrigin", `${w / 2}px ${h / 2}px`);
-  //     const lastAngle = $rotateWrapper.data("rotationObj")?.current || 0;
-  //     postUpdate({
-  //       id,
-  //       src,
-  //       left: $dragWrapper.position().left,
-  //       top: $dragWrapper.position().top,
-  //       width: w,
-  //       height: h,
-  //       rotation: lastAngle,
-  //     });
-  //   },
-  // });
   $rotateWrapper.resizable({
     aspectRatio: true,
     handles: "n,e,s,w,ne,nw,se,sw",
