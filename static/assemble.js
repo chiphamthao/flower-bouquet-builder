@@ -348,31 +348,59 @@ $(document).ready(function () {
     zIndex: 200,
   });
 
+  // Replace your old handler with this:
   $("#check-bouquet").on("click", function () {
     const types = ["focal", "secondary", "filler", "greens"];
-    let hasError = false;
+    let hasErrorLocal = false;
+
+    // 1) Highlight each check-item as correct or incorrect
     $(".check-item").each(function (index) {
       const type = types[index];
-      const $ind = $(this).find(".validation-indicator");
-      $(this).removeClass("correct");
+      const $item = $(this);
+      const $ind = $item.find(".validation-indicator");
+      $item.removeClass("correct incorrect");
       $ind.removeClass("correct incorrect");
+
       if (current_selections[type] && current_selections[type][1] === type) {
-        $(this).addClass("correct");
+        $item.addClass("correct");
         $ind.addClass("correct");
       } else {
         $ind.addClass("incorrect");
-        hasError = true;
+        hasErrorLocal = true;
       }
     });
-    const $msg = $(".validation-message");
-    $msg.removeClass("show error success");
-    setTimeout(
-      () =>
-        $msg
-          .text(hasError ? "Please check your selections again!" : "Perfect!")
-          .addClass(`show ${hasError ? "error" : "success"}`),
-      100
-    );
+
+    // 2) Send to server to track remaining tries
+    const payload = { selections: current_selections };
+    $.ajax({
+      url: "/check_bouquet",
+      method: "POST",
+      contentType: "application/json",
+      data: JSON.stringify(payload),
+      success(resp) {
+        const { hasError, remaining } = resp;
+        const $msg = $(".validation-message").removeClass("show error success");
+
+        // slight delay so the UI updates “pop”
+        setTimeout(() => {
+          if (hasError) {
+            $msg
+              .text(
+                `Please check your selections again! (${remaining} tries left)`
+              )
+              .addClass("show error");
+            if (remaining <= 0) {
+              $("#check-bouquet").prop("disabled", true).text("No More Checks");
+            }
+          } else {
+            $msg.text("Perfect!").addClass("show success");
+          }
+        }, 100);
+      },
+      error() {
+        console.error("Check-bouquet request failed");
+      },
+    });
   });
 
   $("#submit-theme").on("click", submitTheme);
