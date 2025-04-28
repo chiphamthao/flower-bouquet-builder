@@ -3,12 +3,40 @@
 {% block title %}Focal & Secondary Flowers{% endblock %}
 
 {% block content %}
-<script type="text/javascript" src="{{ url_for('static', filename = 'focal_secondary.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename = 'cyu_focal_secondary.js') }}"></script>
 
 <div class="checkyourunderstanding">
     <h1>check your understanding</h1>
     <p>drag and drop each flower to the correct category</p>
 </div>
+
+<div class="d-flex justify-content-center">
+    <div id="drag-area">
+        <div class="draggable" draggable="true">Box 1</div>
+        <div class="draggable" draggable="true">Box 2</div>
+        <div class="draggable" draggable="true">Box 3</div>
+        <div class="draggable" draggable="true">Box 4</div>
+        <div class="draggable" draggable="true">Box 5</div>
+        <div class="draggable" draggable="true">Box 6</div>
+        <div class="draggable" draggable="true">Box 7</div>
+        <div class="draggable" draggable="true">Box 8</div>
+        <div class="draggable" draggable="true">Box 9</div>
+        <div class="draggable" draggable="true">Box 10</div>
+        <div class="draggable" draggable="true">Box 11</div>
+        <div class="draggable" draggable="true">Box 12</div>
+    </div>
+</div>
+
+<div class="d-flex justify-content-center gap-5" id="drop-areas-container">
+    <div id="drop-area-1" class="drop-area">
+        Focal Flowers
+    </div>
+
+    <div id="drop-area-2" class="drop-area">
+        Secondary Flowers
+    </div>
+</div>
+
 
 
 <div class="back_next">
@@ -21,6 +49,7 @@
         </div>
     </div>
 </div>
+
 
 
 {% endblock %}

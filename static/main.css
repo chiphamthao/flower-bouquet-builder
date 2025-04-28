@@ -369,6 +369,46 @@ label.disabled {
     font-family: 'Indie Flower', sans-serif;
 }
 
+#drag-area {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  width: 650px;
+  margin-bottom: 30px;
+}
+
+.draggable {
+  width: 100px;
+  height: 100px;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: move;
+  border: 2px solid gray;
+  border-radius: 8px;
+}
+
+#drop-areas-container {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 30px;
+}
+
+.drop-area {
+  width: 300px;
+  height: 200px;
+  border: 3px solid gray;
+  background-color: white;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 10px;
+  border-radius: 8px;
+}
 
 /* Flower Grid Styles */
 .flower-grid {
