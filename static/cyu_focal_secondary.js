@@ -21,6 +21,11 @@ $(document).ready(function () {
             $(this).removeClass("droppable-hover");
             $(this).css("background-color", "lightgreen");
             ui.draggable.fadeOut();
+
+            setTimeout(() => {
+                $(this).css("background-color", "white");
+            }, 500);
+
         }
     });
 
@@ -36,6 +41,10 @@ $(document).ready(function () {
             $(this).removeClass("droppable-hover");
             $(this).css("background-color", "lightgreen");
             ui.draggable.fadeOut();
+
+            setTimeout(() => {
+                $(this).css("background-color", "white");
+            }, 500);
         }
     });
 });
