@@ -52,7 +52,7 @@
 
 /* Forward/Back Buttons */
 .back_next {
-  margin-top: 80px;
+  margin-top: 30px;
   text-align: center;
   margin-bottom: 30px;
 }
@@ -350,6 +350,16 @@ label.disabled {
     margin-top: 20px;
 }
 
+.cyu_button{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-botton: 0px;
+    margin-top: 50px;
+}
+
 .checkyourunderstanding h1,
 .checkyourunderstanding p {
     margin-top: 20;
@@ -358,6 +368,8 @@ label.disabled {
 .groupLabel{
     font-family: 'Indie Flower', sans-serif;
 }
+
+
 /* Flower Grid Styles */
 .flower-grid {
   display: grid;

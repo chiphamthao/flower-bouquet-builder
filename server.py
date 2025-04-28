@@ -72,7 +72,7 @@ def focal_secondary():
 
 
 @app.route('/cyu_focal_secondary')
-def focal_secondary():
+def cyu_focal_secondary():
     return render_template('cyu_focal_secondary.html')
 
 
