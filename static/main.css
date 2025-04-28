@@ -63,6 +63,16 @@
   border-color: gray;
 }
 
+.btn.cyu {
+  font-family: "Indie Flower", sans-serif;
+  color: green;
+  border-color: gray;
+  background-color: #b4d6b4;
+}
+.btn.cyu:hover {
+  background-color: #a3c9a3;
+}
+
 /* Overview Page */
 .img-cropped {
   width: 300px;
@@ -96,7 +106,6 @@
   padding: 0;
   border: none;
   border-radius: 10px;
-  background-color: #b4d6b4;
   margin: 0 2rem;
   width: 300px;
   height: 300px;
@@ -105,6 +114,7 @@
 }
 
 .selection-btn:hover {
+  background-color: #82c282;
   transform: scale(1.05);
 }
 
@@ -115,6 +125,18 @@
   justify-content: center;
   max-width: 1200px;
   margin: 0 auto;
+}
+/* Fillers Page */
+.custom-darkgreen-btn {
+  background-color: darkgreen;
+  border-color: darkgreen;
+  color: white; /* Optional: makes text white */
+}
+
+.custom-darkgreen-btn:hover {
+  background-color: #006400; /* even darker green on hover */
+  border-color: #006400;
+  color: white;
 }
 
 /* Greens Page */
