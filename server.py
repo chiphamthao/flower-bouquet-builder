@@ -20,12 +20,14 @@ current_selections = {
 canvas_flowers = []
 MAX_CHECKS = 3
 
+
 # ROUTES
 @app.route('/')
 def default():
     session['user_id'] = str(uuid.uuid4())  # Create a unique ID for each session
     session['page_visits'] = {}  # To track timestamps
     return render_template('home.html')
+
 
 def is_bouquet_valid(selections):
     # replicate your client‐side logic here
@@ -36,6 +38,7 @@ def is_bouquet_valid(selections):
         if t not in selections or selections[t] == None or selections[t][1] != t:
             return False
     return True
+
 
 @app.route("/check_bouquet", methods=["POST"])
 def check_bouquet():
@@ -66,6 +69,11 @@ def overview():
 @app.route('/focal_secondary')
 def focal_secondary():
     return render_template('focal_secondary.html')
+
+
+@app.route('/cyu_focal_secondary')
+def focal_secondary():
+    return render_template('cyu_focal_secondary.html')
 
 
 @app.route('/assemble')
