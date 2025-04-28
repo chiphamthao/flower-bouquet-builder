@@ -410,6 +410,11 @@ label.disabled {
   border-radius: 8px;
 }
 
+.drop-area.wrong {
+  border: 3px solid red;
+  background-color: #ffe5e5;
+}
+
 /* Flower Grid Styles */
 .flower-grid {
   display: grid;
