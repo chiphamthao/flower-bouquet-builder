@@ -3,6 +3,12 @@
 
 {% block content %}
 <style>
+
+  #check-btn{
+    margin-top: 50px;
+    margin-bottom: 30px;
+  }
+
   .selectable-img {
     border: 2px solid transparent;
     cursor: pointer;
@@ -28,6 +34,10 @@
   .incorrect {
     color: #c02e2e;
   }
+
+  .lesson-title{
+    margin-top: 20px;
+  }
 </style>
 
 <h1 class="lesson-title" style="color: #4a7a4a;">Build-It!</h1>
@@ -45,7 +55,7 @@
 <div id="feedback1" class="feedback"></div>
 
 <!-- Question 2 -->
-<p class="lesson-subtitle">Which flowers are NOT similar in texture? Select 2.</p>
+<p class="lesson-subtitle">Which flowers are NOT similar in texture? Select 2</p>
 <div class="row justify-content-center mb-2" id="row2">
   {% for i in range(3) %}
     <img src="{{ url_for('static', filename='images/rose.png') }}" class="selectable-img mx-1" data-row="2" data-index="{{ i }}">
@@ -56,7 +66,7 @@
 <div id="feedback2" class="feedback"></div>
 
 <!-- Check button -->
-<div class="text-center mt-3">
+<div class="text-center mt-3" style="font-family: Indie Flower, sans-serif">
   <button class="btn btn-success" id="check-btn">Check</button>
 </div>
 
