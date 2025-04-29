@@ -390,6 +390,17 @@ label.disabled {
   border-radius: 8px;
 }
 
+#secondary1 img,
+#secondary2 img,
+#secondary3 img,
+#secondary4 img,
+#secondary5 img,
+#secondary6 img {
+    width: 50%;
+    height: 50%;
+    object-fit: cover;
+}
+
 #drop-areas-container {
   display: flex;
   justify-content: center;
