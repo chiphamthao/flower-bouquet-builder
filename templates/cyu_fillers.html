@@ -1,114 +1,71 @@
 {% extends "layout.html" %}
 
-{% block title %}Check your understanding{% endblock %}
-
-{% block head %}
-{% endblock %}
+{% block title %}Check Your Understanding - Fillers{% endblock %}
 
 {% block content %}
 <script type="text/javascript" src="{{ url_for('static', filename='fillers.js') }}"></script>
-<link rel="stylesheet" href="{{url_for('static', filename='cyu_fillers.css')}}" />
-<br>
-<h1 class="lesson-title" style="color: #4a7a4a; text-align: center;">check your understanding</h1>
-<p class="lesson-subtitle" style="text-align: center;">Drag and drop each flower to the correct category</p>
 
-<br><br>
+<div class="checkyourunderstanding">
+    <h1>check your understanding</h1>
+    <p>drag and drop each filler to the correct category</p>
+</div>
 
-<!-- Draggable flowers -->
-<div class="greens-grid">
-    <!-- Regular flowers -->
-    <div 
-    class="greens-item"
-    draggable="true"
-    data-type="regular"
-    id="baby-breath">
-        <img src="/static/images/babys-breath.png" alt="Baby's Breath" />
+<div class="d-flex justify-content-center">
+    <div id="drag-area">
+        <div class="draggable" id="regular1">
+            <img src="/static/images/babys-breath.png" alt="Baby's Breath" />
+        </div>
+        <div class="draggable" id="regular2">
+            <img src="/static/images/statice.webp" alt="Statice" />
+        </div>
+        <div class="draggable" id="regular3">
+            <img src="/static/images/waxflower.webp" alt="Waxflower" />
+        </div>
+        <div class="draggable" id="regular4">
+            <img src="/static/images/solidago.webp" alt="Solidago" />
+        </div>
+        <div class="draggable" id="unique1">
+            <img src="/static/images/craspedia.webp" alt="Craspedia" />
+        </div>
+        <div class="draggable" id="unique2">
+            <img src="/static/images/astilbe.webp" alt="Astilbe" />
+        </div>
+        <div class="draggable" id="unique3">
+            <img src="/static/images/berries.webp" alt="Hypericum Berries" />
+        </div>
+        <div class="draggable" id="unique4">
+            <img src="/static/images/thistle.webp" alt="Thistle" />
+        </div>
     </div>
-    
-    <div 
-    class="greens-item"
-    draggable="true"
-    data-type="regular"
-    id="statice">
-        <img src="/static/images/statice.webp" alt="Statice" />
-    </div>
-    
-    <div 
-    class="greens-item"
-    draggable="true"
-    data-type="regular"
-    id="waxflower">
-        <img src="/static/images/waxflower.webp" alt="Waxflower" />
-    </div>
-    
-    <div 
-    class="greens-item"
-    draggable="true"
-    data-type="regular"
-    id="solidago">
-        <img src="/static/images/solidago.webp" alt="Solidago" />
-    </div>
-
-    <!-- Unique flowers -->
-    <div 
-    class="greens-item"
-    draggable="true"
-    data-type="unique"
-    id="craspedia">
-        <img src="/static/images/craspedia.webp" alt="Craspedia" />
-    </div>
-
-    <div 
-    class="greens-item"
-    draggable="true"
-    data-type="unique"
-    id="astilbe">
-        <img src="/static/images/astilbe.webp" alt="Astilbe" />
-    </div>
-
-    <div 
-    class="greens-item"
-    draggable="true"
-    data-type="unique"
-    id="hypericum">
-        <img src="/static/images/berries.webp" alt="Hypericum Berries" />
-    </div>
-    
-    <div 
-    class="greens-item"
-    draggable="true"
-    data-type="unique"
-    id="thistle">
-        <img src="/static/images/thistle.webp" alt="Thistle" />
+</div>
+<div class="d-flex justify-content-end my-3 me-4">
+    <div id="score" class="score-box">
+        Score: 0/8
     </div>
 </div>
 
-<!-- Drop areas for each type -->
 
-<div class="drop-zone-container">
-    <div class="drop-zone" data-type="regular">
-        <p>Regular Filler</p>
+
+<div class="d-flex justify-content-center gap-5" id="drop-areas-container">
+    <div id="drop-area-1" class="drop-area" style="font-family: 'Indie Flower', sans-serif;">
+        <h4> Regular Fillers </h4>
     </div>
 
-    <div class="drop-zone" data-type="unique">
-        <p>Unique Filler</p>
+    <div id="drop-area-2" class="drop-area" style="font-family: 'Indie Flower', sans-serif;">
+        <h4> Unique Fillers </h4>
     </div>
 </div>
-<div style="text-align: center; margin-top: 20px;">
-    <button id="checkAnswers" class="btn btn-success">Submit</button>
-</div>
-<div style=" margin-top: 10px;">
-    <button id="resetActivity" class="btn btn-secondary">Reset</button>
-</div>
-<!-- Navigation Buttons -->
+
 <div class="back_next">
-  <div class="row justify-content-between">
-      <div class="col-auto">
-          <a href="/fillers" class="btn btn-outline-primary">Fillers</a>
-      </div>
-      <div class="col-auto">
-          <a href="/greens" class="btn btn-outline-primary">Greens</a>
-      </div>
-  </div>
+    <div class="row justify-content-between">
+        <div class="col-auto">
+            <a href="/fillers" class="btn btn-outline-primary">Fillers</a>
+        </div>
+        <div class="col-auto">
+            <a href="/greens" class="btn btn-outline-primary">Greens</a>
+        </div>
+    </div>
 </div>
+
+
 {% endblock %}
