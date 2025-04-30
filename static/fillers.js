@@ -1,84 +1,46 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const dragItems = document.querySelectorAll('.greens-item');
-    const dropZones = document.querySelectorAll('.drop-zone');
-    const submitBtn = document.getElementById('checkAnswers');
-    const feedback = document.getElementById('feedback');
-    const resetBtn = document.getElementById('resetActivity');
-    let draggedItem = null;
+let correctCount = 0;
 
-    // Drag-and-drop functionality
-    dragItems.forEach(item => {
-        item.addEventListener('dragstart', function () {
-            draggedItem = item;
-            setTimeout(() => item.style.opacity = 0.5, 0);
-        });
-
-        item.addEventListener('dragend', function () {
-            setTimeout(() => {
-                item.style.opacity = 1;
-                draggedItem = null;
-            }, 0);
-        });
-    });
-
-    dropZones.forEach(zone => {
-        zone.addEventListener('dragover', function (e) {
-            e.preventDefault();
-            zone.classList.add('over');
-        });
-
-        zone.addEventListener('dragleave', function () {
-            zone.classList.remove('over');
-        });
-
-        zone.addEventListener('drop', function (e) {
-            e.preventDefault();
-            if (draggedItem) {
-                zone.appendChild(draggedItem);
-                draggedItem.style.opacity = 1;
-                zone.classList.remove('over');
-            }
-        });
-    });
-
-    // Submit button logic
-    submitBtn.addEventListener('click', function () {
-        let total = 0;
-        let correct = 0;
-
-        dragItems.forEach(item => item.style.border = 'none');
-
-        dropZones.forEach(zone => {
-            const expectedType = zone.getAttribute('data-type');
-            const children = zone.querySelectorAll('.greens-item');
-
-            children.forEach(item => {
-                total++;
-                const actualType = item.getAttribute('data-type');
-                if (actualType === expectedType) {
-                    correct++;
-                    item.style.border = '3px solid green';
-                } else {
-                    item.style.border = '3px solid red';
-                }
-            });
-        });
-
-        if (correct === total && total > 0) {
-            feedback.innerText = `✅ Correct! You got all ${correct} right!`;
-            feedback.style.color = 'green';
-        } else {
-            feedback.innerText = `❌ Not quite, scroll back up to reread the information! (${correct} out of ${total} correct)`;
-            feedback.style.color = 'red';
+$(document).ready(function () {
+    $("#regular1, #regular2, #regular3, #regular4, #unique1, #unique2, #unique3, #unique4").draggable({
+        revert: false, // ✅ allow manual revert
+        start: function () {
+            $(this).css("cursor", "move");
+        },
+        stop: function () {
+            $(this).css("cursor", "default");
         }
     });
 
-    // Reset button logic
-    resetBtn.addEventListener('click', function () {
-        feedback.innerText = '';
-        dragItems.forEach(item => {
-            item.style.border = 'none';
-            document.querySelector('.greens-grid').appendChild(item);
+    function handleDrop(dropArea, acceptedIds) {
+        $(dropArea).droppable({
+            accept: "*",  // ✅ accept everything, handle logic manually
+            over: function () {
+                $(this).addClass("droppable-hover");
+            },
+            out: function () {
+                $(this).removeClass("droppable-hover");
+            },
+            drop: function (event, ui) {
+                $(this).removeClass("droppable-hover");
+                const draggedId = "#" + ui.draggable.attr("id");
+
+                if (acceptedIds.includes(draggedId)) {
+                    $(this).css("background-color", "lightgreen");
+                    correctCount++;
+                    $("#score").text(`Score: ${correctCount}/8`);
+                } else {
+                    $(this).css("background-color", "lightcoral");
+                }
+
+                ui.draggable.fadeOut();
+
+                setTimeout(() => {
+                    $(this).css("background-color", "white");
+                }, 500);
+            }
         });
-    });
+    }
+
+    handleDrop("#drop-area-1", ["#regular1", "#regular2", "#regular3", "#regular4"]);
+    handleDrop("#drop-area-2", ["#unique1", "#unique2", "#unique3", "#unique4"]);
 });

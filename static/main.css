@@ -130,18 +130,34 @@
   max-width: 1200px;
   margin: 0 auto;
 }
-/* Fillers Page */
-.custom-darkgreen-btn {
-  background-color: darkgreen;
-  border-color: darkgreen;
-  color: white; /* Optional: makes text white */
+/* Fillers CYU Page */
+
+#regular1 img,
+#regular2 img,
+#regular3 img,
+#regular4 img,
+#unique1 img,
+#unique2 img,
+#unique3 img,
+#unique4 img {
+    width: 80%;
+    height: 100%;
+    margin-bottom: 0px;
+    border-radius: 20px;
+}
+.score-box {
+  font-size: 1.5rem;
+  font-weight: bold;
+  font-family: "Indie Flower", sans-serif;
+  color: green;
+  background-color: #b4d6b4;
+  padding: 10px 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  
+  font-family: 'Indie Flower', sans-serif;
 }
 
-.custom-darkgreen-btn:hover {
-  background-color: #006400; /* even darker green on hover */
-  border-color: #006400;
-  color: white;
-}
 
 /* Greens Page */
 .lesson-title {
