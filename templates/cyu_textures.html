@@ -35,7 +35,7 @@
 <p class="lesson-subtitle" style="text-align: center;">Which flowers are similar in texture? Select 2.</p>
 
 <div class="row justify-content-center">
-  {% set imgs = ['astilbe.webp', 'astilbe.webp', 'craspedia.webp', 'bay_laurel.jpg', 'rose.png'] %}
+  {% set imgs = ['Peony.png', 'tulip.png', 'thistle.webp', 'astilbe.webp', 'Sunflower.png'] %}
   {% for img in imgs %}
     <div class="col-auto text-center">
       <img src="{{ url_for('static', filename='images/' + img) }}"
@@ -47,7 +47,7 @@
 </div>
 
 <div class="text-center mt-4">
-  <button class="btn btn-success" id="check-btn">Check</button>
+  <button class="btn btn-success" id="check-btn" style="font-family: 'Indie Flower', sans-serif;">Check</button>
   <div class="feedback" id="feedback"></div>
 </div>
 
@@ -91,7 +91,7 @@
 
     // Correct answer: index 0 and 1 (first two astilbes)
     if (selected.includes(0) && selected.includes(1)) {
-      feedback.textContent = 'Correct! Explanation........';
+      feedback.textContent = 'Correct! Both of these flowers are soft, rounded, and lush.';
       feedback.classList.add('correct');
     } else {
       feedback.textContent = 'Not Quite!';
