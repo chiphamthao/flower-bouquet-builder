@@ -795,3 +795,9 @@ rotate-wrapper .ui-resizable-nw {
 .drag-wrapper.selected .ui-rotatable-handle {
   display: block !important;
 }
+
+.texture-group-img {
+  height: 120px;
+  width: auto;
+  object-fit: contain;
+}
