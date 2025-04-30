@@ -33,11 +33,11 @@
 </p>
 
 <div class="quiz1_formatting">
-<h4>What type of color harmony are these two flowers?</h4>
-<div class="d-flex mb-3">
-  <img src="{{ url_for('static', filename='images/astilbe.webp') }}" class="img-fluid mr-3" style="max-height: 150px;" />
-  <img src="{{ url_for('static', filename='images/statice.webp') }}" class="img-fluid" style="max-height: 150px;" />
+<h4>What type of color harmony is this?</h4>
+<div class="mb-3">
+  <img src="{{ url_for('static', filename='images/buildit_1.jpg') }}" class="img-fluid" style="max-height: 180px;" />
 </div>
+  
 
 <form id="quizForm">
     <div class="form-check d-flex align-items-center mb-2">
@@ -88,13 +88,24 @@
       return;
     }
 
-    if (selected.value === 'B') {
-      feedback.textContent = 'Correct! Pink and purple are next to each other on the color wheel!';
+    const answer = selected.value;
+
+    // Disable all inputs
+    const allRadios = document.querySelectorAll('input[name="answer"]');
+    allRadios.forEach(radio => {
+      radio.disabled = true;
+    });
+
+    if (answer === 'A') {
+      feedback.textContent = 'Correct! Yellow/Orange and Indigo/Violet are complementary colors on the color wheel.';
       feedback.classList.add('correct');
     } else {
-      feedback.textContent = 'Not Quite!';
+      feedback.textContent = 'Not quite! The correct answer is A. Yellow/Orange and Indigo/Violet are complementary colors.';
       feedback.classList.add('incorrect');
     }
+
+    // Disable check button too (optional)
+    document.getElementById('check-btn').disabled = true;
   });
 </script>
 {% endblock %}
