@@ -1,4 +1,4 @@
-.quiz1_formatting{
+.quiz1_formatting {
   font-family: "Indie Flower", sans-serif;
 }
 
@@ -14,7 +14,6 @@
   font-family: "Indie Flower", sans-serif;
   font-size: 4.5rem;
   margin-bottom: 0.5rem;
-  /*color: #4a7a4a;*/
   color: black;
 }
 
@@ -22,6 +21,7 @@
   font-family: "Indie Flower", sans-serif;
   font-size: 1.2em;
   margin-bottom: 2rem;
+  color: rgb(110, 109, 109) !important;
 }
 
 .section-title {
@@ -36,6 +36,10 @@
   font-family: "Indie Flower", sans-serif;
   font-size: 32px;
   color: black !important;
+}
+
+.secondary-title {
+  color: rgb(110, 109, 109) !important;
 }
 
 .navbar {
@@ -140,10 +144,10 @@
 #unique2 img,
 #unique3 img,
 #unique4 img {
-    width: 80%;
-    height: 100%;
-    margin-bottom: 0px;
-    border-radius: 20px;
+  width: 80%;
+  height: 100%;
+  margin-bottom: 0px;
+  border-radius: 20px;
 }
 .score-box {
   font-size: 1.5rem;
@@ -154,10 +158,9 @@
   padding: 10px 20px;
   border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  
-  font-family: 'Indie Flower', sans-serif;
-}
 
+  font-family: "Indie Flower", sans-serif;
+}
 
 /* Greens Page */
 .lesson-title {
@@ -330,7 +333,7 @@ label.disabled {
   color: #4a7a4a;
 }
 
-.vs{
+.vs {
   font-family: "Indie Flower", sans-serif;
 }
 
@@ -346,51 +349,51 @@ label.disabled {
 }
 
 .img-vs {
-    width: 200px;
-    height: 250px;
-    object-fit: cover;
-    border: 1px solid #333;
-    border-radius: 8px;
-    margin-top: 30px;
-    margin-bottom: 30px;
+  width: 200px;
+  height: 250px;
+  object-fit: cover;
+  border: 1px solid #333;
+  border-radius: 8px;
+  margin-top: 30px;
+  margin-bottom: 30px;
 }
 
 .img-group1 {
-    width: 200px;
-    height: 300px;
-    object-fit: cover;
-    border: 1px solid #333;
-    border-radius: 8px;
-    margin-bottom: 30px;
+  width: 200px;
+  height: 300px;
+  object-fit: cover;
+  border: 1px solid #333;
+  border-radius: 8px;
+  margin-bottom: 30px;
 }
 
 .checkyourunderstanding {
-    font-family: 'Indie Flower', sans-serif;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    margin-top: 20px;
+  font-family: "Indie Flower", sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-top: 20px;
 }
 
-.cyu_button{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    margin-botton: 0px;
-    margin-top: 50px;
+.cyu_button {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-botton: 0px;
+  margin-top: 50px;
 }
 
 .checkyourunderstanding h1,
 .checkyourunderstanding p {
-    margin-top: 20;
+  margin-top: 20;
 }
 
-.groupLabel{
-    font-family: 'Indie Flower', sans-serif;
+.groupLabel {
+  font-family: "Indie Flower", sans-serif;
 }
 
 #drag-area {
@@ -420,10 +423,10 @@ label.disabled {
 #focal4 img,
 #focal5 img,
 #focal6 img {
-    width: 80%;
-    height: 100%;
-    margin-bottom: 0px;
-    border-radius: 20px;
+  width: 80%;
+  height: 100%;
+  margin-bottom: 0px;
+  border-radius: 20px;
 }
 
 #secondary1 img,
@@ -432,9 +435,9 @@ label.disabled {
 #secondary4 img,
 #secondary5 img,
 #secondary6 img {
-    width: 80%;
-    height: 100%;
-    border-radius: 20px;
+  width: 80%;
+  height: 100%;
+  border-radius: 20px;
 }
 
 #drop-areas-container {
