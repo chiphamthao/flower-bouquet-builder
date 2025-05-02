@@ -42,18 +42,23 @@ def is_bouquet_valid(selections):
 
 @app.route("/check_bouquet", methods=["POST"])
 def check_bouquet():
-    global MAX_CHECKS
-
     data = request.get_json() or {}
     selections = data.get("selections", {})
     valid = is_bouquet_valid(selections)
 
-    if not valid:
-        MAX_CHECKS =  max(0, MAX_CHECKS - 1)
+    if 'attempts_used' not in session:
+        session['attempts_used'] = 0
+    session['attempts_used'] += 1
+
+    if valid:
+        attempts = session['attempts_used']
+        score = max(4 - (attempts - 1), 0)  # e.g. 3 if second try
+        session['assemble_score'] = score
+        session['attempts_used'] = 0  # reset
 
     return jsonify({
         "hasError": not valid,
-        "remaining": MAX_CHECKS
+        "remaining": max(0, 4 - session['attempts_used'])  # optional
     })
 
 @app.route('/lessons')
@@ -103,7 +108,9 @@ def update_canvas():
     if not found:
         canvas_flowers.append(data)
 
+    session['canvas_flowers'] = canvas_flowers
     return jsonify(canvas_flowers=canvas_flowers)
+
 
 @app.route("/delete_canvas", methods=["POST"])
 def delete_canvas():
@@ -114,7 +121,33 @@ def delete_canvas():
 
 @app.route('/final')
 def final():
-    return render_template('final.html', canvas_flowers=canvas_flowers, current_selections = current_selections)
+    # Quiz score (already tracked)
+    quiz_score = 0
+    if session.get('quiz1_correct'):
+        quiz_score += 1
+    if session.get('quiz2_q1_correct'):
+        quiz_score += 1
+    if session.get('quiz2_q2_correct'):
+        quiz_score += 1
+    quiz_total = 3
+
+    # Assemble score (newly tracked)
+    bouquet_score = session.get('assemble_score', 0)
+    bouquet_total = 4
+
+    total_score = quiz_score + bouquet_score
+    total_possible = quiz_total + bouquet_total
+
+    return render_template(
+        'final.html',
+        total_score=total_score,
+        quiz_score=quiz_score,
+        quiz_total=quiz_total,
+        bouquet_score=bouquet_score,
+        bouquet_total=bouquet_total,
+        current_selections=session.get('current_selections', {}),
+        canvas_flowers=session.get('canvas_flowers', [])
+    )
 
 @app.route('/fillers')
 def fillers():
@@ -181,6 +214,25 @@ def save_theme():
     color_theme = data.get('color_theme', '').strip()
     current_selections["color_theme"] = color_theme
     return jsonify(current_selections=current_selections)
+
+@app.route('/submit_assemble_score', methods=['POST'])
+def submit_assemble_score():
+    data = request.get_json()
+    session['assemble_score'] = data.get('score', 0)
+    return jsonify(success=True)
+
+@app.route('/submit_quiz1', methods=['POST'])
+def submit_quiz1():
+    data = request.get_json()
+    session['quiz1_correct'] = data.get('correct', False)
+    return jsonify(success=True)
+
+@app.route('/submit_quiz2', methods=['POST'])
+def submit_quiz2():
+    data = request.get_json()
+    session['quiz2_q1_correct'] = data.get('q1_correct', False)
+    session['quiz2_q2_correct'] = data.get('q2_correct', False)
+    return jsonify(success=True)
 
 
 if __name__ == '__main__':

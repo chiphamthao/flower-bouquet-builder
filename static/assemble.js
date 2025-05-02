@@ -396,6 +396,7 @@ $(document).ready(function () {
             $msg.text("Perfect!").addClass("show success");
           }
         }, 100);
+
       },
       error() {
         console.error("Check-bouquet request failed");

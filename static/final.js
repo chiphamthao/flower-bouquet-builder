@@ -39,4 +39,12 @@ $(document).ready(function () {
   });
   console.log(correct);
   $("#score").text("Your score: " + correct + "/4");
+  // Send score to Flask session
+fetch("/submit_assemble_score", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({ score: correct })
+});
 });

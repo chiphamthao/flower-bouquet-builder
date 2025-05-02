@@ -25,6 +25,7 @@
     font-size: 1.1em;
     font-weight: bold;
     margin-top: 10px;
+    font-family: 'Indie Flower', sans-serif;
   }
 
   .correct {
@@ -89,14 +90,13 @@
 
   document.querySelectorAll('.selectable-img').forEach(img => {
     img.addEventListener('click', () => {
-      if (hasSubmitted) return; // prevent changes after submission
+      if (hasSubmitted) return;
 
       const row = img.dataset.row;
       const index = parseInt(img.dataset.index);
       const selected = row === '1' ? selectedRow1 : selectedRow2;
 
       if (row === '1') {
-        // only allow one selection
         selectedRow1.length = 0;
         document.querySelectorAll('[data-row="1"]').forEach(el => el.classList.remove('selected'));
         selectedRow1.push(index);
@@ -121,27 +121,31 @@
     fb1.classList.remove('correct', 'incorrect');
     fb2.classList.remove('correct', 'incorrect');
 
-    // Validate Question 1 (correct: index 0)
-    if (selectedRow1.length === 1 && selectedRow1[0] === 0) {
-      fb1.textContent = 'Correct! Both of these flowers are soft, rounded, and lush.';
-      fb1.classList.add('correct');
-    } else {
-      fb1.textContent = 'Not Quite! The rose is soft, rounded, and lush — the correct answer is the first flower.';
-      fb1.classList.add('incorrect');
-    }
+    const q1Correct = selectedRow1.length === 1 && selectedRow1[0] === 0;
+    const q2Correct = selectedRow2.length === 2 && selectedRow2.includes(3) && selectedRow2.includes(4);
 
-    // Validate Question 2 (correct: index 3 and 4)
-    if (selectedRow2.length === 2 && selectedRow2.includes(3) && selectedRow2.includes(4)) {
-      fb2.textContent = 'Correct! Both of these flowers are not airy, wispy, and light like the rest.';
-      fb2.classList.add('correct');
-    } else {
-      fb2.textContent = 'Not Quite! The correct answers are the last two flowers — they are not airy, wispy, and light like the rest.';
-      fb2.classList.add('incorrect');
-    }
+    fb1.textContent = q1Correct
+      ? 'Correct! Both of these flowers are soft, rounded, and lush.'
+      : 'Not Quite! The rose is soft, rounded, and lush — the correct answer is the first flower.';
+    fb1.classList.add(q1Correct ? 'correct' : 'incorrect');
 
-    // Prevent further interaction
+    fb2.textContent = q2Correct
+      ? 'Correct! Both of these flowers are not airy, wispy, and light like the rest.'
+      : 'Not Quite! The correct answers are the last two flowers — they are not airy, wispy, and light like the rest.';
+    fb2.classList.add(q2Correct ? 'correct' : 'incorrect');
+
     hasSubmitted = true;
     document.getElementById('check-btn').disabled = true;
+
+    // Send correctness to Flask
+    fetch('/submit_quiz2', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        q1_correct: q1Correct,
+        q2_correct: q2Correct
+      })
+    });
   });
 </script>
 {% endblock %}

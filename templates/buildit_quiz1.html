@@ -89,23 +89,24 @@
     }
 
     const answer = selected.value;
+    const isCorrect = answer === 'A';
 
-    // Disable all inputs
-    const allRadios = document.querySelectorAll('input[name="answer"]');
-    allRadios.forEach(radio => {
-      radio.disabled = true;
-    });
+    // Feedback
+    feedback.textContent = isCorrect
+      ? 'Correct! Yellow/Orange and Indigo/Violet are complementary colors on the color wheel.'
+      : 'Not quite! The correct answer is A. Yellow/Orange and Indigo/Violet are complementary colors.';
+    feedback.classList.add(isCorrect ? 'correct' : 'incorrect');
 
-    if (answer === 'A') {
-      feedback.textContent = 'Correct! Yellow/Orange and Indigo/Violet are complementary colors on the color wheel.';
-      feedback.classList.add('correct');
-    } else {
-      feedback.textContent = 'Not quite! The correct answer is A. Yellow/Orange and Indigo/Violet are complementary colors.';
-      feedback.classList.add('incorrect');
-    }
-
-    // Disable check button too (optional)
+    // Disable inputs
+    document.querySelectorAll('input[name="answer"]').forEach(r => r.disabled = true);
     document.getElementById('check-btn').disabled = true;
+
+    // Save result to session
+    fetch('/submit_quiz1', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ correct: isCorrect })
+    });
   });
 </script>
 {% endblock %}
