@@ -5,6 +5,10 @@
 {% block content %}
 <script type="text/javascript" src="{{ url_for('static', filename = 'cyu_focal_secondary.js') }}"></script>
 
+<script>
+    var initialDropData = {{ drop_data | default({}) | tojson }};
+</script>
+
 <div class="checkyourunderstanding">
     <h1>check your understanding</h1>
     <p>drag and drop each flower to the correct category</p>
