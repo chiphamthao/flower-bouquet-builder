@@ -81,14 +81,11 @@ def cyu_focal_secondary():
     return render_template('cyu_focal_secondary.html')
 
 
-@app.route('/dragdrop')
-def index():
-    # Default drop state
-    drop_data = session.get('drop_data', {
-        'drop-area-1': [],
-        'drop-area-2': []
-    })
-    return render_template('cyu_focal_secondary.html', drop_data=drop_data)
+@app.route('/get_progress', methods=['GET'])
+def get_progress():
+    # Get the drop data from session
+    drop_data = session.get('drop_data', {'drop-area-1': [], 'drop-area-2': []})
+    return jsonify(drop_data)  # Return it as JSON
 
 
 @app.route('/save_progress', methods=['POST'])
