@@ -81,6 +81,25 @@ def cyu_focal_secondary():
     return render_template('cyu_focal_secondary.html')
 
 
+@app.route('/dragdrop')
+def index():
+    # Default drop state
+    drop_data = session.get('drop_data', {
+        'drop-area-1': [],
+        'drop-area-2': []
+    })
+    return render_template('cyu_focal_secondary.html', drop_data=drop_data)
+
+
+@app.route('/save_progress', methods=['POST'])
+def save_progress():
+    drop_data = request.get_json()
+    if drop_data:
+        session['drop_data'] = drop_data
+        return jsonify({"status": "success"}), 200
+    return jsonify({"status": "error", "message": "No data received"}), 400
+
+
 @app.route('/assemble')
 def assemble():
     global canvas_flowers
