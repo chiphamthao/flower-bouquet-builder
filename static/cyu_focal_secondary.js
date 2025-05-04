@@ -26,43 +26,77 @@ function setupDropAreas(){
             $(this).removeClass("droppable-hover");
             $(this).css("background-color", "lightgreen");
 
-            const dropped = ui.draggable;
+            const dropTarget = $(this);
+            const droppedItem = ui.draggable;
 
-            saveProgress(dropped);
+            dropTarget.append(droppedItem);
 
-            dropped.fadeOut(100, function () {
-                dropped.remove();
+            saveProgress(dropTarget, droppedItem);
+
+            droppedItem.fadeOut(0, function () {
+                droppedItem.remove();
             });
 
             setTimeout(() => {
                 $(this).css("background-color", "white");
-            }, 500);
+            }, 300);
+        }
+    });
+
+    $("#drop-area-2").droppable({
+        accept: secondaryIds.join(", "),
+        over: function () {
+            $(this).addClass("droppable-hover");
+        },
+        out: function () {
+            $(this).removeClass("droppable-hover");
+        },
+        drop: function (event, ui) {
+            $(this).removeClass("droppable-hover");
+            $(this).css("background-color", "lightgreen");
+
+            const dropTarget = $(this);
+            const droppedItem = ui.draggable;
+
+            dropTarget.append(droppedItem);
+
+            saveProgress(dropTarget, droppedItem);
+
+            droppedItem.fadeOut(0, function () {
+                droppedItem.remove();
+            });
+
+            setTimeout(() => {
+                $(this).css("background-color", "white");
+            }, 300);
         }
     });
 }
 
-function saveProgress(dropped) {
+
+function saveProgress(dropTarget, dropped) {
+    const parentId = dropTarget.attr("id");
+    const droppedId = dropped.attr("id");
+
     let progress = {
         "drop-area-1": [],
         "drop-area-2": []
     };
 
-    const parentId = dropped.parent().attr("id");
-    const droppedId = dropped.attr("id");
-
     if (parentId && droppedId && progress.hasOwnProperty(parentId)) {
         progress[parentId].push(droppedId);
+        console.log("Saved", droppedId, "into", parentId);
+        console.log("Current contents of", parentId + ":", progress[parentId]);
     }
 
     console.log("Saving progress:", progress);
 
-    // Send to Flask server using AJAX
     $.ajax({
-        url: "/save_progress",          // Endpoint for saving progress
-        type: "POST",                   // POST method to send data
-        contentType: "application/json", // Indicate that data is JSON
-        dataType: "json",               // Expect JSON response
-        data: JSON.stringify(progress), // Convert progress to JSON format
+        url: "/save_progress",
+        type: "POST",
+        contentType: "application/json",
+        dataType: "json",
+        data: JSON.stringify(progress),
         success: function (result) {
             console.log("Saved successfully:", result);
         },
@@ -99,3 +133,8 @@ function loadProgress() {
     });
 }
 
+$(document).ready(function () {
+    createDraggables();
+    setupDropAreas();
+
+});
