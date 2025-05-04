@@ -1,4 +1,4 @@
-from flask import Flask, session
+from flask import Flask,session
 from flask import render_template
 from flask import Response, request, jsonify
 from datetime import datetime
@@ -83,9 +83,19 @@ def cyu_focal_secondary():
 
 @app.route('/get_progress', methods=['GET'])
 def get_progress():
-    # Get the drop data from session
-    drop_data = session.get('drop_data', {'drop-area-1': [], 'drop-area-2': []})
-    return jsonify(drop_data)  # Return it as JSON
+    progress = session.get('drop_data', {'drop-area-1': [], 'drop-area-2': []})
+    dropped_ids = progress['drop-area-1'] + progress['drop-area-2']
+
+    all_items = {
+        'focals': ["focal1", "focal2", "focal3", "focal4", "focal5", "focal6"],
+        'secondaries': ["secondary1", "secondary2", "secondary3", "secondary4", "secondary5", "secondary6"]
+    }
+
+    remaining_focals = [id for id in all_items['focals'] if id not in dropped_ids]
+    remaining_secondaries = [id for id in all_items['secondaries'] if id not in dropped_ids]
+
+    return jsonify(progress)
+    #return jsonify({"remaining_focals": remaining_focals, "remaining_secondaries": remaining_secondaries})
 
 
 @app.route('/save_progress', methods=['POST'])

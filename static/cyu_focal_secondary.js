@@ -34,7 +34,7 @@ function setupDropAreas(){
             const dropTarget = $(this);
             const droppedItem = ui.draggable;
 
-            dropTarget.append(droppedItem);
+          //  dropTarget.append(droppedItem);
 
             saveProgress(dropTarget, droppedItem);
 
@@ -108,24 +108,28 @@ function saveProgress(dropTarget, dropped) {
 
 function loadProgress() {
     $.ajax({
-        url: "/get_progress", // URL to fetch saved progress
-        type: "GET",          // GET method to retrieve data
-        dataType: "json",     // Expecting JSON response
+        url: "/get_progress",
+        type: "GET",
+        dataType: "json",
         success: function (result) {
-            if (!result || !result['drop-area-1'] || !result['drop-area-2']) {
-                return; // Exit if data is not available
-            }
 
-            // Loop through each drop area and append elements
-            for (const area in result) {
-                result[area].forEach(id => {
-                    const el = $("#" + id);
-                    if (el.length) {
-                        $("#" + area).append(el);
-                        el.css({ top: "0px", left: "0px" }); // Reset position
-                    }
-                });
-            }
+        console.log(result)
+
+            //if (!result || !result.remaining_focals || !result.remaining_secondaries) {
+              //  return;
+            //}
+
+            progress = result;
+
+            const allIds = result['drop-area-1'].concat(result['drop-area-2']);
+            const allSelectors = allIds.map(id => `#${id}`);
+
+            // Hide all elements not in the result (i.e. dropped items)
+            $(".draggable").each(function () {
+                if (allSelectors.includes("#" + $(this).attr("id"))) {
+                    $(this).remove();  // dropped, so remove from DOM
+                }
+            });
         },
         error: function (request, status, error) {
             console.error("Error fetching progress data:", request, status, error);
@@ -136,5 +140,5 @@ function loadProgress() {
 $(document).ready(function () {
     createDraggables();
     setupDropAreas();
-
+    loadProgress();
 });
