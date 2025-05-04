@@ -1,6 +1,11 @@
 const focalIds = ["#focal1", "#focal2", "#focal3", "#focal4", "#focal5", "#focal6"];
 const secondaryIds = ["#secondary1", "#secondary2", "#secondary3", "#secondary4", "#secondary5", "#secondary6"];
 
+let progress = {
+    "drop-area-1": [],
+    "drop-area-2": []
+};
+
 function createDraggables(){
     $(focalIds.join(", ") + ", " + secondaryIds.join(", ")).draggable({
         revert: "invalid",
@@ -77,11 +82,6 @@ function setupDropAreas(){
 function saveProgress(dropTarget, dropped) {
     const parentId = dropTarget.attr("id");
     const droppedId = dropped.attr("id");
-
-    let progress = {
-        "drop-area-1": [],
-        "drop-area-2": []
-    };
 
     if (parentId && droppedId && progress.hasOwnProperty(parentId)) {
         progress[parentId].push(droppedId);
