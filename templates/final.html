@@ -2,6 +2,11 @@
 {% block title %}Final Score{% endblock %}
 
 {% block content %}
+<script src="{{ url_for('static', filename='final.js') }}"></script>
+<script>
+  let current_selections = {{ current_selections|tojson }};
+  let canvas_flowers = {{ canvas_flowers|tojson }};
+</script>
 <div class="container mt-5" style="font-family: 'Indie Flower', sans-serif;">
   <h2 class="text-center mb-4" style="font-size: 2rem;">Quiz Results</h2>
 
@@ -15,25 +20,25 @@
 
   <hr class="my-4" />
 
-  <div class="text-center" style="margin-top: 30px;">
-    <div
-      id="canvas"
-      style="width: 400px; height: 400px; border: 2px solid #ccc; margin: 0 auto; position: relative;"
+  <div class="content">
+  
+    <section
+      class="canvas-area"
+      style="
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 2rem;
+      "
     >
-      {% for flower in canvas_flowers %}
-        <img
-        src="{{ url_for('static', filename=flower['src'] if 'images/' in flower['src'] else 'images/' + flower['src']) }}"    
-          style="position: absolute;
-                 top: {{ flower['top'] }};
-                 left: {{ flower['left'] }};
-                 width: {{ flower['width'] }};
-                 transform: rotate({{ flower['rotation'] }})"
-        />
-      {% endfor %}
-      {% if not canvas_flowers %}
-        <p style="color: #aaa; margin-top: 180px;">Created bouquet image here</p>
-      {% endif %}
-    </div>
+      <!-- Canvas -->
+      <div
+        id="canvas"
+        class="drop-zone-canvas"
+        style="position: relative; width: 800px; height: 600px; margin: 0 auto"
+      ></div>
+  
+    </section>
   </div>
 
   <div class="text-center mt-4">
@@ -41,6 +46,5 @@
   </div>
 </div>
 
-<script src="{{ url_for('static', filename='final.js') }}"></script>
 {% endblock %}
 
