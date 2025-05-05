@@ -81,6 +81,15 @@ def cyu_focal_secondary():
     return render_template('cyu_focal_secondary.html')
 
 
+@app.route('/refresh', methods=['POST'])
+def refresh():
+    progress = {
+        "drop-area-1": [],
+        "drop-area-2": []
+    }
+    return jsonify(progress)
+
+
 @app.route('/get_progress', methods=['GET'])
 def get_progress():
     progress = session.get('drop_data', {'drop-area-1': [], 'drop-area-2': []})
@@ -95,7 +104,6 @@ def get_progress():
     remaining_secondaries = [id for id in all_items['secondaries'] if id not in dropped_ids]
 
     return jsonify(progress)
-    #return jsonify({"remaining_focals": remaining_focals, "remaining_secondaries": remaining_secondaries})
 
 
 @app.route('/save_progress', methods=['POST'])
@@ -105,6 +113,7 @@ def save_progress():
         session['drop_data'] = drop_data
         return jsonify({"status": "success"}), 200
     return jsonify({"status": "error", "message": "No data received"}), 400
+
 
 
 @app.route('/assemble')
