@@ -113,12 +113,6 @@ function loadProgress() {
         dataType: "json",
         success: function (result) {
 
-        console.log(result)
-
-            //if (!result || !result.remaining_focals || !result.remaining_secondaries) {
-              //  return;
-            //}
-
             progress = result;
 
             const allIds = result['drop-area-1'].concat(result['drop-area-2']);
@@ -127,12 +121,33 @@ function loadProgress() {
             // Hide all elements not in the result (i.e. dropped items)
             $(".draggable").each(function () {
                 if (allSelectors.includes("#" + $(this).attr("id"))) {
-                    $(this).remove();  // dropped, so remove from DOM
+                    $(this).remove();
                 }
             });
         },
         error: function (request, status, error) {
             console.error("Error fetching progress data:", request, status, error);
+        }
+    });
+}
+
+function refreshDraggables(result) {
+
+progress = {
+    "drop-area-1": [],
+    "drop-area-2": []
+};
+$.ajax({
+        url: "/save_progress",
+        type: "POST",
+        contentType: "application/json",
+        dataType: "json",
+        data: JSON.stringify(progress),
+        success: function (result) {
+            console.log("Saved successfully:", result);
+        },
+        error: function (request, status, error) {
+            console.error("Error saving progress:", request, status, error);
         }
     });
 }
