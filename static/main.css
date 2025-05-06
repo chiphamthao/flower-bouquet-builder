@@ -626,7 +626,7 @@ label.disabled {
   margin-top: 20px;
   padding: 10px;
   border-radius: 8px;
-  font-size: 1.2em;
+  font-size: 1.3em;
   font-weight: bold;
   text-align: center;
   opacity: 0;
@@ -794,4 +794,28 @@ rotate-wrapper .ui-resizable-nw {
 
 .finish-btn {
   background-color: #28a745;
+  border-color: #28a745;
+}
+
+.finish-btn:hover,
+.finish-btn:focus {
+  background-color: #a3c9a3;
+  border-color: #a3c9a3;
+}
+
+.prev-assem-btn:hover {
+  background-color: #a3c9a3;
+  border-color: #a3c9a3;
+}
+
+.final-home-btn:hover,
+.final-home-btn:focus,
+.final-home-btn:active {
+  background-color: #a3c9a3;
+  border-color: #a3c9a3;
+}
+
+.final-subtitle {
+  color: #4a7a4a;
+  text-align: center;
 }

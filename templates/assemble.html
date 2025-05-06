@@ -1,7 +1,6 @@
 {% extends "layout.html" %} {% block content %}
 <!-- jQuery UI Rotatable plugin -->
 <script src="{{ url_for('static', filename='assemble.js') }}"></script>
-<script src="{{ url_for('static', filename='final.js') }}"></script>
 <script>
   let current_selections = {{current_selections|tojson}}
   let canvas_flowers = {{canvas_flowers|tojson}}
@@ -224,7 +223,7 @@
   <div class="back_next mt-4">
     <div class="row justify-content-between">
       <div class="col-auto">
-        <a href="/buildit_quiz2" class="btn btn-outline-primary"
+        <a href="/buildit_quiz2" class="prev-assem-btn btn btn-outline-primary"
           >Previous Question</a
         >
       </div>
@@ -234,24 +233,5 @@
     </div>
   </div>
 </div>
-<script>
-  async function submitScoreThenGo() {
-    // Read the score from the on-screen text
-    const scoreText = document.getElementById("score");
-    if (!scoreText) {
-      window.location.href = "/final"; // fallback
-      return;
-    }
 
-    const score = parseInt(scoreText.textContent.match(/\d+/)[0]);
-
-    await fetch("/submit_assemble_score", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ score }),
-    });
-
-    window.location.href = "/final";
-  }
-</script>
 {% endblock %}
