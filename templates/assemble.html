@@ -165,21 +165,6 @@
     </div>
   </div>
 
-  <div class="theme-description">
-    <h2 class="section-title">
-      How would you describe the color theme of your bouquet?
-    </h2>
-    <textarea
-      id="color-theme"
-      class="theme-input"
-      rows="3"
-      placeholder="Describe your color theme here…"
-    ></textarea>
-    <!-- preload existing text -->
-    <button id="submit-theme" class="theme-submit">Submit Theme</button>
-    <div class="theme-message"></div>
-  </div>
-
   <div class="bouquet-check">
     <button id="check-bouquet" class="check-button">Check your bouquet</button>
     <div class="check-results">
@@ -222,7 +207,9 @@
   <div class="back_next mt-4">
     <div class="row justify-content-between">
       <div class="col-auto">
-        <a href="/buildit_quiz2" class="btn btn-outline-primary">Previous Question</a>
+        <a href="/buildit_quiz2" class="btn btn-outline-primary"
+          >Previous Question</a
+        >
       </div>
       <div class="col-auto">
         <a href="/final" class="btn btn-primary">Finish</a>
@@ -230,24 +217,24 @@
     </div>
   </div>
 </div>
-  <script>
-    async function submitScoreThenGo() {
-      // Read the score from the on-screen text
-      const scoreText = document.getElementById("score");
-      if (!scoreText) {
-        window.location.href = "/final"; // fallback
-        return;
-      }
-  
-      const score = parseInt(scoreText.textContent.match(/\d+/)[0]);
-  
-      await fetch("/submit_assemble_score", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ score })
-      });
-  
-      window.location.href = "/final";
+<script>
+  async function submitScoreThenGo() {
+    // Read the score from the on-screen text
+    const scoreText = document.getElementById("score");
+    if (!scoreText) {
+      window.location.href = "/final"; // fallback
+      return;
     }
-  </script>
-  {% endblock %}
+
+    const score = parseInt(scoreText.textContent.match(/\d+/)[0]);
+
+    await fetch("/submit_assemble_score", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ score }),
+    });
+
+    window.location.href = "/final";
+  }
+</script>
+{% endblock %}
