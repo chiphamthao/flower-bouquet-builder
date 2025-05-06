@@ -124,6 +124,19 @@ def save_progress():
         return jsonify({"status": "success"}), 200
     return jsonify({"status": "error", "message": "No data received"}), 400
 
+@app.route('/save_progress_textures', methods=['POST'])
+def save_progress_textures():
+    data = request.get_json()
+    session['texture_selection'] = data.get('selected', [])
+    session['texture_feedback'] = data.get('feedback', "")
+    return jsonify(status="saved")
+
+@app.route('/get_progress_textures', methods=['GET'])
+def get_progress_textures():
+    saved = session.get('texture_selection', [])
+    feedback = session.get('texture_feedback', "")
+    return jsonify(selected=saved, feedback=feedback)
+
 
 
 @app.route('/assemble')
