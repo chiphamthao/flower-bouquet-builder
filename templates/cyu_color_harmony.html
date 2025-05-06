@@ -34,6 +34,26 @@
   <div id="feedback" class="feedback"></div>
 </form>
 
+<div class="refresh_button" style="margin-top: 30px">
+  <div class="row justify-content-center">
+      <div class="col-auto">
+        <button onclick="resetMCQ()" class="btn btn-outline-primary">Reset</button>
+      </div>
+  </div>
+</div>
+
+
+<script>
+function resetMCQ() {
+  fetch("/save_mcq_color_harmony", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ answer: null }),
+  }).then(() => location.reload());
+}
+</script>
+
+
 <div class="back_next">
   <div class="row justify-content-between">
       <div class="col-auto">

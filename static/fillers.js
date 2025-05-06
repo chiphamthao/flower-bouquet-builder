@@ -1,8 +1,22 @@
 let correctCount = 0;
+let hiddenItems = [];
 
 $(document).ready(function () {
+    // Load saved progress
+    $.get('/get_progress_fillers', function (data) {
+        correctCount = data.correctCount;
+        hiddenItems = data.hiddenItems;
+
+        $("#score").text(`Score: ${correctCount}/8`);
+
+        hiddenItems.forEach(id => {
+            $("#" + id).hide();
+        });
+    });
+
+    // Setup draggables
     $("#regular1, #regular2, #regular3, #regular4, #unique1, #unique2, #unique3, #unique4").draggable({
-        revert: false, // ✅ allow manual revert
+        revert: false,
         start: function () {
             $(this).css("cursor", "move");
         },
@@ -11,9 +25,21 @@ $(document).ready(function () {
         }
     });
 
+    function saveProgress() {
+        $.ajax({
+            url: "/save_progress_fillers",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({
+                correctCount: correctCount,
+                hiddenItems: hiddenItems
+            })
+        });
+    }
+
     function handleDrop(dropArea, acceptedIds) {
         $(dropArea).droppable({
-            accept: "*",  // ✅ accept everything, handle logic manually
+            accept: "*",
             over: function () {
                 $(this).addClass("droppable-hover");
             },
@@ -22,9 +48,9 @@ $(document).ready(function () {
             },
             drop: function (event, ui) {
                 $(this).removeClass("droppable-hover");
-                const draggedId = "#" + ui.draggable.attr("id");
+                const draggedId = ui.draggable.attr("id");
 
-                if (acceptedIds.includes(draggedId)) {
+                if (acceptedIds.includes("#" + draggedId)) {
                     $(this).css("background-color", "lightgreen");
                     correctCount++;
                     $("#score").text(`Score: ${correctCount}/8`);
@@ -33,6 +59,8 @@ $(document).ready(function () {
                 }
 
                 ui.draggable.fadeOut();
+                hiddenItems.push(draggedId);
+                saveProgress();
 
                 setTimeout(() => {
                     $(this).css("background-color", "white");
