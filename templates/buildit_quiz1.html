@@ -71,7 +71,7 @@
       <a href="/textures" class="btn btn-outline-primary">Textures</a>
     </div>
     <div class="col-auto">
-      <a href="/buildit_quiz2" class="btn btn-outline-primary">Next Question</a> <!-- Replace later -->
+      <button class="btn btn-outline-primary" id="next-btn" disabled onclick="window.location.href='/buildit_quiz2'">Next Question</button>
     </div>
   </div>
 </div>
@@ -107,6 +107,8 @@
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ correct: isCorrect })
     });
+
+    document.getElementById('next-btn').disabled = false;
   });
 </script>
 {% endblock %}
