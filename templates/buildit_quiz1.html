@@ -77,54 +77,38 @@
 </div>
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    fetch('/get_quiz1_progress')
-      .then(res => res.json())
-      .then(data => {
-        if (data.answer) {
-          document.getElementById(data.answer.toLowerCase()).checked = true;
-          const isCorrect = data.correct;
-          const feedback = document.getElementById('feedback');
-          feedback.textContent = isCorrect
-            ? 'Correct! Yellow/Orange and Indigo/Violet are complementary colors on the color wheel.'
-            : 'Not quite! The correct answer is A. Yellow/Orange and Indigo/Violet are complementary colors.';
-          feedback.classList.add(isCorrect ? 'correct' : 'incorrect');
-          document.querySelectorAll('input[name="answer"]').forEach(r => r.disabled = true);
-          document.getElementById('check-btn').disabled = true;
-          document.getElementById('next-btn').disabled = false;
-        }
-      });
+  document.getElementById('check-btn').addEventListener('click', () => {
+    const selected = document.querySelector('input[name="answer"]:checked');
+    const feedback = document.getElementById('feedback');
+    feedback.classList.remove('correct', 'incorrect');
 
-    document.getElementById('check-btn').addEventListener('click', () => {
-      const selected = document.querySelector('input[name="answer"]:checked');
-      const feedback = document.getElementById('feedback');
-      feedback.classList.remove('correct', 'incorrect');
+    if (!selected) {
+      feedback.textContent = 'Please select an answer.';
+      feedback.classList.add('incorrect');
+      return;
+    }
 
-      if (!selected) {
-        feedback.textContent = 'Please select an answer.';
-        feedback.classList.add('incorrect');
-        return;
-      }
+    const answer = selected.value;
+    const isCorrect = answer === 'A';
 
-      const answer = selected.value;
-      const isCorrect = answer === 'A';
+    // Feedback
+    feedback.textContent = isCorrect
+      ? 'Correct! Yellow/Orange and Indigo/Violet are complementary colors on the color wheel.'
+      : 'Not quite! The correct answer is A. Yellow/Orange and Indigo/Violet are complementary colors.';
+    feedback.classList.add(isCorrect ? 'correct' : 'incorrect');
 
-      feedback.textContent = isCorrect
-        ? 'Correct! Yellow/Orange and Indigo/Violet are complementary colors on the color wheel.'
-        : 'Not quite! The correct answer is A. Yellow/Orange and Indigo/Violet are complementary colors.';
-      feedback.classList.add(isCorrect ? 'correct' : 'incorrect');
+    // Disable inputs
+    document.querySelectorAll('input[name="answer"]').forEach(r => r.disabled = true);
+    document.getElementById('check-btn').disabled = true;
 
-      document.querySelectorAll('input[name="answer"]').forEach(r => r.disabled = true);
-      document.getElementById('check-btn').disabled = true;
-
-      fetch('/submit_quiz1', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ correct: isCorrect, answer })
-      });
-
-      document.getElementById('next-btn').disabled = false;
+    // Save result to session
+    fetch('/submit_quiz1', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ correct: isCorrect })
     });
+
+    document.getElementById('next-btn').disabled = false;
   });
 </script>
 {% endblock %}
