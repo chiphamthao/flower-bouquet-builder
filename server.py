@@ -137,6 +137,21 @@ def get_progress_textures():
     feedback = session.get('texture_feedback', "")
     return jsonify(selected=saved, feedback=feedback)
 
+@app.route('/get_quiz1_progress', methods=['GET'])
+def get_quiz1_progress():
+    return jsonify({
+        "answer": session.get('quiz1_answer'),
+        "correct": session.get('quiz1_correct')
+    })
+
+@app.route('/get_quiz2_progress', methods=['GET'])
+def get_quiz2_progress():
+    return jsonify({
+        "q1_selected": session.get('quiz2_q1_answer'),
+        "q2_selected": session.get('quiz2_q2_answers'),
+        "q1_correct": session.get('quiz2_q1_correct'),
+        "q2_correct": session.get('quiz2_q2_correct')
+    })
 
 
 @app.route('/assemble')
@@ -283,6 +298,7 @@ def submit_assemble_score():
 def submit_quiz1():
     data = request.get_json()
     session['quiz1_correct'] = data.get('correct', False)
+    session['quiz1_answer'] = data.get('answer')  # new line
     return jsonify(success=True)
 
 @app.route('/submit_quiz2', methods=['POST'])
@@ -290,7 +306,10 @@ def submit_quiz2():
     data = request.get_json()
     session['quiz2_q1_correct'] = data.get('q1_correct', False)
     session['quiz2_q2_correct'] = data.get('q2_correct', False)
+    session['quiz2_q1_answer'] = data.get('q1_selected')  # new
+    session['quiz2_q2_answers'] = data.get('q2_selected')  # new
     return jsonify(success=True)
+
 
 
 if __name__ == '__main__':

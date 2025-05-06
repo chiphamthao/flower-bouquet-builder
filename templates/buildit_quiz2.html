@@ -91,7 +91,6 @@
   document.querySelectorAll('.selectable-img').forEach(img => {
     img.addEventListener('click', () => {
       if (hasSubmitted) return;
-
       const row = img.dataset.row;
       const index = parseInt(img.dataset.index);
       const selected = row === '1' ? selectedRow1 : selectedRow2;
@@ -112,6 +111,52 @@
       }
     });
   });
+
+  function restoreSelection() {
+    fetch('/get_quiz2_progress')
+      .then(res => res.json())
+      .then(data => {
+        if (data.q1_selected !== undefined) {
+          document.querySelectorAll('[data-row="1"]').forEach((el, i) => {
+            if (i === data.q1_selected) {
+              selectedRow1.push(i);
+              el.classList.add('selected');
+            }
+          });
+        }
+
+        if (data.q2_selected) {
+          document.querySelectorAll('[data-row="2"]').forEach((el, i) => {
+            if (data.q2_selected.includes(i)) {
+              selectedRow2.push(i);
+              el.classList.add('selected');
+            }
+          });
+        }
+
+        const fb1 = document.getElementById('feedback1');
+        const fb2 = document.getElementById('feedback2');
+        if (data.q1_selected !== undefined) {
+          fb1.textContent = data.q1_correct
+            ? 'Correct! Both of these flowers are soft, rounded, and lush.'
+            : 'Not Quite! The rose is soft, rounded, and lush — the correct answer is the first flower.';
+          fb1.classList.add(data.q1_correct ? 'correct' : 'incorrect');
+        }
+
+        if (data.q2_selected && data.q2_selected.length === 2) {
+          fb2.textContent = data.q2_correct
+            ? 'Correct! Both of these flowers are not airy, wispy, and light like the rest.'
+            : 'Not Quite! The correct answers are the last two flowers — they are not airy, wispy, and light like the rest.';
+          fb2.classList.add(data.q2_correct ? 'correct' : 'incorrect');
+        }
+
+        if (data.q1_selected !== undefined || (data.q2_selected && data.q2_selected.length === 2)) {
+          hasSubmitted = true;
+          document.getElementById('check-btn').disabled = true;
+          document.getElementById('next-btn').disabled = false;
+        }
+      });
+  }
 
   document.getElementById('check-btn').addEventListener('click', () => {
     if (hasSubmitted) return;
@@ -136,18 +181,21 @@
 
     hasSubmitted = true;
     document.getElementById('check-btn').disabled = true;
+    document.getElementById('next-btn').disabled = false;
 
-    // Send correctness to Flask
     fetch('/submit_quiz2', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         q1_correct: q1Correct,
-        q2_correct: q2Correct
+        q2_correct: q2Correct,
+        q1_selected: selectedRow1[0] ?? null,
+        q2_selected: selectedRow2
       })
     });
-
-    document.getElementById('next-btn').disabled = false;
   });
+
+  document.addEventListener('DOMContentLoaded', restoreSelection);
 </script>
+
 {% endblock %}
