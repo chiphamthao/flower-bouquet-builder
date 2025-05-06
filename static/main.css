@@ -519,10 +519,11 @@ label.disabled {
 }
 
 .drop-zone-label {
-  font-size: 1.1em;
+  font-size: 1.5em;
   color: #4a7a4a;
   font-weight: 500;
   text-align: center;
+  font-family: "Indie Flower", sans-serif;
 }
 
 .drop-zone {
@@ -553,38 +554,6 @@ label.disabled {
   object-fit: contain;
 }
 
-/* Color harmony textbox styles */
-.theme-description {
-  margin-top: 40px;
-  text-align: center;
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.theme-input {
-  width: 100%;
-  padding: 12px;
-  margin-top: 15px;
-  border: 2px solid #4a7a4a;
-  border-radius: 8px;
-  font-size: 16px;
-  resize: vertical;
-  min-height: 80px;
-  background-color: white;
-  color: #333;
-}
-
-.theme-input:focus {
-  outline: none;
-  border-color: #2d4d2d;
-  box-shadow: 0 0 5px rgba(74, 122, 74, 0.3);
-}
-
-.theme-input::placeholder {
-  color: #999;
-}
-
 /* Bouquet Check Styles */
 .bouquet-check {
   margin-top: 40px;
@@ -604,6 +573,7 @@ label.disabled {
   cursor: pointer;
   margin-bottom: 30px;
   transition: background-color 0.2s, transform 0.2s;
+  font-size: 1.5rem;
 }
 
 .check-button:hover {
@@ -630,6 +600,7 @@ label.disabled {
 .check-label {
   color: #c74a4a;
   transition: color 0.3s ease;
+  font-size: 1.5rem;
 }
 
 .check-item.correct .check-label {
@@ -691,7 +662,7 @@ label.disabled {
   width: 200px;
 }
 .flower-palette h2 {
-  font-size: 1.3em;
+  font-size: 2em;
   margin-bottom: 0.5em;
   color: #4a7a4a;
 }
@@ -710,7 +681,7 @@ label.disabled {
   flex: 1;
 }
 .canvas-area h2 {
-  font-size: 1.3em;
+  font-size: 2em;
   margin-bottom: 0.5em;
   color: #4a7a4a;
 }
@@ -819,4 +790,8 @@ rotate-wrapper .ui-resizable-nw {
   height: 120px;
   width: auto;
   object-fit: contain;
+}
+
+.finish-btn {
+  background-color: #28a745;
 }
