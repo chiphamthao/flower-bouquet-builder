@@ -35,7 +35,7 @@
 .nav-link {
   font-family: "Indie Flower", sans-serif;
   font-size: 32px;
-  color: black !important;
+  color: gray !important;
 }
 
 .secondary-title {
@@ -98,7 +98,7 @@
 }
 
 .overviewlink {
-  color: black;
+  color: green;
   font-weight: bold;
   text-decoration: underline;
 }
