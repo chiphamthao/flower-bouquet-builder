@@ -314,6 +314,36 @@ def submit_quiz2():
     session['quiz2_q2_correct'] = data.get('q2_correct', False)
     return jsonify(success=True)
 
+@app.route('/save_progress_quiz1', methods=['POST'])
+def save_progress_quiz1():
+    data = request.get_json()
+    session['quiz1_saved_answer'] = data.get('answer')
+    session['quiz1_correct'] = data.get('correct')
+    return jsonify(success=True)
+
+@app.route('/get_progress_quiz1')
+def get_progress_quiz1():
+    return jsonify(
+        answer=session.get('quiz1_saved_answer'),
+        correct=session.get('quiz1_correct')
+    )
+
+@app.route('/save_progress_quiz2', methods=['POST'])
+def save_progress_quiz2():
+    data = request.get_json()
+    session['quiz2_saved'] = {
+        'row1': data.get('row1'),
+        'row2': data.get('row2'),
+        'q1_correct': data.get('q1_correct'),
+        'q2_correct': data.get('q2_correct')
+    }
+    session['quiz2_q1_correct'] = data.get('q1_correct')
+    session['quiz2_q2_correct'] = data.get('q2_correct')
+    return jsonify(success=True)
+
+@app.route('/get_progress_quiz2')
+def get_progress_quiz2():
+    return jsonify(session.get('quiz2_saved', {}))
 
 
 if __name__ == '__main__':

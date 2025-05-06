@@ -11,10 +11,11 @@
   }
 
   .feedback {
-    text-align: center;
+    text-align: left;
     font-size: 1.1em;
     font-weight: bold;
     margin-top: 20px;
+    margin-bottom: 20px;
   }
 
   .correct {
@@ -61,7 +62,8 @@
       </div>
       <br>
       <button type="button" class="btn btn-success" id="check-btn">Check</button>
-      <div id="feedback" class="feedback"></div>     
+      <div id="feedback" class="feedback"></div>
+      <button class="btn btn-outline-secondary" id="try-again-btn">Try Again</button>          
 </form>
 </div>
 
@@ -77,9 +79,43 @@
 </div>
 
 <script>
-  document.getElementById('check-btn').addEventListener('click', () => {
+  const checkBtn = document.getElementById('check-btn');
+  const nextBtn = document.getElementById('next-btn');
+  const tryAgainBtn = document.getElementById('try-again-btn');
+  const feedback = document.getElementById('feedback');
+  const radios = document.querySelectorAll('input[name="answer"]');
+
+  function disableQuiz() {
+    radios.forEach(r => r.disabled = true);
+    checkBtn.disabled = true;
+    nextBtn.disabled = false;
+  }
+
+  function resetQuiz() {
+    radios.forEach(r => {
+      r.checked = false;
+      r.disabled = false;
+    });
+    checkBtn.disabled = false;
+    nextBtn.disabled = true;
+    feedback.textContent = "";
+    feedback.classList.remove('correct', 'incorrect');
+
+    // Clear session
+    fetch('/submit_quiz1', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ correct: false })
+    });
+    fetch('/save_progress_quiz1', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ answer: null, correct: false })
+    });
+  }
+
+  checkBtn.addEventListener('click', () => {
     const selected = document.querySelector('input[name="answer"]:checked');
-    const feedback = document.getElementById('feedback');
     feedback.classList.remove('correct', 'incorrect');
 
     if (!selected) {
@@ -91,24 +127,40 @@
     const answer = selected.value;
     const isCorrect = answer === 'A';
 
-    // Feedback
     feedback.textContent = isCorrect
       ? 'Correct! Yellow/Orange and Indigo/Violet are complementary colors on the color wheel.'
-      : 'Not quite! The correct answer is A. Yellow/Orange and Indigo/Violet are complementary colors.';
+      : 'Not quite!';
     feedback.classList.add(isCorrect ? 'correct' : 'incorrect');
 
-    // Disable inputs
-    document.querySelectorAll('input[name="answer"]').forEach(r => r.disabled = true);
-    document.getElementById('check-btn').disabled = true;
+    disableQuiz();
 
-    // Save result to session
     fetch('/submit_quiz1', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ correct: isCorrect })
     });
-
-    document.getElementById('next-btn').disabled = false;
+    fetch('/save_progress_quiz1', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ answer: answer, correct: isCorrect })
+    });
   });
+
+  tryAgainBtn.addEventListener('click', resetQuiz);
+
+  // Load progress if exists
+  fetch('/get_progress_quiz1')
+    .then(res => res.json())
+    .then(data => {
+      if (data.answer) {
+        document.getElementById(data.answer.toLowerCase()).checked = true;
+        feedback.textContent = data.correct
+          ? 'Correct! Yellow/Orange and Indigo/Violet are complementary colors on the color wheel.'
+          : 'Not quite!';
+        feedback.classList.add(data.correct ? 'correct' : 'incorrect');
+        disableQuiz();
+      }
+    });
 </script>
+
 {% endblock %}

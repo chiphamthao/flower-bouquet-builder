@@ -71,6 +71,10 @@
   <button class="btn btn-success" id="check-btn">Check</button>
 </div>
 
+<div class="text-center mt-2">
+  <button class="btn btn-outline-secondary" id="try-again-btn" style="font-family: 'Indie Flower', sans-serif;">Try Again</button>
+</div>
+
 <!-- Navigation -->
 <div class="back_next mt-4">
   <div class="row justify-content-between">
@@ -88,67 +92,152 @@
   const selectedRow2 = [];
   let hasSubmitted = false;
 
+  const fb1 = document.getElementById('feedback1');
+  const fb2 = document.getElementById('feedback2');
+  const checkBtn = document.getElementById('check-btn');
+  const nextBtn = document.getElementById('next-btn');
+  const tryAgainBtn = document.getElementById('try-again-btn');
+
+  function updateFeedback(isQ1Correct, isQ2Correct) {
+    fb1.textContent = isQ1Correct
+      ? 'Correct! Both of these flowers are soft, rounded, and lush.'
+      : 'Not Quite!';
+    fb1.classList.add(isQ1Correct ? 'correct' : 'incorrect');
+
+    fb2.textContent = isQ2Correct
+      ? 'Correct! Both of these flowers are not airy, wispy, and light like the rest.'
+      : 'Not Quite!';
+    fb2.classList.add(isQ2Correct ? 'correct' : 'incorrect');
+  }
+
+  function disableQuiz() {
+    hasSubmitted = true;
+    checkBtn.disabled = true;
+    nextBtn.disabled = false;
+  }
+
+  function clearSelections() {
+    document.querySelectorAll('.selectable-img').forEach(img => img.classList.remove('selected'));
+    selectedRow1.length = 0;
+    selectedRow2.length = 0;
+  }
+
+  function tryAgain() {
+    clearSelections();
+    fb1.textContent = '';
+    fb1.classList.remove('correct', 'incorrect');
+    fb2.textContent = '';
+    fb2.classList.remove('correct', 'incorrect');
+    hasSubmitted = false;
+    checkBtn.disabled = false;
+    nextBtn.disabled = true;
+
+    // clear session data
+    fetch('/submit_quiz2', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ q1_correct: false, q2_correct: false })
+    });
+    fetch('/save_progress_quiz2', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        row1: null,
+        row2: [],
+        q1_correct: false,
+        q2_correct: false
+      })
+    });
+  }
+
   document.querySelectorAll('.selectable-img').forEach(img => {
     img.addEventListener('click', () => {
       if (hasSubmitted) return;
-
       const row = img.dataset.row;
       const index = parseInt(img.dataset.index);
-      const selected = row === '1' ? selectedRow1 : selectedRow2;
 
       if (row === '1') {
-        selectedRow1.length = 0;
         document.querySelectorAll('[data-row="1"]').forEach(el => el.classList.remove('selected'));
+        selectedRow1.length = 0;
         selectedRow1.push(index);
         img.classList.add('selected');
       } else {
-        if (selected.includes(index)) {
-          selected.splice(selected.indexOf(index), 1);
+        if (selectedRow2.includes(index)) {
+          selectedRow2.splice(selectedRow2.indexOf(index), 1);
           img.classList.remove('selected');
-        } else if (selected.length < 2) {
-          selected.push(index);
+        } else if (selectedRow2.length < 2) {
+          selectedRow2.push(index);
           img.classList.add('selected');
         }
       }
     });
   });
 
-  document.getElementById('check-btn').addEventListener('click', () => {
+  checkBtn.addEventListener('click', () => {
     if (hasSubmitted) return;
 
-    const fb1 = document.getElementById('feedback1');
-    const fb2 = document.getElementById('feedback2');
     fb1.classList.remove('correct', 'incorrect');
     fb2.classList.remove('correct', 'incorrect');
 
-    const q1Correct = selectedRow1.length === 1 && selectedRow1[0] === 0;
-    const q2Correct = selectedRow2.length === 2 && selectedRow2.includes(3) && selectedRow2.includes(4);
+    const isQ1Correct = selectedRow1.length === 1 && selectedRow1[0] === 0;
+    const isQ2Correct = selectedRow2.length === 2 && selectedRow2.includes(3) && selectedRow2.includes(4);
 
-    fb1.textContent = q1Correct
-      ? 'Correct! Both of these flowers are soft, rounded, and lush.'
-      : 'Not Quite! The rose is soft, rounded, and lush — the correct answer is the first flower.';
-    fb1.classList.add(q1Correct ? 'correct' : 'incorrect');
+    updateFeedback(isQ1Correct, isQ2Correct);
+    disableQuiz();
 
-    fb2.textContent = q2Correct
-      ? 'Correct! Both of these flowers are not airy, wispy, and light like the rest.'
-      : 'Not Quite! The correct answers are the last two flowers — they are not airy, wispy, and light like the rest.';
-    fb2.classList.add(q2Correct ? 'correct' : 'incorrect');
-
-    hasSubmitted = true;
-    document.getElementById('check-btn').disabled = true;
-
-    // Send correctness to Flask
     fetch('/submit_quiz2', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        q1_correct: q1Correct,
-        q2_correct: q2Correct
+        q1_correct: isQ1Correct,
+        q2_correct: isQ2Correct
       })
     });
 
-    document.getElementById('next-btn').disabled = false;
+    fetch('/save_progress_quiz2', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        row1: selectedRow1[0] ?? null,
+        row2: selectedRow2,
+        q1_correct: isQ1Correct,
+        q2_correct: isQ2Correct
+      })
+    });
   });
+
+  tryAgainBtn.addEventListener('click', tryAgain);
+
+  function loadProgress() {
+    fetch('/get_progress_quiz2')
+      .then(res => res.json())
+      .then(data => {
+        if (data.row1 !== undefined && data.row1 !== null) {
+          const img = document.querySelector(`.selectable-img[data-row="1"][data-index="${data.row1}"]`);
+          if (img) {
+            img.classList.add('selected');
+            selectedRow1.push(data.row1);
+          }
+        }
+
+        if (data.row2 && Array.isArray(data.row2)) {
+          data.row2.forEach(i => {
+            const img = document.querySelector(`.selectable-img[data-row="2"][data-index="${i}"]`);
+            if (img) {
+              img.classList.add('selected');
+              selectedRow2.push(i);
+            }
+          });
+        }
+
+        if (data.q1_correct !== undefined || data.q2_correct !== undefined) {
+          updateFeedback(data.q1_correct, data.q2_correct);
+          disableQuiz();
+        }
+      });
+  }
+
+  window.onload = loadProgress;
 </script>
 
 {% endblock %}
