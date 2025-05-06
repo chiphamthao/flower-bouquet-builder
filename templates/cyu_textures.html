@@ -19,6 +19,7 @@
     font-size: 1.2em;
     font-weight: bold;
     margin-top: 20px;
+    font-family: "Indie Flower", sans-serif;
   }
 
   .feedback.correct {
@@ -51,6 +52,14 @@
   <div class="feedback" id="feedback"></div>
 </div>
 
+<div class="refresh_button" style="margin-top: 30px">
+  <div class="row justify-content-center">
+      <div class="col-auto">
+        <button class="btn btn-outline-secondary" id="refresh-btn" style="font-family: 'Indie Flower', sans-serif;">Refresh</button>
+      </div>
+  </div>
+</div>
+
 <div class="back_next mt-4">
   <div class="row justify-content-between">
     <div class="col-auto">
@@ -65,6 +74,40 @@
 <script>
   let selected = [];
 
+  function saveSelection(feedback = "") {
+    fetch("/save_progress_textures", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ selected, feedback })
+    });
+  }
+
+  function loadSelection() {
+    fetch("/get_progress_textures")
+      .then(response => response.json())
+      .then(data => {
+        selected = data.selected || [];
+        const feedbackText = data.feedback || "";
+        const feedbackEl = document.getElementById('feedback');
+
+        selected.forEach(index => {
+          const img = document.querySelector(`.selectable-img[data-index="${index}"]`);
+          if (img) {
+            img.classList.add("selected");
+          }
+        });
+
+        if (feedbackText) {
+          feedbackEl.textContent = feedbackText;
+          if (feedbackText.startsWith("Correct")) {
+            feedbackEl.classList.add("correct");
+          } else {
+            feedbackEl.classList.add("incorrect");
+          }
+        }
+      });
+  }
+
   document.querySelectorAll('.selectable-img').forEach(img => {
     img.addEventListener('click', () => {
       const index = parseInt(img.dataset.index);
@@ -76,6 +119,8 @@
         selected.push(index);
         img.classList.add('selected');
       }
+
+      saveSelection(); // Save after selection change
     });
   });
 
@@ -83,20 +128,44 @@
     const feedback = document.getElementById('feedback');
     feedback.classList.remove('correct', 'incorrect');
 
-    if (selected.length !== 2) {
-      feedback.textContent = 'Please select exactly 2 images.';
-      feedback.classList.add('incorrect');
-      return;
-    }
+    let feedbackText = "";
 
-    // Correct answer: index 0 and 1 (first two astilbes)
-    if (selected.includes(0) && selected.includes(1)) {
-      feedback.textContent = 'Correct! Both of these flowers are soft, rounded, and lush.';
+    if (selected.length !== 2) {
+      feedbackText = 'Please select exactly 2 images.';
+      feedback.classList.add('incorrect');
+    } else if (selected.includes(0) && selected.includes(1)) {
+      feedbackText = 'Correct! Both of these flowers are soft, rounded, and lush.';
       feedback.classList.add('correct');
     } else {
-      feedback.textContent = 'Not Quite!';
+      feedbackText = 'Not Quite!';
       feedback.classList.add('incorrect');
     }
+
+    feedback.textContent = feedbackText;
+    saveSelection(feedbackText); // Save feedback with selection
   });
+
+  window.onload = loadSelection;
+
+  document.getElementById("refresh-btn").addEventListener("click", () => {
+  // Clear selected
+  selected = [];
+  document.querySelectorAll(".selectable-img").forEach(img => {
+    img.classList.remove("selected");
+  });
+
+  // Clear feedback
+  const feedback = document.getElementById("feedback");
+  feedback.textContent = "";
+  feedback.classList.remove("correct", "incorrect");
+
+  // Clear saved session data
+  fetch("/save_progress_textures", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ selected: [], feedback: "" })
+  });
+});
 </script>
+
 {% endblock %}

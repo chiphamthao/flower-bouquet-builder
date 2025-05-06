@@ -50,15 +50,25 @@ def check_bouquet():
         session['attempts_used'] = 0
     session['attempts_used'] += 1
 
+    attempts_used = session['attempts_used']  # Store before reset
+    remaining = max(0, 3 - attempts_used)
+
     if valid:
-        attempts = session['attempts_used']
-        score = max(4 - (attempts - 1), 0)  # e.g. 3 if second try
+        session['assemble_score'] = 4
+        session['attempts_used'] = 0  # reset after success
+    elif attempts_used >= 3:
+        # After 3rd attempt, partial credit per correct type
+        score = 0
+        types = ["focal", "secondary", "filler", "greens"]
+        for t in types:
+            if t in selections and selections[t] and selections[t][1] == t:
+                score += 1
         session['assemble_score'] = score
-        session['attempts_used'] = 0  # reset
+        session['attempts_used'] = 0  # reset after final attempt
 
     return jsonify({
         "hasError": not valid,
-        "remaining": max(0, 4 - session['attempts_used'])  # optional
+        "remaining": remaining
     })
 
 @app.route('/lessons')
@@ -81,6 +91,15 @@ def cyu_focal_secondary():
     return render_template('cyu_focal_secondary.html')
 
 
+@app.route('/refresh', methods=['POST'])
+def refresh():
+    progress = {
+        "drop-area-1": [],
+        "drop-area-2": []
+    }
+    return jsonify(progress)
+
+
 @app.route('/get_progress', methods=['GET'])
 def get_progress():
     progress = session.get('drop_data', {'drop-area-1': [], 'drop-area-2': []})
@@ -95,7 +114,6 @@ def get_progress():
     remaining_secondaries = [id for id in all_items['secondaries'] if id not in dropped_ids]
 
     return jsonify(progress)
-    #return jsonify({"remaining_focals": remaining_focals, "remaining_secondaries": remaining_secondaries})
 
 
 @app.route('/save_progress', methods=['POST'])
@@ -105,6 +123,19 @@ def save_progress():
         session['drop_data'] = drop_data
         return jsonify({"status": "success"}), 200
     return jsonify({"status": "error", "message": "No data received"}), 400
+
+@app.route('/save_progress_textures', methods=['POST'])
+def save_progress_textures():
+    data = request.get_json()
+    session['texture_selection'] = data.get('selected', [])
+    session['texture_feedback'] = data.get('feedback', "")
+    return jsonify(status="saved")
+
+@app.route('/get_progress_textures', methods=['GET'])
+def get_progress_textures():
+    saved = session.get('texture_selection', [])
+    feedback = session.get('texture_feedback', "")
+    return jsonify(selected=saved, feedback=feedback)
 
 
 @app.route('/assemble')
@@ -259,6 +290,7 @@ def submit_quiz2():
     session['quiz2_q1_correct'] = data.get('q1_correct', False)
     session['quiz2_q2_correct'] = data.get('q2_correct', False)
     return jsonify(success=True)
+
 
 
 if __name__ == '__main__':

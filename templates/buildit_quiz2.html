@@ -78,7 +78,7 @@
       <a href="/buildit_quiz1" class="btn btn-outline-primary">Previous Question</a>
     </div>
     <div class="col-auto">
-      <a href="/assemble" class="btn btn-outline-primary">Next Question</a>
+      <button class="btn btn-outline-primary" id="next-btn" disabled onclick="window.location.href='/assemble'">Next Question</button>
     </div>
   </div>
 </div>
@@ -146,6 +146,9 @@
         q2_correct: q2Correct
       })
     });
+
+    document.getElementById('next-btn').disabled = false;
   });
 </script>
+
 {% endblock %}
