@@ -242,6 +242,29 @@ def buildit_quiz1():
 def buildit_quiz2():
     return render_template('buildit_quiz2.html')
 
+@app.route('/save_progress_fillers', methods=['POST'])
+def save_progress_fillers():
+    data = request.get_json()
+    session['correctCount'] = data.get('correctCount', 0)
+    session['hiddenItems'] = data.get('hiddenItems', [])
+    return jsonify(status="success")
+
+@app.route('/get_progress_fillers', methods=['GET'])
+def get_progress_fillers():
+    return jsonify(
+        correctCount=session.get('correctCount', 0),
+        hiddenItems=session.get('hiddenItems', [])
+    )
+
+@app.route('/save_mcq_color_harmony', methods=['POST'])
+def save_mcq():
+    data = request.get_json()
+    session['mcq_answer'] = data.get('answer')
+    return jsonify(status='success')
+@app.route('/get_mcq_color_harmony')
+def get_mcq():
+    return jsonify(answer=session.get('mcq_answer'))
+
 
 
 # AJAX FUNCTIONS
