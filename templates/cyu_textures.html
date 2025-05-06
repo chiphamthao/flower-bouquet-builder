@@ -52,6 +52,14 @@
   <div class="feedback" id="feedback"></div>
 </div>
 
+<div class="refresh_button" style="margin-top: 30px">
+  <div class="row justify-content-center">
+      <div class="col-auto">
+        <button class="btn btn-outline-secondary" id="refresh-btn" style="font-family: 'Indie Flower', sans-serif;">Refresh</button>
+      </div>
+  </div>
+</div>
+
 <div class="back_next mt-4">
   <div class="row justify-content-between">
     <div class="col-auto">
@@ -138,6 +146,26 @@
   });
 
   window.onload = loadSelection;
+
+  document.getElementById("refresh-btn").addEventListener("click", () => {
+  // Clear selected
+  selected = [];
+  document.querySelectorAll(".selectable-img").forEach(img => {
+    img.classList.remove("selected");
+  });
+
+  // Clear feedback
+  const feedback = document.getElementById("feedback");
+  feedback.textContent = "";
+  feedback.classList.remove("correct", "incorrect");
+
+  // Clear saved session data
+  fetch("/save_progress_textures", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ selected: [], feedback: "" })
+  });
+});
 </script>
 
 {% endblock %}
