@@ -50,15 +50,25 @@ def check_bouquet():
         session['attempts_used'] = 0
     session['attempts_used'] += 1
 
+    attempts_used = session['attempts_used']  # Store before reset
+    remaining = max(0, 3 - attempts_used)
+
     if valid:
-        attempts = session['attempts_used']
-        score = max(4 - (attempts - 1), 0)  # e.g. 3 if second try
+        session['assemble_score'] = 4
+        session['attempts_used'] = 0  # reset after success
+    elif attempts_used >= 3:
+        # After 3rd attempt, partial credit per correct type
+        score = 0
+        types = ["focal", "secondary", "filler", "greens"]
+        for t in types:
+            if t in selections and selections[t] and selections[t][1] == t:
+                score += 1
         session['assemble_score'] = score
-        session['attempts_used'] = 0  # reset
+        session['attempts_used'] = 0  # reset after final attempt
 
     return jsonify({
         "hasError": not valid,
-        "remaining": max(0, 4 - session['attempts_used'])  # optional
+        "remaining": remaining
     })
 
 @app.route('/lessons')
