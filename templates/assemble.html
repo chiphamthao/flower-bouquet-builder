@@ -1,7 +1,6 @@
 {% extends "layout.html" %} {% block content %}
 <!-- jQuery UI Rotatable plugin -->
 <script src="{{ url_for('static', filename='assemble.js') }}"></script>
-<script src="{{ url_for('static', filename='final.js') }}"></script>
 <script>
   let current_selections = {{current_selections|tojson}}
   let canvas_flowers = {{canvas_flowers|tojson}}
@@ -16,7 +15,7 @@
     and greens to create a full bouquet
   </p>
 
-  <h2 class="section-title">Choose your selection</h2>
+  <h2 class="section-title">Drag and drop your final selection</h2>
   <div class="flower-grid">
     <!-- Row 1 -->
     <div
@@ -38,7 +37,7 @@
     <div
       class="flower-item"
       draggable="true"
-      data-type="focal"
+      data-type="secondary"
       data-name="daisy"
     >
       <img src="/static/images/daisy.png" alt="Daisy" />
@@ -55,9 +54,9 @@
       class="flower-item"
       draggable="true"
       data-type="focal"
-      data-name="lily"
+      data-name="Chrysanthemum"
     >
-      <img src="/static/images/lily.png" alt="Lily" />
+      <img src="/static/images/Chrysanthemum.png" alt="Chrysanthemum" />
     </div>
 
     <!-- Row 2 (Fillers) -->
@@ -73,25 +72,25 @@
       class="flower-item"
       draggable="true"
       data-type="secondary"
-      data-name="waxflower"
+      data-name="Scabiosa"
     >
-      <img src="/static/images/waxflower.webp" alt="Waxflower" />
+      <img src="/static/images/Scabiosa.png" alt="Scabiosa" />
     </div>
     <div
       class="flower-item"
       draggable="true"
-      data-type="filler"
-      data-name="statice"
+      data-type="secondary"
+      data-name="Poppy"
     >
-      <img src="/static/images/statice.webp" alt="Statice" />
+      <img src="/static/images/Poppy.png" alt="Poppy" />
     </div>
     <div
       class="flower-item"
       draggable="true"
-      data-type="filler"
-      data-name="dustyMiller"
+      data-type="secondary"
+      data-name="Carnation"
     >
-      <img src="/static/images/dustymiller.png" alt="Dusty Miller" />
+      <img src="/static/images/Carnation.png" alt="Carnation" />
     </div>
     <div
       class="flower-item"
@@ -106,26 +105,26 @@
     <div
       class="flower-item"
       draggable="true"
-      data-type="greens"
-      data-name="ming-fern"
+      data-type="filler"
+      data-name="Craspedia"
     >
-      <img src="/static/images/ming-fern.jpg" alt="Ming Fern" />
+      <img src="/static/images/Craspedia.png" alt="Craspedia" />
     </div>
     <div
       class="flower-item"
       draggable="true"
-      data-type="greens"
-      data-name="leatherLeaf"
+      data-type="filler"
+      data-name="Statice"
     >
-      <img src="/static/images/leatherleaf.png" alt="Leather Leaf" />
+      <img src="/static/images/Statice.png" alt="Statice" />
     </div>
     <div
       class="flower-item"
       draggable="true"
-      data-type="greens"
-      data-name="salal"
+      data-type="filler"
+      data-name="Astilbe"
     >
-      <img src="/static/images/salal.jpg" alt="Salal" />
+      <img src="/static/images/Astilbe.png" alt="Astilbe" />
     </div>
     <div
       class="flower-item"
@@ -133,19 +132,18 @@
       data-type="greens"
       data-name="ruscus"
     >
-      <img src="/static/images/ruscus.png" alt="Ruscus" />
+      <img src="/static/images/Ruscus.png" alt="Ruscus" />
     </div>
     <div
       class="flower-item"
       draggable="true"
       data-type="greens"
-      data-name="treeFern"
+      data-name="Salal"
     >
-      <img src="/static/images/treefern.png" alt="Tree Fern" />
+      <img src="/static/images/Salal.png" alt="Salal" />
     </div>
   </div>
 
-  <h2 class="section-title">Drag and drop your final selection</h2>
   <div class="drop-zones">
     <div class="drop-zone-container">
       <div class="drop-zone-label">Focal</div>
@@ -165,56 +163,58 @@
     </div>
   </div>
 
-  <div class="theme-description">
-    <h2 class="section-title">
-      How would you describe the color theme of your bouquet?
-    </h2>
-    <textarea
-      id="color-theme"
-      class="theme-input"
-      rows="3"
-      style="font-family: Indie Flower, sans-serif;"
-      placeholder="Describe your color theme here…"
-    ></textarea>
-    <!-- preload existing text -->
-    <button id="submit-theme" style="font-family: Indie Flower, sans-serif;" class="theme-submit">Submit Theme</button>
-    <div class="theme-message"></div>
-  </div>
-
   <div class="bouquet-check">
-    <button id="check-bouquet" style="font-family: Indie Flower, sans-serif;" class="check-button">Check your bouquet</button>
+    <button
+      id="check-bouquet"
+      style="font-family: Indie Flower, sans-serif"
+      class="check-button"
+    >
+      Check your bouquet
+    </button>
     <div class="check-results">
       <div class="check-item">
-        <span class="check-label" style="font-family: Indie Flower, sans-serif;">Focal Flower</span>
+        <span class="check-label" style="font-family: Indie Flower, sans-serif"
+          >Focal Flower</span
+        >
         <span class="validation-indicator"></span>
       </div>
       <div class="check-item">
-        <span class="check-label" style="font-family: Indie Flower, sans-serif;">Secondary Flower</span>
+        <span class="check-label" style="font-family: Indie Flower, sans-serif"
+          >Secondary Flower</span
+        >
         <span class="validation-indicator"></span>
       </div>
       <div class="check-item">
-        <span class="check-label" style="font-family: Indie Flower, sans-serif;">Filler</span>
+        <span class="check-label" style="font-family: Indie Flower, sans-serif"
+          >Filler</span
+        >
         <span class="validation-indicator"></span>
       </div>
       <div class="check-item">
-        <span class="check-label" style="font-family: Indie Flower, sans-serif;">Greens</span>
-        <span class="validation-indicator" style="font-family: Indie Flower, sans-serif;"></span>
+        <span class="check-label" style="font-family: Indie Flower, sans-serif"
+          >Greens</span
+        >
+        <span
+          class="validation-indicator"
+          style="font-family: Indie Flower, sans-serif"
+        ></span>
       </div>
     </div>
-    <div class="validation-message" style="font-family: Indie Flower, sans-serif;"></div>
+    <div
+      class="validation-message"
+      style="font-family: Indie Flower, sans-serif"
+    ></div>
   </div>
 
   <div class="palette-canvas">
     <!-- Palette (populated by JS) -->
-    <aside class="flower-palette" style="font-family: Indie Flower, sans-serif;">
+    <aside class="flower-palette" style="font-family: Indie Flower, sans-serif">
       <h2>Flower Palette</h2>
-      <div id="palette" class="flower-sidebar">
-        <!-- JS will inject your selected flowers here -->
-      </div>
+      <div id="palette" class="flower-sidebar"></div>
     </aside>
 
     <!-- Canvas -->
-    <section class="canvas-area" style="font-family: Indie Flower, sans-serif;">
+    <section class="canvas-area" style="font-family: Indie Flower, sans-serif">
       <h2>Your Canvas</h2>
       <div id="canvas" class="drop-zone-canvas"></div>
     </section>
@@ -223,32 +223,15 @@
   <div class="back_next mt-4">
     <div class="row justify-content-between">
       <div class="col-auto">
-        <a href="/buildit_quiz2" class="btn btn-outline-primary">Previous Question</a>
+        <a href="/buildit_quiz2" class="prev-assem-btn btn btn-outline-primary"
+          >Previous Question</a
+        >
       </div>
-      <div class="col-auto" style="font-family: Indie Flower, sans-serif;">
-        <a href="/final" class="btn btn-primary">Finish</a>
+      <div class="col-auto" style="font-family: Indie Flower, sans-serif">
+        <a href="/final" class="finish-btn btn btn-primary">Finish</a>
       </div>
     </div>
   </div>
 </div>
-  <script>
-    async function submitScoreThenGo() {
-      // Read the score from the on-screen text
-      const scoreText = document.getElementById("score");
-      if (!scoreText) {
-        window.location.href = "/final"; // fallback
-        return;
-      }
-  
-      const score = parseInt(scoreText.textContent.match(/\d+/)[0]);
-  
-      await fetch("/submit_assemble_score", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ score })
-      });
-  
-      window.location.href = "/final";
-    }
-  </script>
-  {% endblock %}
+
+{% endblock %}

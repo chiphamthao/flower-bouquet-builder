@@ -80,7 +80,6 @@ function clearDroppedFlower(data) {
 function display_page(current_selections) {
   const types = ["focal", "secondary", "filler", "greens"];
   $(".drop-zone").empty();
-  console.log(current_selections["color_theme"]);
   // for each slot type, if we have data, inject its <img>
   for (let type of types) {
     if (current_selections[type]) {
@@ -99,38 +98,7 @@ function display_page(current_selections) {
     }
   }
 
-  $("#color-theme").val(current_selections.color_theme || "");
   refreshPalette();
-}
-
-function submitTheme() {
-  const theme = $("#color-theme").val().trim();
-  if (!theme) {
-    return $(".theme-message")
-      .text("Please enter a color theme.")
-      .addClass("error")
-      .removeClass("success");
-  }
-  $.ajax({
-    url: "/save_theme",
-    method: "POST",
-    contentType: "application/json",
-    data: JSON.stringify({ color_theme: theme }),
-    success: function (resp) {
-      current_selections = resp.current_selections;
-      display_page(current_selections);
-      $(".theme-message")
-        .text("Color theme saved.")
-        .addClass("success")
-        .removeClass("error");
-    },
-    error: function () {
-      $(".theme-message")
-        .text("Error saving theme; try again.")
-        .addClass("error")
-        .removeClass("success");
-    },
-  });
 }
 
 function addCanvasFlower(info) {
@@ -396,20 +364,11 @@ $(document).ready(function () {
             $msg.text("Perfect!").addClass("show success");
           }
         }, 100);
-
       },
       error() {
         console.error("Check-bouquet request failed");
       },
     });
-  });
-
-  $("#submit-theme").on("click", submitTheme);
-  $("#color-theme").on("keypress", function (e) {
-    if (e.which === 13) {
-      e.preventDefault();
-      submitTheme();
-    }
   });
 
   $(".drop-zone").on("contextmenu", function (e) {
