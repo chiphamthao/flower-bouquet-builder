@@ -18,7 +18,7 @@ current_selections = {
     'color_theme': None
 }
 canvas_flowers = []
-MAX_CHECKS = 3
+MAX_CHECKS = 4
 
 
 # ROUTES
@@ -45,11 +45,12 @@ def check_bouquet():
     global MAX_CHECKS
 
     data = request.get_json() or {}
+
     selections = data.get("selections", {})
     valid = is_bouquet_valid(selections)
 
     if not valid:
-        MAX_CHECKS =  max(0, MAX_CHECKS - 1)
+        MAX_CHECKS = max(0, MAX_CHECKS - 1)
 
     return jsonify({
         "hasError": not valid,
@@ -164,7 +165,6 @@ def delete_canvas():
 
 @app.route('/final')
 def final():
-    global MAX_CHECKS
     # Quiz score (already tracked)
     quiz_score = 0
     if session.get('quiz1_correct'):
@@ -175,15 +175,19 @@ def final():
         quiz_score += 1
     quiz_total = 3
 
-    total_score = quiz_score + MAX_CHECKS
-    total_possible = quiz_total + 4
-
+    # compute bouquet score based on correct selections
+    types = ["focal", "secondary", "filler", "greens"]
+    bouquet_score = 0
+    for t in types:
+        if current_selections.get(t) and current_selections[t][1] == t:
+            bouquet_score += 1
+    
     return render_template(
         'final.html',
-        total_score=total_score,
+        total_score=quiz_score + bouquet_score,
         quiz_score=quiz_score,
         quiz_total=quiz_total,
-        bouquet_score=MAX_CHECKS,
+        bouquet_score=bouquet_score,
         bouquet_total=4,
         current_selections=session.get('current_selections', {}),
         canvas_flowers=session.get('canvas_flowers', [])
