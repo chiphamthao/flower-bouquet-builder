@@ -189,9 +189,8 @@ def final():
         quiz_total=quiz_total,
         bouquet_score=bouquet_score,
         bouquet_total=4,
-        current_selections=session.get('current_selections', {}),
-        canvas_flowers=session.get('canvas_flowers', [])
-    )
+        current_selections= current_selections,
+        canvas_flowers=canvas_flowers)
 
 @app.route('/fillers')
 def fillers():
@@ -271,22 +270,6 @@ def clear_flower():
     # Clear the flower from build_it_flowers
     current_selections[flower_type] = None
     return jsonify(current_selections=current_selections) 
-
-
-@app.route('/save_theme', methods=['POST'])
-def save_theme():
-    global color_theme
-    data = request.get_json()
-    # Grab the submitted theme (or default to empty)
-    color_theme = data.get('color_theme', '').strip()
-    current_selections["color_theme"] = color_theme
-    return jsonify(current_selections=current_selections)
-
-@app.route('/submit_assemble_score', methods=['POST'])
-def submit_assemble_score():
-    data = request.get_json()
-    session['assemble_score'] = data.get('score', 0)
-    return jsonify(success=True)
 
 @app.route('/submit_quiz1', methods=['POST'])
 def submit_quiz1():
