@@ -42,34 +42,20 @@ def is_bouquet_valid(selections):
 
 @app.route("/check_bouquet", methods=["POST"])
 def check_bouquet():
+    global MAX_CHECKS
+
     data = request.get_json() or {}
     selections = data.get("selections", {})
     valid = is_bouquet_valid(selections)
 
-    if 'attempts_used' not in session:
-        session['attempts_used'] = 0
-    session['attempts_used'] += 1
-
-    attempts_used = session['attempts_used']  # Store before reset
-    remaining = max(0, 3 - attempts_used)
-
-    if valid:
-        session['assemble_score'] = 4
-        session['attempts_used'] = 0  # reset after success
-    elif attempts_used >= 3:
-        # After 3rd attempt, partial credit per correct type
-        score = 0
-        types = ["focal", "secondary", "filler", "greens"]
-        for t in types:
-            if t in selections and selections[t] and selections[t][1] == t:
-                score += 1
-        session['assemble_score'] = score
-        session['attempts_used'] = 0  # reset after final attempt
+    if not valid:
+        MAX_CHECKS =  max(0, MAX_CHECKS - 1)
 
     return jsonify({
         "hasError": not valid,
-        "remaining": remaining
+        "remaining": MAX_CHECKS
     })
+
 
 @app.route('/lessons')
 def lessons():
@@ -178,6 +164,7 @@ def delete_canvas():
 
 @app.route('/final')
 def final():
+    global MAX_CHECKS
     # Quiz score (already tracked)
     quiz_score = 0
     if session.get('quiz1_correct'):
@@ -188,20 +175,16 @@ def final():
         quiz_score += 1
     quiz_total = 3
 
-    # Assemble score (newly tracked)
-    bouquet_score = session.get('assemble_score', 0)
-    bouquet_total = 4
-
-    total_score = quiz_score + bouquet_score
-    total_possible = quiz_total + bouquet_total
+    total_score = quiz_score + MAX_CHECKS
+    total_possible = quiz_total + 4
 
     return render_template(
         'final.html',
         total_score=total_score,
         quiz_score=quiz_score,
         quiz_total=quiz_total,
-        bouquet_score=bouquet_score,
-        bouquet_total=bouquet_total,
+        bouquet_score=MAX_CHECKS,
+        bouquet_total=4,
         current_selections=session.get('current_selections', {}),
         canvas_flowers=session.get('canvas_flowers', [])
     )
