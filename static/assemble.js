@@ -49,7 +49,7 @@ function saveDroppedFlower(data) {
       console.log("Flower saved successfully:", response);
       if (response.current_selections) {
         current_selections = response.current_selections;
-        display_page(current_selections);
+        display_page(current_selections, true);
       }
     },
     error: function (xhr, status, error) {
@@ -68,7 +68,7 @@ function clearDroppedFlower(data) {
       console.log("Position cleared successfully:", response);
       if (response.current_selections) {
         current_selections = response.current_selections; // Update the global variable
-        display_page(current_selections);
+        display_page(current_selections, true);
       }
     },
     error: function (xhr, status, error) {
@@ -77,12 +77,31 @@ function clearDroppedFlower(data) {
   });
 }
 
-function display_page(current_selections) {
+// display a stored bouquet check message without AJAX
+function displayBouquetMessage(hasError, remaining) {
+  const $msg = $(".validation-message").removeClass("show error success");
+  setTimeout(() => {
+    if (hasError) {
+      $msg
+        .text(`Please check your selections again! (${remaining} tries left)`)
+        .addClass("show error");
+      if (remaining <= 0) {
+        $("#check-bouquet").prop("disabled", true).text("No More Checks");
+      }
+    } else {
+      $msg.text("Perfect!").addClass("show success");
+    }
+  }, 100);
+}
+
+function display_page(current_selections, not_displaying_checks = false) {
   const types = ["focal", "secondary", "filler", "greens"];
   $(".drop-zone").empty();
   // for each slot type, if we have data, inject its <img>
+  hasFlower = false;
   for (let type of types) {
     if (current_selections[type]) {
+      hasFlower = true;
       const $img = $("<img>", {
         src: current_selections[type][2],
         alt: current_selections[type][0],
@@ -99,6 +118,30 @@ function display_page(current_selections) {
   }
 
   refreshPalette();
+  // on reload, show last stored check message without AJAX
+  const stored = localStorage.getItem("bouquetCheck");
+  if (stored && !not_displaying_checks && hasFlower) {
+    const { hasError, remaining } = JSON.parse(stored);
+    let hasErrorLocal = false;
+
+    // Highlight each check-item as correct or incorrect
+    $(".check-item").each(function (index) {
+      const type = types[index];
+      const $item = $(this);
+      const $ind = $item.find(".validation-indicator");
+      $item.removeClass("correct incorrect");
+      $ind.removeClass("correct incorrect");
+
+      if (current_selections[type] && current_selections[type][1] === type) {
+        $item.addClass("correct");
+        $ind.addClass("correct");
+      } else {
+        $ind.addClass("incorrect");
+        hasErrorLocal = true;
+      }
+    });
+    displayBouquetMessage(hasError, remaining);
+  }
 }
 
 function addCanvasFlower(info) {
@@ -232,9 +275,55 @@ function postUpdate(data) {
   });
 }
 
+function runBouquetCheck(sendAjax = true) {
+  const types = ["focal", "secondary", "filler", "greens"];
+  let hasErrorLocal = false;
+
+  // 1) Highlight each check-item as correct or incorrect
+  $(".check-item").each(function (index) {
+    const type = types[index];
+    const $item = $(this);
+    const $ind = $item.find(".validation-indicator");
+    $item.removeClass("correct incorrect");
+    $ind.removeClass("correct incorrect");
+
+    if (current_selections[type] && current_selections[type][1] === type) {
+      $item.addClass("correct");
+      $ind.addClass("correct");
+    } else {
+      $ind.addClass("incorrect");
+      hasErrorLocal = true;
+    }
+  });
+
+  if (sendAjax) {
+    // 2) Send to server to track remaining tries
+    const payload = { selections: current_selections };
+    $.ajax({
+      url: "/check_bouquet",
+      method: "POST",
+      contentType: "application/json",
+      data: JSON.stringify(payload),
+      success(resp) {
+        const { hasError, remaining } = resp;
+        // Store the result to localStorage
+        localStorage.setItem(
+          "bouquetCheck",
+          JSON.stringify({ hasError, remaining })
+        );
+        // Replace inline UI update by calling displayBouquetMessage
+        displayBouquetMessage(hasError, remaining);
+      },
+      error() {
+        console.error("Check-bouquet request failed");
+      },
+    });
+  }
+}
+
 $(document).ready(function () {
   if (typeof current_selections !== "undefined") {
-    display_page(current_selections);
+    display_page(current_selections, false);
   }
   if (typeof canvas_flowers !== "undefined") {
     console.log(canvas_flowers);
@@ -316,59 +405,8 @@ $(document).ready(function () {
     zIndex: 200,
   });
 
-  // Replace your old handler with this:
   $("#check-bouquet").on("click", function () {
-    const types = ["focal", "secondary", "filler", "greens"];
-    let hasErrorLocal = false;
-
-    // 1) Highlight each check-item as correct or incorrect
-    $(".check-item").each(function (index) {
-      const type = types[index];
-      const $item = $(this);
-      const $ind = $item.find(".validation-indicator");
-      $item.removeClass("correct incorrect");
-      $ind.removeClass("correct incorrect");
-
-      if (current_selections[type] && current_selections[type][1] === type) {
-        $item.addClass("correct");
-        $ind.addClass("correct");
-      } else {
-        $ind.addClass("incorrect");
-        hasErrorLocal = true;
-      }
-    });
-
-    // 2) Send to server to track remaining tries
-    const payload = { selections: current_selections };
-    $.ajax({
-      url: "/check_bouquet",
-      method: "POST",
-      contentType: "application/json",
-      data: JSON.stringify(payload),
-      success(resp) {
-        const { hasError, remaining } = resp;
-        const $msg = $(".validation-message").removeClass("show error success");
-
-        // slight delay so the UI updates “pop”
-        setTimeout(() => {
-          if (hasError) {
-            $msg
-              .text(
-                `Please check your selections again! (${remaining} tries left)`
-              )
-              .addClass("show error");
-            if (remaining <= 0) {
-              $("#check-bouquet").prop("disabled", true).text("No More Checks");
-            }
-          } else {
-            $msg.text("Perfect!").addClass("show success");
-          }
-        }, 100);
-      },
-      error() {
-        console.error("Check-bouquet request failed");
-      },
-    });
+    runBouquetCheck(true);
   });
 
   $(".drop-zone").on("contextmenu", function (e) {
@@ -406,7 +444,7 @@ $(document).ready(function () {
           data: JSON.stringify({ id, deleted: true }),
           success(response) {
             canvas_flowers = response.canvas_flowers;
-            display_page(current_selections);
+            display_page(current_selections, true);
           },
           error(xhr, status, err) {
             console.error("Failed to delete canvas flower:", err);
