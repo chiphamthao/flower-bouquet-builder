@@ -1,3 +1,5 @@
+This is a website where you learn how to create your own bouquet!
+
 Columbia University  
 User-Interface Design  
 Spring 2025  
