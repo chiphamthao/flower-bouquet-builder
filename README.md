@@ -1,4 +1,4 @@
-This is a website where you learn how to create your own bouquet!
+This is a website where you learn how to create your own flower bouquet!
 
 Columbia University  
 User-Interface Design  
@@ -28,4 +28,5 @@ To run the app, execute the following in the terminal:
 
 ```
 python3 server.py
+open browser (preferably Google Chrome) and go to http://127.0.0.1:5001/ to load and view website
 ```
